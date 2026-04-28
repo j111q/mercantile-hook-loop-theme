@@ -1,0 +1,2021 @@
+/*
+Theme Name: Mercantile Hook Loop
+Theme URI: https://mercantile.wordpress.org/
+Description: Editorial-zine block theme for the WordPress merch shop. A monospace ticker, a giant Fraktur wordmark, a four-column product grid, and an oversized typographic band — all riffing on the wp-admin palette.
+Version: 0.1.0
+Author: Automattic
+License: GPL-2.0-or-later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: mercantile-hook-loop
+Tags: full-site-editing, block-theme, editorial, shop, monospace
+*/
+
+:root {
+	--mh-wp: #3858e9;
+	--mh-wp-d: #183ad6;
+	--mh-ink: #1d2327;
+	--mh-ink-2: #2c3338;
+	--mh-slate: #646970;
+	--mh-slate-2: #8c8f94;
+	--mh-rule: #c3c4c7;
+	--mh-rule-2: #dcdcde;
+	--mh-paper: #f0f0f1;
+	--mh-paper-2: #f6f7f7;
+	--mh-card: #ffffff;
+	--mh-accent: #d63638;
+	--mh-ok: #1f8f3a;
+	--mh-pink: #ffd4e1;
+	--mh-blue-tint: #e2e8ff;
+	--mh-gutter: max(40px, calc(50vw - 800px));
+}
+
+body {
+	background: var(--mh-paper);
+	color: var(--mh-ink);
+}
+
+::selection {
+	background: var(--mh-wp);
+	color: #fff;
+}
+
+/* ===== Ticker ===== */
+.mh-ticker {
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	background: var(--mh-ink);
+	color: #9a9ca3;
+	font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 11px;
+	letter-spacing: 0.02em;
+	height: 34px;
+	display: flex;
+	align-items: stretch;
+	overflow: hidden;
+	border-bottom: 1px solid var(--mh-ink);
+}
+
+/* Reset WP flow-layout child margins so flex children sit on the cross-axis center. */
+.mh-ticker > * {
+	margin-block-start: 0 !important;
+	margin-block-end: 0 !important;
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+.mh-ticker .mh-ticker__lead {
+	padding: 0 12px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	background: var(--mh-ink);
+	color: #ecebe4;
+	font-weight: 600;
+	flex-shrink: 0;
+	border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.mh-ticker .mh-ticker__dot {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--mh-ok);
+	animation: mh-pulse 2s infinite;
+}
+
+@keyframes mh-pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.4; }
+}
+
+.mh-ticker .mh-ticker__rail {
+	flex: 1;
+	overflow: hidden;
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.mh-ticker .mh-ticker__track {
+	display: flex;
+	gap: 40px;
+	white-space: nowrap;
+	padding-left: 16px;
+	animation: mh-marquee 90s linear infinite;
+}
+
+.mh-ticker .mh-ticker__rail:hover .mh-ticker__track {
+	animation-play-state: paused;
+}
+
+@keyframes mh-marquee {
+	from { transform: translateX(0); }
+	to { transform: translateX(-50%); }
+}
+
+.mh-ticker .mh-ticker__item b {
+	color: #ecebe4;
+	font-weight: 600;
+}
+
+.mh-ticker .mh-ticker__item.is-wapuu {
+	color: #9fb1ff;
+	font-weight: 600;
+}
+
+.mh-ticker .mh-ticker__item.is-wapuu::before {
+	content: '✿ ';
+}
+
+.mh-ticker .mh-ticker__tab {
+	padding: 0 12px;
+	border-left: 1px solid rgba(255, 255, 255, 0.12);
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-shrink: 0;
+	color: #ecebe4;
+}
+
+.mh-ticker .mh-ticker__tab .v {
+	color: #ecebe4;
+	font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mh-ticker .mh-ticker__track { animation: none; }
+	.mh-ticker .mh-ticker__dot { animation: none; }
+}
+
+/* ===== Hero meta ===== */
+.mh-meta-strip {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-slate);
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	padding-bottom: 8px;
+	border-bottom: 1px solid var(--mh-rule);
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.mh-meta-strip b {
+	color: var(--mh-ink);
+	font-weight: 600;
+}
+
+.mh-meta-strip .mh-col {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.mh-meta-strip .mh-col.is-right {
+	text-align: right;
+}
+
+/* ===== Wordmark ===== */
+.mh-mark {
+	font-family: 'UnifrakturCook', 'Newsreader', Georgia, serif;
+	font-weight: 700;
+	font-size: clamp(96px, 14vw, 195px);
+	line-height: 1;
+	letter-spacing: -0.005em;
+	color: var(--mh-ink);
+	margin: 12px 0 0;
+	text-wrap: balance;
+}
+
+.mh-mark .mh-mark__dot {
+	color: var(--mh-wp);
+}
+
+/* ===== Hero rail row ===== */
+.mh-rail-row {
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr;
+	gap: 48px;
+	padding: 20px 0 24px;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-slate);
+	line-height: 1.7;
+}
+
+.mh-rail-row .mh-blurb {
+	font-family: 'Newsreader', Georgia, serif;
+	font-size: 17px;
+	color: var(--mh-ink);
+	line-height: 1.4;
+	font-style: italic;
+	max-width: 38ch;
+}
+
+.mh-rail-row .mh-blurb em {
+	color: var(--mh-wp);
+	font-style: italic;
+}
+
+.mh-rail-row b {
+	color: var(--mh-ink);
+	font-weight: 600;
+}
+
+.mh-rail-row .mh-kv {
+	display: flex;
+	justify-content: space-between;
+	border-bottom: 1px dashed var(--mh-rule);
+	padding: 2px 0;
+}
+
+.mh-rail-row .mh-kv:last-child {
+	border-bottom: 0;
+}
+
+@media (max-width: 800px) {
+	.mh-rail-row {
+		grid-template-columns: 1fr;
+		gap: 18px;
+	}
+}
+
+/* ===== Section head ===== */
+.mh-section-head {
+	position: sticky;
+	top: 34px;
+	z-index: 40;
+	background: var(--mh-paper);
+	border-top: 1px solid var(--mh-rule);
+	border-bottom: 1px solid var(--mh-rule);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	flex-wrap: wrap;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Reset WP flow-layout child margins so flex children sit on the cross-axis center. */
+.mh-section-head > * {
+	margin-block-start: 0 !important;
+	margin-block-end: 0 !important;
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+/* The section-head only needs a bottom rule — the hero's own bottom border
+   sits flush above it once we collapse the block-gap. */
+.mh-section-head { border-top: 0; }
+
+/* Kill the 24px WP block-gap between every top-level section in the home/shop
+   chain. Each landing-page band already supplies its own border, so we want
+   them flush. The selector covers both direct mh-* groups and the
+   template-part wrappers that hold ticker / section-head / footer. */
+.wp-site-blocks > .wp-block-template-part,
+.wp-site-blocks > .mh-hero,
+.wp-site-blocks > .mh-grid-wrap,
+.wp-site-blocks > .mh-band,
+.wp-site-blocks > .mh-pdp-wrap {
+	margin-top: 0 !important;
+	margin-block-start: 0 !important;
+}
+
+.mh-section-head__label {
+	font-size: 11px;
+	color: var(--mh-slate);
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.mh-filters {
+	display: flex;
+	gap: 0;
+	font-size: 12px;
+	border: 1px solid var(--mh-rule);
+	background: var(--mh-paper-2);
+}
+
+.mh-filters .mh-filter {
+	padding: 6px 12px;
+	color: var(--mh-wp);
+	border-right: 1px solid var(--mh-rule);
+	display: inline-flex;
+	align-items: baseline;
+	gap: 5px;
+	line-height: 1.4;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.mh-filters .mh-filter:hover { background: var(--mh-card); }
+
+.mh-filters .mh-filter:last-child { border-right: 0; }
+
+.mh-filters .mh-filter.is-on,
+body.tax-product_cat .mh-filters .mh-filter.is-on { /* category page can flip is-on via JS later */
+	background: var(--mh-ink);
+	color: var(--mh-paper);
+}
+
+/* On a category archive, mark the matching filter active and unmark "all".
+   WP body classes are: tax-product_cat + term-<slug> (separate classes). */
+body.tax-product_cat .mh-filters .mh-filter.is-on { background: transparent; color: var(--mh-wp); }
+body.tax-product_cat.term-apparel .mh-filters [href$="/apparel/"],
+body.tax-product_cat.term-drinkware .mh-filters [href$="/drinkware/"],
+body.tax-product_cat.term-accessories .mh-filters [href$="/accessories/"] {
+	background: var(--mh-ink);
+	color: var(--mh-paper);
+}
+body.tax-product_cat.term-apparel .mh-filters [href$="/apparel/"] .mh-n,
+body.tax-product_cat.term-drinkware .mh-filters [href$="/drinkware/"] .mh-n,
+body.tax-product_cat.term-accessories .mh-filters [href$="/accessories/"] .mh-n {
+	color: var(--mh-slate-2);
+}
+
+.mh-filters .mh-filter .mh-n {
+	font-size: 10px;
+	color: var(--mh-slate-2);
+}
+
+.mh-filters .mh-filter.is-on .mh-n,
+.mh-filters .mh-filter:hover .mh-n { color: var(--mh-slate-2); }
+
+/* Active state via current URL — works on shop archive + category archives. */
+body.tax-product_cat .mh-filters .mh-filter,
+body.post-type-archive-product .mh-filters .mh-filter {
+	transition: background 0.1s, color 0.1s;
+}
+
+/* Search block tweaks */
+.mh-section-head .mh-search-block .wp-block-search__inside-wrapper {
+	border-radius: 0 !important;
+	border: 1px solid var(--mh-rule) !important;
+	background: var(--mh-paper-2) !important;
+	padding: 0 !important;
+}
+
+.mh-section-head .mh-search-block .wp-block-search__input {
+	border: 0 !important;
+	background: transparent !important;
+	padding: 6px 10px !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 12px !important;
+	color: var(--mh-ink) !important;
+	min-height: 0 !important;
+	width: 220px !important;
+	line-height: 1.4 !important;
+}
+
+.mh-section-head .mh-search-block .wp-block-search__input::placeholder {
+	color: var(--mh-slate-2);
+}
+
+.mh-section-head .mh-search-block .wp-block-search__input:focus {
+	outline: none !important;
+	background: #fff !important;
+}
+
+/* Mini-cart button — match the prototype's dark cart pill */
+.mh-section-head .mh-mini-cart.wp-block-woocommerce-mini-cart,
+.mh-section-head .wp-block-woocommerce-mini-cart {
+	margin: 0;
+}
+
+.mh-section-head .wc-block-mini-cart__button,
+.mh-section-head .wp-block-woocommerce-mini-cart .wc-block-mini-cart__button {
+	background: var(--mh-ink) !important;
+	color: var(--mh-paper) !important;
+	border: 1px solid var(--mh-ink) !important;
+	border-radius: 0 !important;
+	padding: 6px 10px !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 12px !important;
+	letter-spacing: 0 !important;
+	text-transform: lowercase !important;
+	font-weight: 400 !important;
+	min-height: 0 !important;
+	gap: 6px;
+	display: inline-flex;
+	align-items: center;
+}
+
+.mh-section-head .wc-block-mini-cart__button:hover {
+	background: var(--mh-ink-2) !important;
+	color: #fff !important;
+}
+
+.mh-section-head .wc-block-mini-cart__button .wc-block-mini-cart__amount {
+	display: none; /* keep it tight — count is enough */
+}
+
+/* Hide the WC cart icon — the prototype uses a plain `cart 0` mono pill. */
+.mh-section-head .wc-block-mini-cart__icon,
+.mh-section-head svg.wc-block-mini-cart__icon {
+	display: none !important;
+}
+
+/* Quantity badge — render inline as a count pill `0` next to the word. */
+.mh-section-head .wc-block-mini-cart__quantity-badge,
+.mh-section-head .wc-block-mini-cart__badge {
+	background: transparent !important;
+	color: #fff !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 12px !important;
+	font-weight: 700 !important;
+	position: static !important;
+	padding: 0 !important;
+	width: auto !important;
+	height: auto !important;
+	min-width: 0 !important;
+	border: 0 !important;
+	display: inline !important;
+	letter-spacing: 0 !important;
+}
+
+/* Pseudo-element prefix `cart ` so the layout reads `cart 0` even when WC
+   only outputs the numeric badge. */
+.mh-section-head .wc-block-mini-cart__button::before {
+	content: 'cart';
+	color: var(--mh-paper);
+	margin-right: 6px;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 12px;
+	font-weight: 400;
+	text-transform: lowercase;
+}
+
+/* ===== Product grid =====
+   Border-left is owned by the inner .wc-block-product-template (further down)
+   to avoid stacking two 1px rules at the same gutter. */
+.mh-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1100px) { .mh-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 800px)  { .mh-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px)  { .mh-grid { grid-template-columns: 1fr; } }
+
+/* (Cell rules live further down with higher-specificity selectors that
+   account for WooCommerce block wrappers — see .mh-cell.wp-block-group.) */
+
+/* ===== Interstitial ===== */
+.mh-interstitial {
+	grid-column: 1 / -1;
+	margin-top: -1px;
+	border-top: 1px solid var(--mh-rule);
+	border-right: 1px solid var(--mh-rule);
+	border-bottom: 1px solid var(--mh-rule);
+	padding: 14px 20px;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10.5px;
+	color: var(--mh-slate);
+	letter-spacing: 0.02em;
+	background: var(--mh-paper-2);
+	display: flex;
+	gap: 4px 18px;
+	flex-wrap: wrap;
+	align-items: baseline;
+}
+
+.mh-interstitial b { color: var(--mh-ink); font-weight: 600; }
+.mh-interstitial .k { color: var(--mh-wp); }
+.mh-interstitial .c { color: var(--mh-slate-2); }
+
+/* ===== Band ===== */
+.mh-band {
+	border-bottom: 1px solid var(--mh-rule);
+	background: var(--mh-paper);
+	overflow: hidden;
+}
+
+.mh-band__line {
+	font-family: 'UnifrakturCook', 'Newsreader', Georgia, serif;
+	font-weight: 700;
+	font-size: clamp(36px, 6vw, 84px);
+	line-height: 1.02;
+	color: var(--mh-ink);
+	letter-spacing: -0.01em;
+	margin: 0;
+	text-wrap: balance;
+}
+
+.mh-band__line .mh-q {
+	color: var(--mh-wp);
+	font-style: normal;
+}
+
+.mh-band__line .mh-mono-inline {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-weight: 600;
+	font-size: 0.72em;
+	letter-spacing: -0.01em;
+	vertical-align: 0.06em;
+}
+
+.mh-band__caption {
+	font-family: 'Newsreader', Georgia, serif;
+	font-style: italic;
+	font-weight: 400;
+	font-size: clamp(16px, 1.5vw, 20px);
+	color: var(--mh-ink-2);
+	line-height: 1.5;
+	max-width: 42em;
+	margin-top: 20px;
+	text-wrap: balance;
+}
+
+.mh-band__caption b { color: var(--mh-ink); font-weight: 600; }
+.mh-band__caption em { color: var(--mh-wp); font-style: normal; }
+
+/* ===== Footer ===== */
+.mh-footer {
+	background: var(--mh-ink);
+	color: var(--mh-paper);
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	line-height: 1.7;
+}
+
+.mh-footer .mh-footer__inner {
+	padding: 0 var(--mh-gutter);
+}
+
+.mh-footer .mh-footer__cols {
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr;
+	gap: 32px;
+}
+
+@media (max-width: 800px) {
+	.mh-footer .mh-footer__cols { grid-template-columns: 1fr; }
+}
+
+.mh-footer .mh-footer__frak {
+	font-family: 'UnifrakturCook', serif;
+	font-size: 63px;
+	line-height: 0.9;
+	color: var(--mh-paper);
+}
+
+.mh-footer .mh-footer__frak .d {
+	color: var(--mh-wp);
+}
+
+.mh-footer h4 {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--mh-slate-2);
+	margin: 0 0 8px;
+	font-weight: 500;
+}
+
+.mh-footer a {
+	color: var(--mh-paper);
+	text-decoration: none;
+	display: block;
+}
+
+.mh-footer a:hover { color: var(--mh-wp); }
+
+.mh-footer .mh-footer__bottom {
+	border-top: 1px solid var(--mh-slate);
+	margin-top: 36px;
+	color: var(--mh-slate-2);
+	width: 100%;
+}
+
+.mh-footer .mh-footer__bottom-inner {
+	padding: 14px var(--mh-gutter) 24px;
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.mh-footer .mh-footer__bottom b { color: var(--mh-paper); }
+
+/* ===== Tag pill (decorative typography pop) ===== */
+.mh-pill {
+	display: inline-block;
+	background: var(--mh-blue-tint);
+	color: var(--mh-ink);
+	padding: 0 6px;
+	border-radius: 2px;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+}
+
+.mh-pill.is-pink { background: var(--mh-pink); }
+.mh-pill.is-paper { background: var(--mh-paper-2); border: 1px solid var(--mh-rule); }
+
+/* ===== Editor parity tweaks ===== */
+.editor-styles-wrapper {
+	background: var(--mh-paper);
+}
+
+/* ===== WooCommerce Product Collection grid =====
+   Force the collection wrapper back to flow so the inner product-template
+   can own the grid — otherwise displayLayout makes both grids and nests. */
+.mh-grid-wrap .wp-block-woocommerce-product-collection.mh-grid {
+	display: block !important;
+	grid-template-columns: none !important;
+	gap: 0 !important;
+	margin-bottom: 0;
+	width: 100%;
+}
+
+.mh-grid-wrap .mh-grid .wc-block-product-template {
+	display: grid !important;
+	grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+	gap: 0 !important;
+	border-left: 1px solid var(--mh-rule);
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	max-width: none !important;
+	width: 100%;
+}
+
+@media (max-width: 1100px) {
+	.mh-grid-wrap .mh-grid .wc-block-product-template { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+}
+
+@media (max-width: 800px) {
+	.mh-grid-wrap .mh-grid .wc-block-product-template { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+
+@media (max-width: 500px) {
+	.mh-grid-wrap .mh-grid .wc-block-product-template { grid-template-columns: 1fr !important; }
+}
+
+.mh-grid-wrap .mh-grid .wc-block-product-template > li,
+.mh-grid-wrap .mh-grid .wc-block-product-template > .wc-block-product {
+	margin: 0 !important;
+	padding: 0;
+	list-style: none;
+	width: auto !important;
+	max-width: none !important;
+	display: flex;
+}
+
+/* Cell counter — provides "001 / WP—001" idx label via ::before. */
+.mh-grid-wrap .mh-grid .wc-block-product-template { counter-reset: mh-cell; }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li,
+.mh-grid-wrap .mh-grid .wc-block-product-template > .wc-block-product { counter-increment: mh-cell; }
+
+.mh-cell.wp-block-group {
+	border-right: 1px solid var(--mh-rule);
+	border-bottom: 1px solid var(--mh-rule);
+	background: var(--mh-paper);
+	padding: 14px 14px 12px;
+	min-height: 340px;
+	gap: 8px;
+	transition: background 0.12s;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	cursor: pointer;
+}
+
+.mh-cell.wp-block-group::before {
+	content: '0' counter(mh-cell, decimal-leading-zero) ' / WP—0' counter(mh-cell, decimal-leading-zero);
+	position: absolute;
+	top: 8px;
+	left: 10px;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	color: var(--mh-slate-2);
+	letter-spacing: 0.05em;
+	z-index: 2;
+	pointer-events: none;
+}
+
+.mh-cell.wp-block-group:hover { background: var(--mh-card); }
+.mh-cell.wp-block-group:hover .mh-cell__title a { color: var(--mh-wp); }
+
+/* Price tag — absolute top-right */
+.mh-cell .mh-cell__price-tag {
+	position: absolute;
+	top: 8px;
+	right: 10px;
+	margin: 0 !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	font-weight: 600;
+	color: var(--mh-ink);
+	z-index: 2;
+}
+.mh-cell .mh-cell__price-tag .wc-block-components-product-price__value,
+.mh-cell .mh-cell__price-tag .wp-block-woocommerce-product-price__value {
+	color: var(--mh-ink);
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-weight: 600;
+	font-size: 11px;
+}
+
+/* Image — square, paper-2 inset */
+.mh-cell .mh-cell__img-wrap,
+.mh-cell .wc-block-components-product-image,
+.mh-cell .wp-block-woocommerce-product-image {
+	background: var(--mh-paper-2);
+	border: 1px solid var(--mh-rule);
+	aspect-ratio: 1;
+	margin: 16px 0 0;
+	overflow: hidden;
+}
+
+.mh-cell .wc-block-components-product-image img,
+.mh-cell .wp-block-woocommerce-product-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.mh-cell .wc-block-components-product-image .wc-block-components-product-image__no-image,
+.mh-cell .wp-block-woocommerce-product-image .wp-block-woocommerce-product-image__no-image-placeholder {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--mh-wp);
+	font-family: 'UnifrakturCook', serif;
+	font-size: 56px;
+	background: var(--mh-paper-2);
+}
+
+/* Stamp row — sits at the image bottom-right, overlapping by -22px */
+.mh-cell .mh-cell__stamp-row {
+	margin-top: -2px;
+	text-align: right;
+	position: relative;
+	height: 0;
+	z-index: 2;
+}
+
+.mh-cell .mh-cell__stamp {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--mh-slate);
+	padding: 2px 8px;
+	border: 1px solid var(--mh-rule);
+	border-radius: 2px;
+	background: var(--mh-paper-2);
+	font-weight: 500;
+	position: relative;
+	top: -22px;
+}
+
+.mh-cell .mh-cell__stamp::before {
+	content: '▲';
+	color: var(--mh-wp);
+	font-size: 1.1em;
+	line-height: 1;
+	transform: translateY(-1px);
+}
+
+/* Rotate stamp variants per cell for visual variety */
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+2) .mh-cell__stamp::before { content: '⬢'; color: #ff7aa8; }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+2) .mh-cell__stamp { color: var(--mh-ink); }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+3) .mh-cell__stamp::before { content: '✦'; color: #f5b800; }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+5) .mh-cell__stamp::before { content: '◆'; color: var(--mh-slate-2); }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(11n+8) .mh-cell__stamp::before { content: '▪'; color: var(--mh-accent); }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+2) .mh-cell__stamp { content: 'low stock'; }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+2) .mh-cell__stamp { font-size: 0; }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+2) .mh-cell__stamp::after { content: 'low stock'; font-size: 10px; }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+3) .mh-cell__stamp { font-size: 0; }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+3) .mh-cell__stamp::after { content: 'seasonal'; font-size: 10px; }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+5) .mh-cell__stamp { font-size: 0; }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+5) .mh-cell__stamp::after { content: 'heritage'; font-size: 10px; }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(11n+8) .mh-cell__stamp { font-size: 0; }
+.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(11n+8) .mh-cell__stamp::after { content: 'out'; font-size: 10px; }
+
+/* Meta row — category + first tag, mono uppercase */
+.mh-cell .mh-cell__meta-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 10px;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	color: var(--mh-slate);
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.mh-cell .mh-cell__meta-row .wp-block-post-terms {
+	margin: 0;
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	letter-spacing: inherit;
+	text-transform: inherit;
+}
+
+.mh-cell .wp-block-post-terms a {
+	color: inherit;
+	text-decoration: none;
+}
+
+/* First tag — only show first <a>, hide separator + later anchors */
+.mh-cell .mh-cell__tag-first .wp-block-post-terms__separator,
+.mh-cell .mh-cell__tag-first a ~ a { display: none; }
+
+.mh-cell .mh-cell__cat { text-align: left; }
+.mh-cell .mh-cell__tag-first { text-align: right; }
+
+/* Title — newsreader, balance, hover blue */
+.mh-cell .mh-cell__title {
+	margin: 0;
+	font-family: 'Newsreader', Georgia, serif;
+	font-size: 17px;
+	font-weight: 500;
+	line-height: 1.15;
+	letter-spacing: -0.005em;
+	color: var(--mh-ink);
+	text-wrap: balance;
+	transition: color 0.12s;
+}
+
+.mh-cell .mh-cell__title a {
+	color: inherit;
+	text-decoration: none;
+	transition: color 0.12s;
+}
+
+/* Title link expands to whole cell so any click opens the product */
+.mh-cell .mh-cell__title a::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+}
+
+/* Hashtag tag list at the bottom — push to bottom via margin-top:auto */
+.mh-cell .mh-cell__tags-list {
+	margin: auto 0 0;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	color: var(--mh-slate);
+	letter-spacing: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 6px;
+}
+
+.mh-cell .mh-cell__tags-list a {
+	color: var(--mh-slate);
+	text-decoration: none;
+	position: relative;
+	z-index: 2;
+}
+
+.mh-cell .mh-cell__tags-list a::before {
+	content: '#';
+	color: var(--mh-slate-2);
+}
+
+.mh-cell .mh-cell__tags-list .wp-block-post-terms__separator { display: none; }
+
+/* Default product price — used elsewhere; keep mono. */
+.mh-cell .wc-block-components-product-price,
+.mh-cell .wp-block-woocommerce-product-price {
+	margin: 0;
+}
+
+.mh-cell .wc-block-components-product-price__value,
+.mh-cell .wp-block-woocommerce-product-price__value {
+	color: var(--mh-ink);
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-weight: 600;
+	font-size: 12px;
+}
+
+/* View → hover affordance: decorative span; cell-spanning title link handles navigation */
+.mh-cell .mh-cell__view {
+	position: absolute;
+	bottom: 12px;
+	right: 12px;
+	margin: 0;
+	padding: 0;
+	opacity: 0;
+	transition: opacity 0.1s;
+	z-index: 0;
+	pointer-events: none;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: 0.02em;
+	color: var(--mh-wp);
+}
+
+.mh-cell:hover .mh-cell__view { opacity: 1; }
+
+/* ===== Single product (admin-editor framing) ===== */
+.mh-breadcrumbs.wc-block-components-breadcrumbs { display: none; } /* prefer custom crumb header */
+
+.mh-pdp-wrap { padding-top: 32px; }
+
+.mh-pdp {
+	background: var(--mh-paper);
+	border: 1px solid var(--mh-rule);
+	border-radius: 6px;
+	box-shadow: 0 18px 50px -12px rgba(17, 18, 20, 0.08), 0 6px 18px -6px rgba(17, 18, 20, 0.05);
+	overflow: hidden;
+}
+
+/* Header crumb bar */
+.mh-pdp__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 16px;
+	background: var(--mh-paper-2);
+	border-bottom: 1px solid var(--mh-rule);
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-slate);
+}
+
+.mh-pdp__crumb { letter-spacing: 0.02em; }
+.mh-pdp__crumb .sl { color: var(--mh-rule); margin: 0 6px; }
+.mh-pdp__crumb b { color: var(--mh-ink); font-weight: 600; }
+.mh-pdp__crumb-action { margin-left: 14px; color: var(--mh-slate-2); }
+
+.mh-pdp__close {
+	width: 28px;
+	height: 28px;
+	border: 1px solid var(--mh-rule);
+	background: var(--mh-paper);
+	color: var(--mh-slate);
+	font-size: 16px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+	line-height: 1;
+}
+
+.mh-pdp__close:hover {
+	background: var(--mh-accent);
+	color: #fff;
+	border-color: var(--mh-accent);
+}
+
+/* Body grid */
+.mh-pdp__body {
+	display: grid !important;
+	grid-template-columns: 1fr 300px !important;
+	gap: 0 !important;
+	align-items: stretch;
+}
+
+@media (max-width: 860px) {
+	.mh-pdp__body { grid-template-columns: 1fr !important; }
+}
+
+.mh-pdp__editor {
+	border-right: 1px solid var(--mh-rule);
+	min-width: 0;
+}
+
+.mh-pdp__side {
+	background: var(--mh-paper-2);
+	min-width: 0;
+}
+
+/* Permalink line */
+.mh-pdp__permalink {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-slate);
+	padding-bottom: 10px;
+	border-bottom: 1px dashed var(--mh-rule);
+	word-break: break-all;
+	margin: 0;
+}
+
+.mh-pdp__permalink .k { color: var(--mh-wp); }
+.mh-pdp__permalink b { color: var(--mh-ink); background: var(--mh-blue-tint); padding: 0 5px; border-radius: 2px; font-weight: 500; }
+.mh-pdp__permalink-meta { margin-left: 10px; color: var(--mh-slate-2); }
+
+/* Title rendered as an "input field" */
+.mh-pdp .mh-pdp__title,
+.mh-pdp .wp-block-post-title.mh-pdp__title {
+	font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace !important;
+	font-weight: 600 !important;
+	font-size: clamp(20px, 2.6vw, 28px) !important;
+	line-height: 1.2 !important;
+	letter-spacing: -0.01em !important;
+	background: var(--mh-paper-2) !important;
+	border: 1px solid var(--mh-rule) !important;
+	border-radius: 4px !important;
+	padding: 12px 14px !important;
+	color: var(--mh-ink) !important;
+	margin: 0 !important;
+	text-wrap: balance;
+}
+
+.mh-pdp .mh-pdp__title::after {
+	content: '';
+	display: inline-block;
+	width: 0.06em;
+	height: 0.9em;
+	background: var(--mh-wp);
+	margin-left: 0.2em;
+	vertical-align: -0.08em;
+	animation: mh-caret 1.1s steps(2, start) infinite;
+}
+
+@keyframes mh-caret { to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+	.mh-pdp .mh-pdp__title::after { animation: none; opacity: 0.9; }
+}
+
+/* Italic blurb */
+.mh-pdp .mh-pdp__blurb,
+.mh-pdp .wp-block-woocommerce-product-summary.mh-pdp__blurb,
+.mh-pdp .mh-pdp__blurb p {
+	font-family: 'Newsreader', Georgia, serif !important;
+	font-size: 17px !important;
+	line-height: 1.45 !important;
+	color: var(--mh-ink-2) !important;
+	margin: 0 !important;
+	max-width: 56ch;
+	font-style: italic !important;
+}
+
+/* Marginalia pill row */
+.mh-pdp .mh-marginalia {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 0;
+}
+
+.mh-pdp .mh-marginalia .mh-pill {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--mh-slate);
+	padding: 2px 8px;
+	border: 1px solid var(--mh-rule);
+	border-radius: 2px;
+	background: var(--mh-paper-2);
+}
+
+.mh-pdp .mh-marginalia .mh-pill.is-blue {
+	background: var(--mh-blue-tint);
+	border-color: #c5d0ff;
+	color: var(--mh-ink);
+}
+
+.mh-pdp .mh-marginalia .mh-pill.is-pink {
+	background: #fff3b0;
+	border-color: #ffe478;
+	color: var(--mh-ink);
+}
+
+/* Gallery box */
+.mh-pdp__gallery {
+	background: #fff;
+	border: 1px solid var(--mh-rule);
+	aspect-ratio: 4 / 5;
+	position: relative;
+	overflow: hidden;
+	margin: 0 !important;
+}
+
+/* Rich-text-toolbar strip (decorative) */
+.mh-pdp__gallery::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 42px;
+	background: var(--mh-paper-2);
+	border-bottom: 1px solid var(--mh-rule);
+	pointer-events: none;
+	z-index: 1;
+}
+
+/* fig label and see-more button */
+.mh-pdp__gallery::after {
+	content: 'fig. 78 · shop';
+	position: absolute;
+	top: 10px;
+	left: 12px;
+	z-index: 2;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--mh-ink);
+	background: var(--mh-blue-tint);
+	padding: 3px 8px;
+	border-radius: 2px;
+}
+
+.mh-pdp__gallery .wp-block-woocommerce-product-gallery {
+	background: transparent !important;
+	border: 0 !important;
+	margin: 0 !important;
+	padding: 56px 32px 32px !important;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.mh-pdp__gallery .wp-block-woocommerce-product-gallery-large-image {
+	width: 100%;
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 0;
+}
+
+.mh-pdp__gallery .wp-block-woocommerce-product-image,
+.mh-pdp__gallery .wp-block-woocommerce-product-gallery-large-image .wp-block-woocommerce-product-image {
+	max-width: 100%;
+	max-height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.mh-pdp__gallery .wp-block-woocommerce-product-image img {
+	max-width: 100%;
+	max-height: 100%;
+	height: auto;
+	object-fit: contain;
+}
+
+.mh-pdp__gallery .wp-block-woocommerce-product-image .wp-block-woocommerce-product-image__no-image-placeholder {
+	width: 100%;
+	height: 100%;
+	min-height: 320px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--mh-paper-2);
+	color: var(--mh-wp);
+	font-family: 'UnifrakturCook', 'Newsreader', serif;
+	font-size: 80px;
+}
+
+/* Dark shortcode strip below the gallery */
+.mh-shortcode {
+	background: var(--mh-ink);
+	color: var(--mh-paper);
+	padding: 10px 14px;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 12px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 14px;
+	flex-wrap: wrap;
+	margin: 0;
+}
+
+.mh-shortcode .k { color: #9ab1ff; }
+.mh-shortcode .v { color: #fff; }
+.mh-shortcode .copy {
+	color: var(--mh-slate-2);
+	font-size: 10px;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: color 0.2s;
+}
+
+.mh-shortcode .copy:hover { color: #fff; }
+
+/* ===== PDP Side panel ===== */
+.mh-pdp__side > * { margin-block-start: 0 !important; margin-block-end: 0 !important; }
+
+.mh-pdp__panel {
+	padding: 12px 0;
+}
+
+.mh-pdp__panel:first-child { padding-top: 0; }
+
+.mh-pdp__panel h3,
+.mh-pdp__panel-h3 {
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 10px !important;
+	color: var(--mh-slate) !important;
+	letter-spacing: 0.1em !important;
+	text-transform: uppercase !important;
+	margin: 0 0 10px !important;
+	font-weight: 500 !important;
+}
+
+.mh-status-row {
+	display: flex;
+	justify-content: space-between;
+	font-size: 12px;
+	padding: 3px 0;
+	border-bottom: 1px dashed var(--mh-rule);
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+.mh-status-row:last-of-type { border-bottom: 0; }
+.mh-status-row .v { color: var(--mh-slate); }
+.mh-status-row .v.g { color: var(--mh-ok); }
+.mh-status-row .v b { color: var(--mh-ink); font-weight: 600; }
+
+.mh-side-label {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	color: var(--mh-slate);
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	margin-top: 14px;
+}
+
+.mh-sizes {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 8px;
+}
+
+.mh-sizes button {
+	min-width: 40px;
+	padding: 8px 12px;
+	border: 1.5px solid var(--mh-wp);
+	border-radius: 4px;
+	background: #fff;
+	color: var(--mh-wp);
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	cursor: pointer;
+	transition: background 0.15s, color 0.15s;
+}
+
+.mh-sizes button:hover { background: var(--mh-blue-tint); }
+.mh-sizes button.on { background: var(--mh-wp); color: #fff; }
+
+/* CTA — make WC add-to-cart form full-width and on-brand */
+.mh-pdp__cta.wp-block-woocommerce-add-to-cart-form,
+.mh-pdp__side .wp-block-woocommerce-add-to-cart-form {
+	margin: 12px 0 0 !important;
+}
+
+.mh-pdp__side .wp-block-woocommerce-add-to-cart-form form.cart {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin: 0;
+}
+
+.mh-pdp__side .wp-block-woocommerce-add-to-cart-form .quantity {
+	display: none; /* keep the side compact — qty unused in prototype */
+}
+
+.mh-pdp__side .wp-block-woocommerce-add-to-cart-form .single_add_to_cart_button {
+	width: 100%;
+	margin-top: 0;
+	background: var(--mh-wp);
+	color: #fff;
+	border: 1px solid var(--mh-wp-d);
+	padding: 12px;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	border-radius: 0;
+}
+
+.mh-pdp__side .wp-block-woocommerce-add-to-cart-form .single_add_to_cart_button:hover { background: var(--mh-wp-d); }
+
+/* Details: row-by-row spec list */
+.mh-pdp__panel--details .mh-pdp__spec-row {
+	display: flex !important;
+	justify-content: space-between !important;
+	align-items: baseline;
+	flex-wrap: nowrap !important;
+	padding: 4px 0 !important;
+	border-bottom: 1px dashed var(--mh-rule);
+	gap: 10px;
+}
+
+.mh-pdp__panel--details .mh-pdp__spec-row .mh-pdp__spec-key {
+	margin: 0 !important;
+	white-space: nowrap;
+	color: var(--mh-slate) !important;
+}
+
+.mh-pdp__panel--details .mh-pdp__spec-row .wp-block-woocommerce-product-price,
+.mh-pdp__panel--details .mh-pdp__spec-row .wp-block-post-terms {
+	margin: 0 !important;
+	text-align: right;
+}
+
+.mh-pdp__panel--details .mh-pdp__spec-row .wc-block-components-product-price__value {
+	font-family: 'Newsreader', Georgia, serif !important;
+	font-size: 14px !important;
+	color: var(--mh-ink) !important;
+	background: var(--mh-blue-tint);
+	padding: 0 5px;
+	border-radius: 2px;
+	font-weight: 500 !important;
+}
+
+.mh-pdp__panel--details .mh-pdp__spec-row .wp-block-post-terms a {
+	font-family: 'Newsreader', Georgia, serif !important;
+	font-size: 13px !important;
+	color: var(--mh-ink) !important;
+	text-decoration: none;
+}
+
+.mh-pdp__panel--details .mh-pdp__spec-row.mh-pdp__spec-row .mh-pdp__spec-tags {
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 11px !important;
+}
+
+.mh-pdp__panel--details .mh-pdp__spec-tags a {
+	display: inline-block;
+	background: var(--mh-pink);
+	color: var(--mh-ink);
+	padding: 0 6px;
+	margin-left: 4px;
+	border-radius: 2px;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	text-decoration: none;
+}
+
+.mh-pdp__panel--details .mh-pdp__spec-tags a::before { content: '#'; }
+
+/* Manual specs (material, care, etc) */
+.mh-pdp__specs {
+	margin: 0;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 4px 12px;
+	font-size: 12px;
+}
+
+.mh-pdp__specs dt {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 9px;
+	color: var(--mh-slate);
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	padding-top: 6px;
+	margin: 0;
+	white-space: nowrap;
+}
+
+.mh-pdp__specs dd {
+	margin: 0;
+	padding: 4px 0 6px;
+	border-bottom: 1px dashed var(--mh-rule);
+	font-family: 'Newsreader', Georgia, serif;
+	font-size: 13px;
+	color: var(--mh-ink);
+	line-height: 1.35;
+	text-align: right;
+}
+
+.mh-pdp__specs dd:last-of-type,
+.mh-pdp__specs dt:last-of-type + dd { border-bottom: 0; }
+
+.mh-pdp__specs dd.mono {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+}
+
+/* Related list — single column rows */
+.mh-pdp__panel--related .mh-pdp__related-list {
+	margin: 0 !important;
+}
+
+.mh-pdp__panel--related .mh-pdp__related-list .wc-block-product-template {
+	display: block !important;
+	border-left: 0 !important;
+	padding: 0;
+}
+
+.mh-pdp__panel--related .mh-pdp__related-list .wc-block-product-template > li {
+	width: 100% !important;
+	display: block !important;
+}
+
+.mh-pdp__panel--related .mh-related-row {
+	display: flex !important;
+	justify-content: space-between !important;
+	align-items: baseline;
+	flex-wrap: nowrap !important;
+	padding: 5px 0 !important;
+	border-bottom: 1px dashed var(--mh-rule);
+	gap: 10px;
+}
+
+.mh-pdp__panel--related .mh-related-row:last-of-type { border-bottom: 0; }
+
+.mh-pdp__panel--related .mh-related-row .wp-block-post-title {
+	margin: 0 !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 11px !important;
+	font-weight: 400 !important;
+	line-height: 1.3 !important;
+}
+
+.mh-pdp__panel--related .mh-related-row .wp-block-post-title a {
+	color: var(--mh-wp);
+	text-decoration: none;
+}
+
+.mh-pdp__panel--related .mh-related-row .wp-block-post-title a:hover { color: var(--mh-wp-d); }
+
+.mh-pdp__panel--related .mh-related-row .wp-block-woocommerce-product-price,
+.mh-pdp__panel--related .mh-related-row .wc-block-components-product-price {
+	margin: 0 !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 11px !important;
+	color: var(--mh-slate) !important;
+	white-space: nowrap;
+}
+
+.mh-pdp__panel--related .mh-related-row .wc-block-components-product-price__value {
+	color: var(--mh-slate) !important;
+	font-weight: 400 !important;
+	font-size: 11px !important;
+}
+
+/* Revisions log */
+.mh-revisions {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10.5px;
+	color: var(--mh-slate);
+	line-height: 1.8;
+}
+
+.mh-revisions b { color: var(--mh-ink); }
+
+.wp-block-woocommerce-add-to-cart-form .quantity input,
+.woocommerce-variation-add-to-cart .quantity input {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	border: 1px solid var(--mh-rule);
+	background: #fff;
+	padding: 10px 8px;
+	color: var(--mh-ink);
+}
+
+.wp-block-woocommerce-add-to-cart-form .single_add_to_cart_button,
+.woocommerce-variation-add-to-cart .single_add_to_cart_button {
+	background: var(--mh-wp);
+	border: 1px solid var(--mh-wp-d);
+	color: #fff;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	font-size: 13px;
+	padding: 12px 18px;
+	border-radius: 0;
+	transition: background 0.15s;
+}
+
+.wp-block-woocommerce-add-to-cart-form .single_add_to_cart_button:hover {
+	background: var(--mh-wp-d);
+}
+
+.product_meta,
+.wp-block-woocommerce-product-meta {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-slate);
+	letter-spacing: 0.04em;
+}
+
+.product_meta a,
+.wp-block-woocommerce-product-meta a {
+	color: var(--mh-wp);
+}
+
+/* WooCommerce notices */
+.woocommerce-notices-wrapper .woocommerce-message,
+.woocommerce-notices-wrapper .woocommerce-info,
+.woocommerce-notices-wrapper .woocommerce-error {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 12px;
+	border: 1px solid var(--mh-rule);
+	background: var(--mh-paper-2);
+	color: var(--mh-ink);
+	border-left: 3px solid var(--mh-wp);
+	border-radius: 0;
+	padding: 12px 16px;
+}
+
+.woocommerce-notices-wrapper .woocommerce-error {
+	border-left-color: var(--mh-accent);
+}
+
+/* Cart + checkout typography */
+.wp-block-woocommerce-cart,
+.wp-block-woocommerce-checkout {
+	font-family: 'Newsreader', Georgia, serif;
+}
+
+.wp-block-woocommerce-cart .wc-block-components-product-name,
+.wp-block-woocommerce-checkout .wc-block-components-product-name {
+	font-family: 'Newsreader', Georgia, serif;
+	font-size: 16px;
+	font-weight: 500;
+	color: var(--mh-ink);
+}
+
+.wp-block-woocommerce-cart .wc-block-components-product-price,
+.wp-block-woocommerce-checkout .wc-block-components-product-price,
+.wp-block-woocommerce-cart .wc-block-formatted-money-amount,
+.wp-block-woocommerce-checkout .wc-block-formatted-money-amount {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	color: var(--mh-ink);
+}
+
+.wp-block-woocommerce-cart .wc-block-components-button,
+.wp-block-woocommerce-checkout .wc-block-components-button,
+.wp-block-woocommerce-mini-cart .wc-block-components-button {
+	border-radius: 0;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.wp-block-woocommerce-cart .wc-block-components-button.wc-block-cart__submit-button,
+.wc-block-components-checkout-place-order-button {
+	background: var(--mh-wp);
+	color: #fff;
+}
+
+.wc-block-components-totals-wrapper {
+	border-color: var(--mh-rule);
+}
+
+/* ===== Mini cart drawer ===== */
+.wc-block-mini-cart__drawer {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	background: var(--mh-paper);
+	color: var(--mh-ink);
+	border-left: 1px solid var(--mh-rule);
+	max-width: 440px;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-drawer__content {
+	background: var(--mh-paper);
+	display: flex;
+	flex-direction: column;
+}
+
+.wc-block-mini-cart__drawer .wp-block-woocommerce-mini-cart-contents {
+	background: var(--mh-paper) !important;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+/* Title row — replace fraktur with mono uppercase "CART · N ITEMS" */
+.wc-block-mini-cart__drawer .wc-block-mini-cart__title {
+	margin: 0 !important;
+	padding: 16px 56px 16px 20px;
+	background: var(--mh-paper-2);
+	border-bottom: 1px solid var(--mh-rule);
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 11px !important;
+	font-weight: 600 !important;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--mh-ink) !important;
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+}
+
+.wc-block-mini-cart__drawer .wp-block-woocommerce-mini-cart-title-label-block {
+	font-size: 0;
+	line-height: 0;
+}
+
+.wc-block-mini-cart__drawer .wp-block-woocommerce-mini-cart-title-label-block::before {
+	content: 'cart ·';
+	font-size: 11px;
+	line-height: 1;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	font-weight: 600;
+	color: var(--mh-ink);
+}
+
+.wc-block-mini-cart__drawer .wp-block-woocommerce-mini-cart-title-items-counter-block {
+	font-weight: 400;
+	color: var(--mh-slate);
+	font-family: inherit;
+	font-size: 11px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+/* Close button — square outline */
+.wc-block-mini-cart__drawer .wc-block-components-drawer__close-wrapper {
+	position: absolute;
+	top: 14px;
+	right: 14px;
+	z-index: 5;
+	height: auto;
+	padding: 0;
+	background: transparent;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-drawer__close {
+	width: 28px !important;
+	height: 28px !important;
+	min-width: 0 !important;
+	min-height: 0 !important;
+	border: 1px solid var(--mh-rule) !important;
+	background: transparent !important;
+	color: var(--mh-ink) !important;
+	border-radius: 0 !important;
+	padding: 4px !important;
+	box-shadow: none !important;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-drawer__close:hover {
+	background: var(--mh-accent) !important;
+	color: #fff !important;
+	border-color: var(--mh-accent) !important;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-drawer__close svg {
+	width: 16px;
+	height: 16px;
+}
+
+/* Items area */
+.wc-block-mini-cart__drawer .wc-block-mini-cart__items {
+	flex: 1;
+	overflow-y: auto;
+	padding: 0 20px;
+	background: var(--mh-paper);
+}
+
+.wc-block-mini-cart__drawer .wc-block-mini-cart-items,
+.wc-block-mini-cart__drawer .wc-block-cart-items {
+	background: transparent;
+	border: 0;
+	margin: 0;
+}
+
+.wc-block-mini-cart__drawer .wc-block-cart-items__header { display: none; }
+
+.wc-block-mini-cart__drawer .wc-block-cart-items__row,
+.wc-block-mini-cart__drawer tr.wc-block-cart-items__row {
+	border-bottom: 1px dashed var(--mh-rule);
+	padding: 14px 0;
+}
+
+.wc-block-mini-cart__drawer .wc-block-cart-items__row:last-child {
+	border-bottom: 0;
+}
+
+.wc-block-mini-cart__drawer .wc-block-cart-item__image {
+	width: 68px;
+	padding: 0 12px 0 0;
+}
+
+.wc-block-mini-cart__drawer .wc-block-cart-item__image [hidden] {
+	display: none !important;
+}
+
+.wc-block-mini-cart__drawer .wc-block-cart-item__image > a,
+.wc-block-mini-cart__drawer .wc-block-cart-item__image > img:not([hidden]) {
+	display: block;
+	width: 68px;
+	height: 68px;
+	border-radius: 2px;
+	background: #fff;
+}
+
+.wc-block-mini-cart__drawer .wc-block-cart-item__image img:not([hidden]) {
+	width: 68px;
+	height: 68px;
+	border: 1px solid var(--mh-rule);
+	background: #fff;
+	object-fit: contain;
+	border-radius: 2px;
+	display: block;
+}
+
+.wc-block-mini-cart__drawer .wc-block-cart-item__product {
+	padding: 0;
+}
+
+.wc-block-mini-cart__drawer .wc-block-cart-item__wrap {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-product-name {
+	font-family: 'Newsreader', Georgia, serif !important;
+	font-size: 15px !important;
+	font-weight: 500 !important;
+	color: var(--mh-ink) !important;
+	line-height: 1.2 !important;
+	text-decoration: none !important;
+	text-wrap: balance;
+}
+
+.wc-block-mini-cart__drawer .wc-block-cart-item__prices {
+	display: none;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-product-metadata__description {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	color: var(--mh-slate);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	margin: 0;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-product-metadata__description p {
+	margin: 0;
+}
+
+/* Quantity selector — mono pill */
+.wc-block-mini-cart__drawer .wc-block-cart-item__quantity {
+	margin-top: 8px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-quantity-selector {
+	display: inline-flex !important;
+	align-items: stretch;
+	border: 1px solid var(--mh-rule) !important;
+	border-radius: 0 !important;
+	background: #fff;
+	height: auto;
+	min-height: 0;
+	padding: 0 !important;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-quantity-selector::before,
+.wc-block-mini-cart__drawer .wc-block-components-quantity-selector::after {
+	display: none !important;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-quantity-selector__button {
+	width: 24px;
+	height: 22px;
+	background: transparent !important;
+	border: 0 !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 14px !important;
+	color: var(--mh-ink) !important;
+	cursor: pointer;
+	line-height: 1;
+	padding: 0 !important;
+	min-width: 0 !important;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-quantity-selector__button:hover {
+	background: var(--mh-ink) !important;
+	color: var(--mh-paper) !important;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-quantity-selector__input {
+	width: 28px !important;
+	min-width: 0 !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 12px !important;
+	border: 0 !important;
+	border-left: 1px solid var(--mh-rule) !important;
+	border-right: 1px solid var(--mh-rule) !important;
+	border-radius: 0 !important;
+	text-align: center;
+	padding: 0 !important;
+	background: transparent;
+	height: 22px;
+	line-height: 22px;
+	color: var(--mh-ink);
+}
+
+/* Remove link — small underlined slate text */
+.wc-block-mini-cart__drawer .wc-block-cart-item__remove-link {
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 10px !important;
+	color: var(--mh-slate-2) !important;
+	background: transparent !important;
+	border: 0 !important;
+	padding: 0 !important;
+	text-decoration: underline;
+	text-transform: lowercase;
+	letter-spacing: 0;
+	cursor: pointer;
+}
+
+.wc-block-mini-cart__drawer .wc-block-cart-item__remove-link:hover {
+	color: var(--mh-accent) !important;
+}
+
+/* Item total (right column) */
+.wc-block-mini-cart__drawer .wc-block-cart-item__total {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-weight: 600;
+	font-size: 13px;
+	color: var(--mh-ink);
+	text-align: right;
+	white-space: nowrap;
+	padding: 0 0 0 8px;
+	vertical-align: top;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-formatted-money-amount,
+.wc-block-mini-cart__drawer .wc-block-formatted-money-amount {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	color: var(--mh-ink);
+}
+
+/* Footer */
+.wc-block-mini-cart__drawer .wc-block-mini-cart__footer {
+	background: var(--mh-paper-2);
+	border-top: 1px solid var(--mh-rule);
+	padding: 18px 20px 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-totals-item.wc-block-mini-cart__footer-subtotal {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--mh-ink);
+	border-top: 1px solid var(--mh-rule);
+	padding-top: 8px;
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-totals-item__label {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-slate);
+	text-transform: lowercase;
+	font-weight: 500;
+	letter-spacing: 0.04em;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-totals-item.wc-block-mini-cart__footer-subtotal .wc-block-components-totals-item__label {
+	font-size: 15px;
+	font-weight: 700;
+	color: var(--mh-ink);
+	text-transform: lowercase;
+	letter-spacing: 0;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-totals-item.wc-block-mini-cart__footer-subtotal .wc-block-components-totals-item__value {
+	font-size: 15px;
+	font-weight: 700;
+	color: var(--mh-ink);
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-totals-item__description {
+	flex: 1 1 100%;
+	font-size: 10px;
+	color: var(--mh-slate-2);
+	margin-top: 4px;
+	letter-spacing: 0.04em;
+	text-align: left;
+}
+
+/* Footer actions: stack View cart (outline) + Checkout (solid blue) */
+.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-actions {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-top: 8px;
+}
+
+.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-cart {
+	background: transparent !important;
+	color: var(--mh-ink) !important;
+	border: 1px solid var(--mh-rule) !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 11px !important;
+	font-weight: 500;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	padding: 10px 12px !important;
+	border-radius: 0 !important;
+	text-align: center;
+	box-shadow: none !important;
+}
+
+.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-cart:hover {
+	background: var(--mh-ink) !important;
+	color: var(--mh-paper) !important;
+	border-color: var(--mh-ink) !important;
+}
+
+.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-checkout {
+	background: var(--mh-wp) !important;
+	color: #fff !important;
+	border: 1px solid var(--mh-wp-d) !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 12px !important;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	padding: 12px !important;
+	border-radius: 0 !important;
+	text-align: center;
+	box-shadow: none !important;
+}
+
+.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-checkout::after {
+	content: ' →';
+}
+
+.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-checkout:hover {
+	background: var(--mh-wp-d) !important;
+}
+
+/* Mono caption appended to footer */
+.wc-block-mini-cart__drawer .wc-block-mini-cart__footer::after {
+	content: 'free returns · ships worldwide · packed by a human';
+	display: block;
+	text-align: center;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	color: var(--mh-slate-2);
+	letter-spacing: 0.04em;
+	margin-top: 8px;
+}
+
+/* Empty state — fraktur */
+.wc-block-mini-cart__drawer .wc-block-mini-cart__empty-cart-wrapper {
+	padding: 60px 24px;
+	text-align: center;
+	color: var(--mh-slate);
+}
+
+.wc-block-mini-cart__drawer .wc-block-mini-cart__empty-cart-wrapper p {
+	font-family: 'Newsreader', Georgia, serif;
+	font-style: italic;
+	font-size: 16px;
+	color: var(--mh-slate);
+	margin: 0 0 18px;
+}
+
+.wc-block-mini-cart__drawer .wc-block-mini-cart__empty-cart-wrapper p strong {
+	font-style: normal;
+	font-weight: 500;
+	color: var(--mh-ink);
+}
+
+.wc-block-mini-cart__drawer .wc-block-mini-cart__shopping-button {
+	background: var(--mh-ink) !important;
+	color: var(--mh-paper) !important;
+	border: 1px solid var(--mh-ink) !important;
+	border-radius: 0 !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 11px !important;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	padding: 10px 16px !important;
+}

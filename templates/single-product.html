@@ -1,0 +1,189 @@
+<!-- wp:template-part {"slug":"header","theme":"mercantile-hook-loop","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"main","align":"full","style":{"spacing":{"padding":{"top":"32px","bottom":"56px","left":"var:preset|spacing|gutter","right":"var:preset|spacing|gutter"},"blockGap":"0"}},"layout":{"type":"default"},"className":"mh-pdp-wrap"} -->
+<main class="wp-block-group alignfull mh-pdp-wrap" style="padding-top:32px;padding-right:var(--wp--preset--spacing--gutter);padding-bottom:56px;padding-left:var(--wp--preset--spacing--gutter)">
+
+	<!-- wp:group {"align":"wide","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"default"},"className":"mh-pdp"} -->
+	<div class="wp-block-group alignwide mh-pdp">
+
+		<!-- wp:html -->
+		<header class="mh-pdp__header">
+			<div class="mh-pdp__crumb">
+				<span>mercantile</span>
+				<span class="sl">/</span>
+				<span>shop</span>
+				<span class="sl">/</span>
+				<b>product</b>
+				<span class="mh-pdp__crumb-action">post.php?action=edit</span>
+			</div>
+			<a class="mh-pdp__close" href="/" aria-label="Back to shop">×</a>
+		</header>
+		<!-- /wp:html -->
+
+		<!-- wp:group {"style":{"spacing":{"blockGap":"0"}},"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top","justifyContent":"left"},"className":"mh-pdp__body"} -->
+		<div class="wp-block-group mh-pdp__body">
+
+			<!-- wp:group {"style":{"spacing":{"blockGap":"14px","padding":{"top":"24px","bottom":"24px","left":"28px","right":"28px"}}},"layout":{"type":"default"},"className":"mh-pdp__editor"} -->
+			<div class="wp-block-group mh-pdp__editor" style="padding-top:24px;padding-right:28px;padding-bottom:24px;padding-left:28px">
+
+				<!-- wp:html -->
+				<div class="mh-pdp__permalink">
+					permalink:
+					<span class="k">http://localhost:8883/product/</span><b class="hl-blue">slug</b>
+					<span class="mh-pdp__permalink-meta">· modified just now</span>
+				</div>
+				<!-- /wp:html -->
+
+				<!-- wp:post-title {"level":1,"className":"mh-pdp__title"} /-->
+
+				<!-- wp:woocommerce/product-summary {"className":"mh-pdp__blurb"} /-->
+
+				<!-- wp:html -->
+				<div class="mh-marginalia">
+					<span class="mh-pill is-blue">highlighted</span>
+					<span class="mh-pill">indexed</span>
+					<span class="mh-pill is-pink">in stock</span>
+					<span class="mh-pill">cross-ref · §shop</span>
+				</div>
+				<!-- /wp:html -->
+
+				<!-- wp:group {"className":"mh-pdp__gallery","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"default"}} -->
+				<div class="wp-block-group mh-pdp__gallery">
+					<!-- wp:woocommerce/product-gallery {"hoverZoom":false,"fullScreenOnClick":false} -->
+					<div class="wp-block-woocommerce-product-gallery">
+						<!-- wp:woocommerce/product-gallery-large-image -->
+						<div class="wp-block-woocommerce-product-gallery-large-image">
+							<!-- wp:woocommerce/product-image {"showSaleBadge":false,"imageSizing":"single"} /-->
+						</div>
+						<!-- /wp:woocommerce/product-gallery-large-image -->
+					</div>
+					<!-- /wp:woocommerce/product-gallery -->
+				</div>
+				<!-- /wp:group -->
+
+				<!-- wp:html -->
+				<div class="mh-shortcode">
+					<span>[<span class="k">mercantile</span> <span class="k">id</span>=<span class="v">"slug"</span> <span class="k">size</span>=<span class="v">"M"</span>]</span>
+					<span class="copy">copy →</span>
+				</div>
+				<!-- /wp:html -->
+
+			</div>
+			<!-- /wp:group -->
+
+			<!-- wp:group {"style":{"spacing":{"blockGap":"0","padding":{"top":"22px","bottom":"22px","left":"20px","right":"18px"}}},"layout":{"type":"default"},"className":"mh-pdp__side"} -->
+			<aside class="wp-block-group mh-pdp__side" style="padding-top:22px;padding-right:18px;padding-bottom:22px;padding-left:20px">
+
+				<!-- wp:html -->
+				<section class="mh-pdp__panel">
+					<h3>Publish</h3>
+					<div class="mh-status-row"><span>status</span><span class="v g">● published</span></div>
+					<div class="mh-status-row"><span>visibility</span><span class="v">public</span></div>
+					<div class="mh-status-row"><span>stock</span><span class="v"><b>in stock</b></span></div>
+					<div class="mh-side-label">Size</div>
+					<div class="mh-sizes">
+						<button type="button">XS</button>
+						<button type="button">S</button>
+						<button type="button" class="on">M</button>
+						<button type="button">L</button>
+						<button type="button">XL</button>
+						<button type="button">XXL</button>
+						<button type="button">3XL</button>
+					</div>
+				</section>
+				<!-- /wp:html -->
+
+				<!-- wp:woocommerce/add-to-cart-form {"className":"mh-pdp__cta"} /-->
+
+				<!-- wp:group {"className":"mh-pdp__panel mh-pdp__panel--details","style":{"spacing":{"blockGap":"0","padding":{"top":"16px"}},"border":{"top":{"color":"var:preset|color|rule","width":"1px"}}},"layout":{"type":"default"}} -->
+				<div class="wp-block-group mh-pdp__panel mh-pdp__panel--details" style="border-top-color:var(--wp--preset--color--rule);border-top-width:1px;padding-top:16px">
+					<!-- wp:html -->
+					<h3 class="mh-pdp__panel-h3">Details</h3>
+					<dl class="mh-pdp__specs">
+						<dt>SKU</dt><dd class="mono"></dd>
+					</dl>
+					<!-- /wp:html -->
+
+					<!-- wp:group {"className":"mh-pdp__spec-row","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"},"style":{"spacing":{"blockGap":"10px"}}} -->
+					<div class="wp-block-group mh-pdp__spec-row">
+						<!-- wp:paragraph {"style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"10px","letterSpacing":"0.08em","textTransform":"uppercase"}},"textColor":"slate","className":"mh-pdp__spec-key"} -->
+						<p class="has-slate-color has-text-color mh-pdp__spec-key" style="font-family:'JetBrains Mono', ui-monospace, monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase">price</p>
+						<!-- /wp:paragraph -->
+						<!-- wp:woocommerce/product-price {"className":"mh-pdp__spec-price"} /-->
+					</div>
+					<!-- /wp:group -->
+
+					<!-- wp:group {"className":"mh-pdp__spec-row","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"},"style":{"spacing":{"blockGap":"10px"}}} -->
+					<div class="wp-block-group mh-pdp__spec-row">
+						<!-- wp:paragraph {"style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"10px","letterSpacing":"0.08em","textTransform":"uppercase"}},"textColor":"slate","className":"mh-pdp__spec-key"} -->
+						<p class="has-slate-color has-text-color mh-pdp__spec-key" style="font-family:'JetBrains Mono', ui-monospace, monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase">category</p>
+						<!-- /wp:paragraph -->
+						<!-- wp:post-terms {"term":"product_cat","style":{"typography":{"fontFamily":"'Newsreader', Georgia, serif","fontSize":"13px"}},"textColor":"ink","className":"mh-pdp__spec-val"} /-->
+					</div>
+					<!-- /wp:group -->
+
+					<!-- wp:group {"className":"mh-pdp__spec-row","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"},"style":{"spacing":{"blockGap":"10px"}}} -->
+					<div class="wp-block-group mh-pdp__spec-row">
+						<!-- wp:paragraph {"style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"10px","letterSpacing":"0.08em","textTransform":"uppercase"}},"textColor":"slate","className":"mh-pdp__spec-key"} -->
+						<p class="has-slate-color has-text-color mh-pdp__spec-key" style="font-family:'JetBrains Mono', ui-monospace, monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase">tags</p>
+						<!-- /wp:paragraph -->
+						<!-- wp:post-terms {"term":"product_tag","prefix":"","suffix":"","style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"11px"}},"className":"mh-pdp__spec-tags"} /-->
+					</div>
+					<!-- /wp:group -->
+
+					<!-- wp:html -->
+					<dl class="mh-pdp__specs mh-pdp__specs--manual">
+						<dt>material</dt><dd>100% ring-spun cotton, 220gsm</dd>
+						<dt>care</dt><dd>cold wash · line dry · review PRs</dd>
+					</dl>
+					<!-- /wp:html -->
+				</div>
+				<!-- /wp:group -->
+
+				<!-- wp:group {"className":"mh-pdp__panel mh-pdp__panel--related","style":{"spacing":{"blockGap":"10px","padding":{"top":"16px","bottom":"4px"}},"border":{"top":{"color":"var:preset|color|rule","width":"1px"}}},"layout":{"type":"default"}} -->
+				<div class="wp-block-group mh-pdp__panel mh-pdp__panel--related" style="border-top-color:var(--wp--preset--color--rule);border-top-width:1px;padding-top:16px;padding-bottom:4px">
+					<!-- wp:html -->
+					<h3 class="mh-pdp__panel-h3">Related</h3>
+					<!-- /wp:html -->
+
+					<!-- wp:woocommerce/product-collection {"queryId":3,"query":{"perPage":5,"pages":0,"offset":0,"postType":"product","order":"desc","orderBy":"date","search":"","exclude":[],"inherit":false,"taxQuery":{},"isProductCollectionBlock":true,"woocommerceOnSale":false,"woocommerceStockStatus":["instock"],"woocommerceAttributes":[],"woocommerceHandPickedProducts":[],"relatedBy":{"categories":true,"tags":false}},"collection":"woocommerce/product-collection/related","displayLayout":{"type":"flex","columns":1,"shrinkColumns":false},"queryContextIncludes":["collection"],"className":"mh-pdp__related-list"} -->
+					<div class="wp-block-woocommerce-product-collection mh-pdp__related-list">
+						<!-- wp:woocommerce/product-template -->
+							<!-- wp:group {"layout":{"type":"flex","justifyContent":"space-between","flexWrap":"nowrap"},"className":"mh-related-row"} -->
+							<div class="wp-block-group mh-related-row">
+								<!-- wp:post-title {"level":4,"isLink":true,"style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"11px","fontWeight":"400","lineHeight":"1.3"}},"textColor":"wp"} /-->
+								<!-- wp:woocommerce/product-price {"isDescendentOfQueryLoop":true,"style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"11px"}},"textColor":"slate"} /-->
+							</div>
+							<!-- /wp:group -->
+						<!-- /wp:woocommerce/product-template -->
+					</div>
+					<!-- /wp:woocommerce/product-collection -->
+				</div>
+				<!-- /wp:group -->
+
+				<!-- wp:group {"className":"mh-pdp__panel mh-pdp__panel--revisions","style":{"spacing":{"blockGap":"4px","padding":{"top":"16px"}},"border":{"top":{"color":"var:preset|color|rule","width":"1px"}}},"layout":{"type":"default"}} -->
+				<div class="wp-block-group mh-pdp__panel mh-pdp__panel--revisions" style="border-top-color:var(--wp--preset--color--rule);border-top-width:1px;padding-top:16px">
+					<!-- wp:html -->
+					<h3 class="mh-pdp__panel-h3">Revisions</h3>
+					<div class="mh-revisions">
+						<div><b>wapuu</b>, <span>2h ago — removed a TODO</span></div>
+						<div><b>wapuu</b>, <span>2w ago — created in a frenzy</span></div>
+						<div><b>wapuu</b>, <span>1mo ago — changed color to mauve</span></div>
+					</div>
+					<!-- /wp:html -->
+				</div>
+				<!-- /wp:group -->
+
+			</aside>
+			<!-- /wp:group -->
+
+		</div>
+		<!-- /wp:group -->
+
+	</div>
+	<!-- /wp:group -->
+
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","theme":"mercantile-hook-loop","tagName":"footer"} /-->
