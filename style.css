@@ -410,10 +410,12 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	padding: 6px 10px !important;
 	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
 	font-size: 12px !important;
+	line-height: 1.4 !important;
 	letter-spacing: 0 !important;
 	text-transform: lowercase !important;
 	font-weight: 400 !important;
 	min-height: 0 !important;
+	box-sizing: border-box !important;
 	gap: 6px;
 	display: inline-flex;
 	align-items: center;
