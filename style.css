@@ -624,6 +624,12 @@ body.post-type-archive-product .mh-filters .mh-filter {
 
 .mh-footer .mh-footer__bottom b { color: var(--mh-paper); }
 
+/* SSH cross-link in the footer bottom row, replacing the version stamp.
+   Mono command in white; arrow + tagline inherit the copyright span style
+   on the other side (footer JetBrains Mono, slate-2). */
+.mh-footer .mh-footer__ssh-cmd { color: var(--mh-paper); font-weight: 600; }
+.mh-footer .mh-footer__ssh-sep { margin: 0 4px; }
+
 /* ===== Tag pill (decorative typography pop) ===== */
 .mh-pill {
 	display: inline-block;
