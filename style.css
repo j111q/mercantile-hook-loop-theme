@@ -1977,7 +1977,7 @@ body.post-type-archive-product .mh-filters .mh-filter {
 
 /* Mono caption appended to footer */
 .wc-block-mini-cart__drawer .wc-block-mini-cart__footer::after {
-	content: 'free returns · ships worldwide · packed by a human';
+	content: 'ships worldwide · profits to the WordPress Foundation · 14-day defect window';
 	display: block;
 	text-align: center;
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
