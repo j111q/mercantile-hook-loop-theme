@@ -366,34 +366,6 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	transition: background 0.1s, color 0.1s;
 }
 
-/* Search block tweaks */
-.mh-section-head .mh-search-block .wp-block-search__inside-wrapper {
-	border-radius: 0 !important;
-	border: 1px solid var(--mh-rule) !important;
-	background: var(--mh-paper-2) !important;
-	padding: 0 !important;
-}
-
-.mh-section-head .mh-search-block .wp-block-search__input {
-	border: 0 !important;
-	background: transparent !important;
-	padding: 6px 10px !important;
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 12px !important;
-	color: var(--mh-ink) !important;
-	min-height: 0 !important;
-	width: 220px !important;
-	line-height: 1.4 !important;
-}
-
-.mh-section-head .mh-search-block .wp-block-search__input::placeholder {
-	color: var(--mh-slate-2);
-}
-
-.mh-section-head .mh-search-block .wp-block-search__input:focus {
-	outline: none !important;
-	background: #fff !important;
-}
 
 /* Mini-cart button — match the prototype's dark cart pill */
 .mh-section-head .mh-mini-cart.wp-block-woocommerce-mini-cart,
