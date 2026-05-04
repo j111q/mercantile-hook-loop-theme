@@ -76,6 +76,21 @@ body {
 	border-right: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+/* WP logomark in the ticker doubles as the home link.
+   Inside joke: click WordPress, go home. */
+.mh-ticker .mh-ticker__home {
+	display: inline-flex;
+	align-items: center;
+	color: inherit;
+	line-height: 0;
+	transition: color 0.15s ease;
+}
+.mh-ticker .mh-ticker__home:hover,
+.mh-ticker .mh-ticker__home:focus-visible {
+	color: var(--mh-wp);
+	outline: none;
+}
+
 .mh-ticker .mh-ticker__dot {
 	width: 6px;
 	height: 6px;
