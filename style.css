@@ -194,11 +194,15 @@ body {
 	text-align: right;
 }
 
-/* ===== Wordmark ===== */
+/* ===== Wordmark =====
+   Floor scales with viewport so "Mercantile." (~5.7em wide in
+   UnifrakturCook) fits inside the hero gutter on phones. At 390px
+   the old 96px floor rendered the word ~550px wide, clipping the
+   final letters. */
 .mh-mark {
 	font-family: 'UnifrakturCook', 'Newsreader', Georgia, serif;
 	font-weight: 700;
-	font-size: clamp(96px, 14vw, 195px);
+	font-size: clamp(48px, 13vw, 195px);
 	line-height: 1;
 	letter-spacing: -0.005em;
 	color: var(--mh-ink);
@@ -313,6 +317,21 @@ body {
 	font-size: 12px;
 	border: 1px solid var(--mh-rule);
 	background: var(--mh-paper-2);
+	/* On narrow viewports the filter row would otherwise burst past the
+	   section-head padding (e.g. 'accessories 05' clipped at the right).
+	   Scroll horizontally instead. The mask-image fades the right edge so
+	   it reads as 'there's more here, swipe' rather than a hard clip. */
+	max-width: 100%;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	scrollbar-width: none;
+}
+.mh-filters::-webkit-scrollbar { display: none; }
+@media (max-width: 600px) {
+	.mh-filters {
+		mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
+		-webkit-mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
+	}
 }
 
 .mh-filters .mh-filter {
@@ -325,6 +344,8 @@ body {
 	line-height: 1.4;
 	cursor: pointer;
 	text-decoration: none;
+	flex: 0 0 auto;
+	white-space: nowrap;
 }
 
 .mh-filters .mh-filter:hover { background: var(--mh-card); }
