@@ -28,17 +28,43 @@ import { store, getContext, getElement } from '@wordpress/interactivity';
 
 const NAMESPACE = 'mercantile/pdp-modal';
 
+// Pool of in-character loading messages shown briefly while we fetch
+// the product page. Picked at random per open, never repeating the
+// previous one. Same vibe as the prototype's HL_LOADING_LABELS but
+// scoped to "viewing a product" rather than "adding to cart".
+const LOADING_LABELS = [
+	'compiling…',
+	'unwrapping it…',
+	'running the_content()…',
+	'pulling from wp-content/merch…',
+	'polishing the kerning…',
+	'committing markup…',
+	'wapuu woke up…',
+	"did_action( 'preview' )…",
+	'fetching, gently…',
+];
+
+let lastLoadingLabel = null;
+function pickLoadingLabel() {
+	const options = LOADING_LABELS.filter( ( l ) => l !== lastLoadingLabel );
+	const next = options[ Math.floor( Math.random() * options.length ) ];
+	lastLoadingLabel = next;
+	return next;
+}
+
 const { state, actions } = store( NAMESPACE, {
 	state: {
 		isOpen: false,
 		isLoading: false,
 		html: '',
 		currentUrl: '',
+		loadingText: 'compiling…',
 	},
 	actions: {
 		*open( url ) {
 			state.isOpen = true;
 			state.isLoading = true;
+			state.loadingText = pickLoadingLabel();
 			state.currentUrl = url;
 			document.body.style.overflow = 'hidden';
 
