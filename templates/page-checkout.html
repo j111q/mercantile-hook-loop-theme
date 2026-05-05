@@ -1,16 +1,25 @@
 <!-- wp:template-part {"slug":"header","theme":"mercantile-hook-loop","tagName":"header"} /-->
 
-<!-- wp:group {"tagName":"main","align":"full","style":{"spacing":{"padding":{"top":"48px","bottom":"64px","left":"var:preset|spacing|gutter","right":"var:preset|spacing|gutter"}}},"layout":{"type":"default"}} -->
-<main class="wp-block-group alignfull" style="padding-top:48px;padding-right:var(--wp--preset--spacing--gutter);padding-bottom:64px;padding-left:var(--wp--preset--spacing--gutter)">
-	<!-- wp:group {"align":"wide","layout":{"type":"default"}} -->
-	<div class="wp-block-group alignwide">
-		<!-- wp:paragraph {"style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"11px","letterSpacing":"0.1em","textTransform":"uppercase"}},"textColor":"slate"} -->
-		<p class="has-slate-color has-text-color" style="font-family:'JetBrains Mono', ui-monospace, monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase">/* basket · review */</p>
-		<!-- /wp:paragraph -->
-		<!-- wp:post-title {"level":1,"style":{"typography":{"fontFamily":"'UnifrakturCook', 'Newsreader', Georgia, serif","fontSize":"clamp(56px, 9vw, 112px)","lineHeight":"1"}}} /-->
-		<!-- wp:post-content {"layout":{"type":"constrained"}} /-->
+<!-- wp:group {"tagName":"main","align":"full","className":"checkout-view","style":{"spacing":{"padding":{"top":"0","right":"0","bottom":"0","left":"0"},"blockGap":"0"}},"layout":{"type":"default"}} -->
+<main class="wp-block-group alignfull checkout-view" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
+
+	<!-- wp:html -->
+	<div class="ckhead">
+		<div class="crumb"><a href="/">← shop</a><b>/</b>checkout</div>
+		<div class="meta">
+			<span>SSL · <b>secure</b></span>
+			<span>est. ship · <b>1–2 business days</b></span>
+		</div>
 	</div>
-	<!-- /wp:group -->
+	<div class="step-nav">
+		<div class="step done"><span class="n">01</span><span>cart</span></div>
+		<div class="step now"><span class="n">02</span><span>details</span></div>
+		<div class="step"><span class="n">03</span><span>confirm</span></div>
+	</div>
+	<!-- /wp:html -->
+
+	<!-- wp:post-content {"layout":{"type":"constrained"}} /-->
+
 </main>
 <!-- /wp:group -->
 

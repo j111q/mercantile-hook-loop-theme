@@ -40,6 +40,28 @@ add_action(
 	}
 );
 
+/**
+ * Re-label a few WooCommerce Checkout step headings to match the
+ * Mercantile prototype (Contact / Shipping address / Payment).
+ */
+add_filter(
+	'gettext_woocommerce',
+	function ( $translation, $text ) {
+		switch ( $text ) {
+			case 'Contact information':
+				return 'Contact';
+			case 'Billing address':
+			case 'Billing':
+				return 'Shipping address';
+			case 'Payment options':
+				return 'Payment';
+		}
+		return $translation;
+	},
+	10,
+	2
+);
+
 add_action(
 	'enqueue_block_editor_assets',
 	function () {

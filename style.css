@@ -2047,3 +2047,460 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	text-transform: uppercase;
 	padding: 10px 16px !important;
 }
+
+/* ============================================================
+   CHECKOUT — page chrome + WooCommerce Checkout Block styling
+   Mirrors the prototype at j111q.github.io/mercantile-prototype
+   /explore/03-hook-loop/#/checkout
+   ============================================================ */
+.checkout-view {
+	background: var(--mh-paper);
+	min-height: calc(100vh - 28px);
+	display: flex;
+	flex-direction: column;
+	padding: 0;
+}
+
+.checkout-view .ckhead {
+	border-bottom: 1px solid var(--mh-rule);
+	padding: 16px var(--mh-gutter);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-slate);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	background: var(--mh-paper-2);
+	flex-wrap: wrap;
+	gap: 8px;
+}
+.checkout-view .ckhead .crumb a {
+	color: var(--mh-ink);
+	text-decoration: none;
+	border-bottom: 1px dashed var(--mh-slate-2);
+}
+.checkout-view .ckhead .crumb a:hover {
+	border-bottom-color: var(--mh-wp);
+	color: var(--mh-wp);
+}
+.checkout-view .ckhead .crumb b {
+	color: var(--mh-ink);
+	margin: 0 8px;
+}
+.checkout-view .ckhead .meta {
+	display: flex;
+	gap: 16px;
+	align-items: center;
+	color: var(--mh-slate-2);
+	flex-wrap: wrap;
+}
+.checkout-view .ckhead .meta b {
+	color: var(--mh-ink);
+}
+
+.checkout-view .step-nav {
+	display: flex;
+	gap: 0;
+	border-bottom: 1px solid var(--mh-rule);
+	padding: 0 var(--mh-gutter);
+	background: var(--mh-paper);
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+}
+.checkout-view .step-nav .step {
+	padding: 14px 18px;
+	color: var(--mh-slate-2);
+	display: flex;
+	gap: 8px;
+	align-items: baseline;
+	border-right: 1px solid var(--mh-rule);
+}
+.checkout-view .step-nav .step .n {
+	color: var(--mh-slate-2);
+	font-size: 9px;
+	border: 1px solid var(--mh-rule);
+	padding: 1px 5px;
+	border-radius: 1px;
+}
+.checkout-view .step-nav .step.now {
+	color: var(--mh-ink);
+}
+.checkout-view .step-nav .step.now .n {
+	background: var(--mh-ink);
+	color: var(--mh-paper);
+	border-color: var(--mh-ink);
+}
+.checkout-view .step-nav .step.done {
+	color: var(--mh-slate);
+}
+
+/* WooCommerce Checkout Block proper */
+.checkout-view .wc-block-checkout,
+.checkout-view .wp-block-woocommerce-checkout {
+	flex: 1;
+	max-width: 1100px;
+	margin: 0 auto;
+	padding: 0 40px;
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.checkout-view .wc-block-checkout__main,
+.checkout-view .wp-block-woocommerce-checkout-fields-block {
+	padding: 32px 36px 48px 0;
+	border-right: 1px solid var(--mh-rule);
+}
+
+.checkout-view .wc-block-components-checkout-step {
+	padding: 0 0 28px;
+	border-bottom: 1px dashed var(--mh-rule);
+	margin-bottom: 28px;
+}
+.checkout-view .wc-block-checkout__main > .wc-block-components-checkout-step:last-of-type {
+	border-bottom: 0;
+}
+.checkout-view .wc-block-components-checkout-step__heading {
+	margin-bottom: 14px;
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+.checkout-view .wc-block-components-checkout-step__title {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--mh-slate);
+	margin: 0;
+	font-weight: 600;
+}
+.checkout-view .wc-block-components-checkout-step__title::before {
+	content: '§ ';
+	color: var(--mh-wp);
+	font-weight: 700;
+}
+.checkout-view .wc-block-components-checkout-step__description {
+	font-family: 'Newsreader', Georgia, serif;
+	font-style: italic;
+	font-size: 13px;
+	color: var(--mh-slate-2);
+	font-weight: 400;
+}
+
+/* Form fields */
+.checkout-view .wc-block-components-text-input input,
+.checkout-view .wc-block-components-text-input select,
+.checkout-view .wc-block-components-text-input textarea,
+.checkout-view .wc-block-components-address-form input,
+.checkout-view .wc-block-components-address-form select {
+	border: 1px solid var(--mh-rule) !important;
+	background: #fff !important;
+	padding: 10px 12px !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 13px !important;
+	color: var(--mh-ink) !important;
+	border-radius: 0 !important;
+	line-height: 1.4;
+	box-sizing: border-box;
+	width: 100%;
+}
+.checkout-view .wc-block-components-text-input label,
+.checkout-view .wc-block-components-address-form label {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--mh-slate-2);
+}
+.checkout-view .wc-block-components-text-input input:focus,
+.checkout-view .wc-block-components-text-input select:focus,
+.checkout-view .wc-block-components-text-input textarea:focus {
+	outline: none;
+	border-color: var(--mh-wp) !important;
+	box-shadow: 0 0 0 1px var(--mh-wp);
+}
+
+/* Radio control (shipping methods) */
+.checkout-view .wc-block-components-radio-control__option {
+	border: 1px solid var(--mh-rule);
+	background: #fff;
+	padding: 12px 14px;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 12px;
+	color: var(--mh-ink);
+	border-radius: 0;
+}
+.checkout-view .wc-block-components-radio-control__option--checked,
+.checkout-view .wc-block-components-radio-control__option-checked {
+	border-color: var(--mh-wp);
+	box-shadow: 0 0 0 1px var(--mh-wp);
+	background: var(--mh-paper-2);
+}
+.checkout-view .wc-block-components-radio-control__option input[type="radio"] {
+	accent-color: var(--mh-wp);
+}
+
+/* Terms */
+.checkout-view .wc-block-checkout-terms-block label,
+.checkout-view .wp-block-woocommerce-checkout-terms-block label {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-slate);
+	line-height: 1.55;
+}
+.checkout-view .wc-block-checkout-terms-block input[type="checkbox"] {
+	accent-color: var(--mh-wp);
+}
+.checkout-view .wc-block-checkout-terms-block a {
+	color: var(--mh-wp);
+	border-bottom: 1px dashed var(--mh-wp);
+}
+
+/* Place order button */
+.checkout-view .wc-block-components-checkout-place-order-button {
+	width: 100%;
+	padding: 16px;
+	background: var(--mh-ink) !important;
+	color: var(--mh-paper) !important;
+	border: 1px solid var(--mh-ink) !important;
+	border-radius: 0 !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 13px !important;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+.checkout-view .wc-block-components-checkout-place-order-button:hover {
+	background: var(--mh-wp) !important;
+	border-color: var(--mh-wp) !important;
+}
+
+/* Sidebar (totals) */
+.checkout-view .wc-block-checkout__sidebar,
+.checkout-view .wp-block-woocommerce-checkout-totals-block {
+	padding: 32px 0 32px 36px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.checkout-view .wc-block-components-order-summary__heading,
+.checkout-view .wp-block-woocommerce-checkout-order-summary-heading-block {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--mh-slate);
+	margin: 0 0 14px;
+	font-weight: 600;
+}
+.checkout-view .wc-block-components-order-summary__heading::before {
+	content: '§ ';
+	color: var(--mh-wp);
+	font-weight: 700;
+}
+
+.checkout-view .wc-block-components-order-summary-item {
+	border-bottom: 1px solid var(--mh-rule);
+	padding: 10px 0;
+}
+.checkout-view .wc-block-components-order-summary-item__description,
+.checkout-view .wc-block-components-product-name {
+	font-family: 'Newsreader', Georgia, serif;
+	font-size: 14px;
+	color: var(--mh-ink);
+	line-height: 1.3;
+}
+.checkout-view .wc-block-components-order-summary-item__quantity {
+	background: var(--mh-ink);
+	color: var(--mh-paper);
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	border: 1.5px solid var(--mh-paper);
+}
+.checkout-view .wc-block-components-order-summary-item__total-price,
+.checkout-view .wc-block-components-product-price {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 12px;
+	color: var(--mh-ink);
+	font-weight: 600;
+}
+
+/* Coupon */
+.checkout-view .wc-block-components-totals-coupon,
+.checkout-view .wp-block-woocommerce-checkout-order-summary-coupon-form-block {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+}
+.checkout-view .wc-block-components-totals-coupon__button {
+	color: var(--mh-wp) !important;
+	border-bottom: 1px dashed var(--mh-wp);
+}
+.checkout-view .wc-block-components-totals-coupon__content input {
+	border: 1px solid var(--mh-rule);
+	border-radius: 0;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+.checkout-view .wc-block-components-totals-coupon__content button {
+	background: var(--mh-ink);
+	color: var(--mh-paper);
+	border: 1px solid var(--mh-ink);
+	border-radius: 0;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+.checkout-view .wc-block-components-totals-coupon__content button:hover {
+	background: var(--mh-wp);
+	border-color: var(--mh-wp);
+}
+
+/* Totals */
+.checkout-view .wc-block-components-totals-wrapper {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 12px;
+	border-top: 1px solid var(--mh-rule);
+	padding-top: 8px;
+}
+.checkout-view .wc-block-components-totals-item {
+	padding: 6px 0;
+	color: var(--mh-ink);
+}
+.checkout-view .wc-block-components-totals-item__label {
+	color: var(--mh-slate);
+}
+.checkout-view .wc-block-components-totals-item--discount .wc-block-components-totals-item__value {
+	color: var(--mh-wp);
+}
+.checkout-view .wc-block-components-totals-footer-item {
+	border-top: 1px solid var(--mh-rule);
+	margin-top: 6px;
+	padding: 12px 0 0;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+@media (max-width: 800px) {
+	.checkout-view .wc-block-checkout,
+	.checkout-view .wp-block-woocommerce-checkout {
+		padding: 0 20px;
+	}
+	.checkout-view .wc-block-checkout__main,
+	.checkout-view .wp-block-woocommerce-checkout-fields-block {
+		padding: 24px 0 32px;
+		border-right: 0;
+		border-top: 1px solid var(--mh-rule);
+		order: 2;
+	}
+	.checkout-view .wc-block-checkout__sidebar,
+	.checkout-view .wp-block-woocommerce-checkout-totals-block {
+		padding: 24px 0;
+		order: 1;
+		position: static;
+		border-bottom: 1px solid var(--mh-rule);
+	}
+	.checkout-view .step-nav {
+		padding: 0 20px;
+		overflow-x: auto;
+	}
+	.checkout-view .step-nav .step {
+		padding: 12px 14px;
+		flex-shrink: 0;
+	}
+}
+
+/* Checkout — strip padding/border from order summary block + image */
+.checkout-view .wp-block-post-content {
+	padding-top: 0;
+}
+.checkout-view .wp-block-woocommerce-checkout-order-summary-block {
+	border: 0;
+	padding: 0;
+	background: transparent;
+}
+.checkout-view .wc-block-components-order-summary-item__image {
+	border: 1px solid var(--mh-rule);
+	background: var(--mh-paper-2);
+}
+
+/* Order summary — constrain thumbnail to 44×44 like prototype */
+.checkout-view .wc-block-components-order-summary-item {
+	display: grid;
+	grid-template-columns: 44px 1fr auto;
+	gap: 10px;
+	align-items: center;
+}
+.checkout-view .wc-block-components-order-summary-item__image {
+	width: 44px;
+	height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	position: relative;
+}
+.checkout-view .wc-block-components-order-summary-item__image img {
+	max-width: 90%;
+	max-height: 90%;
+	object-fit: contain;
+	width: auto;
+	height: auto;
+}
+
+/* Payment radio — let WC's native layout breathe; remove the grid override
+   inherited from the prototype's shipping-method radios. */
+.checkout-view .wp-block-woocommerce-checkout-payment-block .wc-block-components-radio-control__option,
+.checkout-view .wp-block-woocommerce-checkout-payment-block .wc-block-components-radio-control-accordion-option {
+	display: block;
+	padding: 12px 14px 12px 38px;
+	position: relative;
+}
+.checkout-view .wp-block-woocommerce-checkout-payment-block .wc-block-components-radio-control__input,
+.checkout-view .wp-block-woocommerce-checkout-payment-block .wc-block-components-radio-control__option input[type="radio"] {
+	position: absolute;
+	left: 14px;
+	top: 14px;
+	margin: 0;
+}
+
+/* Totals — drop WC's own border on the footer/wrapper so we don't double up
+   with our top rule. */
+.checkout-view .wc-block-components-totals-footer-item {
+	border-bottom: 0;
+}
+.checkout-view .wp-block-woocommerce-checkout-order-summary-totals-block,
+.checkout-view .wp-block-woocommerce-checkout-order-summary-subtotal-block,
+.checkout-view .wp-block-woocommerce-checkout-order-summary-shipping-block,
+.checkout-view .wp-block-woocommerce-checkout-order-summary-taxes-block,
+.checkout-view .wp-block-woocommerce-checkout-order-summary-discount-block,
+.checkout-view .wp-block-woocommerce-checkout-order-summary-fee-block {
+	border: 0;
+}
+
+/* Order summary thumbnail — force 44×44, top-align in row, override WC's
+   width-only constraint which lets tall images stretch the wrapper. */
+.checkout-view .wc-block-components-order-summary-item {
+	align-items: flex-start;
+}
+.checkout-view .wc-block-components-order-summary-item__image {
+	width: 44px !important;
+	height: 44px !important;
+	margin-top: 8px;
+	padding: 0 !important;
+	flex-shrink: 0;
+}
+.checkout-view .wc-block-components-order-summary-item__image > img {
+	max-width: 44px !important;
+	max-height: 44px !important;
+	width: auto !important;
+	height: auto !important;
+	object-fit: contain;
+}
