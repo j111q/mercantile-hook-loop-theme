@@ -2636,6 +2636,13 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	pointer-events: none;
 	white-space: nowrap;
 }
+@media (max-width: 600px) {
+	.mh-pdp-modal__loading {
+		gap: 20px;
+		padding: 40px 12px;
+		font-size: 12px;
+	}
+}
 .mh-pdp-modal__loading[hidden] { display: none; }
 /* Blinking caret cursor after the loading message — matches the title's
    caret animation, so loading reads as 'something is being typed'. */
@@ -2655,7 +2662,9 @@ body.post-type-archive-product .mh-filters .mh-filter {
 .mh-wapuu-ascii {
 	margin: 0;
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 6px;
+	/* Scales smoothly with viewport so the ~100-char-wide figure fits
+	   inside the modal card on phones. Caps at 6px on desktop. */
+	font-size: clamp(3.2px, 1.4vw, 6px);
 	line-height: 1.05;
 	color: var(--mh-slate);
 	white-space: pre;
