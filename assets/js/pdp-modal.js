@@ -17,11 +17,13 @@
  * so external / shared links still work.
  *
  * Architecture: a single global interactive store named
- * `mercantile/pdp-modal`. The modal scaffold lives in parts/pdp-modal.html
- * and is rendered in every page via the header template part. Click
- * interception is handled with a global delegate so it works for any
- * `<a href="/product/...">` link in any block (catalog cells, related
- * products in another modal, mini-cart line items, etc.).
+ * `mercantile/pdp-modal`. All event listeners (click, keydown, popstate) are
+ * registered through IxAPI directives on the modal scaffold rather than via
+ * vanilla `addEventListener`, so the lifecycle is owned by the IxAPI runtime
+ * and the registration is declarative in `parts/pdp-modal.html`. The click
+ * delegate uses `data-wp-on-document--click` so it catches any
+ * `<a href="/product/...">` in any block (catalog cells, related products,
+ * mini-cart line items) without per-template directive plumbing.
  */
 
 import { store, getContext, getElement } from '@wordpress/interactivity';
@@ -116,14 +118,38 @@ const { state, actions } = store( NAMESPACE, {
 				ref.innerHTML = state.html || '';
 			}
 		},
+		// Document-level click delegate, registered via
+		// data-wp-on-document--click on the modal root. Catches any
+		// <a href="/product/..."> in any block (catalog cells, related
+		// products, mini-cart line items, etc.) without per-template
+		// directive plumbing.
+		onDocumentClick( event ) {
+			if ( event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ) {
+				return;
+			}
+			const link = event.target.closest( 'a[href*="/product/"]' );
+			if ( ! link || ! isProductLink( link ) ) return;
+			if ( link.target === '_blank' ) return;
+			// Don't intercept if we're already inside the modal — let the
+			// user navigate away if they explicitly want to leave.
+			if ( link.closest( '.mh-pdp-modal' ) ) return;
+			event.preventDefault();
+			actions.open( link.href );
+		},
+		// Window-level popstate handler, registered via
+		// data-wp-on-window--popstate. Closes the modal when the user
+		// hits the browser back button (the back itself advances history,
+		// so we just clear modal state here).
+		onPopstate( event ) {
+			if ( state.isOpen && ( ! event.state || ! event.state.mhPdpModal ) ) {
+				state.isOpen = false;
+				state.html = '';
+				document.body.style.overflow = '';
+			}
+		},
 	},
 } );
 
-// ---- Global click delegate ----
-// Intercept clicks on any link pointing at /product/<slug>/ and route
-// them through the modal. Lives outside the interactivity store so it
-// catches links in any block — product-collection cells, related links
-// inside an open modal, the mini-cart's product names, etc.
 function isProductLink( link ) {
 	if ( ! link || ! link.href ) return false;
 	let pathname;
@@ -134,31 +160,3 @@ function isProductLink( link ) {
 	}
 	return pathname.startsWith( '/product/' );
 }
-
-document.addEventListener( 'click', function ( event ) {
-	if ( event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ) {
-		return;
-	}
-	const link = event.target.closest( 'a[href*="/product/"]' );
-	if ( ! link || ! isProductLink( link ) ) {
-		return;
-	}
-	if ( link.target === '_blank' ) return;
-	// Don't intercept if we're already inside the modal — let the user
-	// navigate away if they explicitly want to leave.
-	if ( link.closest( '.mh-pdp-modal' ) ) return;
-
-	event.preventDefault();
-	actions.open( link.href );
-} );
-
-// Handle browser back / forward.
-window.addEventListener( 'popstate', function ( event ) {
-	if ( state.isOpen && ( ! event.state || ! event.state.mhPdpModal ) ) {
-		// User hit back — close the modal. Don't trigger another history
-		// step (the back button itself already advanced history).
-		state.isOpen = false;
-		state.html = '';
-		document.body.style.overflow = '';
-	}
-} );
