@@ -30,8 +30,7 @@ const NAMESPACE = 'mercantile/pdp-modal';
 
 // Pool of in-character loading messages shown briefly while we fetch
 // the product page. Picked at random per open, never repeating the
-// previous one. Same vibe as the prototype's HL_LOADING_LABELS but
-// scoped to "viewing a product" rather than "adding to cart".
+// previous one.
 const LOADING_LABELS = [
 	'compiling…',
 	'unwrapping it…',
@@ -52,6 +51,125 @@ function pickLoadingLabel() {
 	return next;
 }
 
+// ASCII Wapuu — original art, drawn by Jill, ~100×51 of U+2588 blocks.
+// Rendered character-by-character while the product page is fetching
+// (see startWapuuReveal). Each open shuffles a fresh reveal order so
+// the wapuu materialises differently every time.
+const WAPUU_ART = `                                            ████████████████
+                                       █████████████████████████
+                                   ████████████████    ████████████
+                                 █████████                    █████████████████████████████
+                               ██████                           ███████████████████████████
+                             ██████             ███             ████                   ████
+                           ██████               ███               █████              █████
+                          ████████   █████                          ██████        ███████
+                       ███████ ███  ██████                             ████████████████
+                   █████████          █           ███                    ███████████
+                  ███████ ██        ████████████████████████              ████
+                  ██████████     ████████████████████████████             ████
+                  ███████████████████████████                              ████
+                   ████████████████████████                                 ███
+                   ████   ███████████████                                   ████
+                  ████   █████████████████    ███████████████               ████
+                  ██████████████████████████████████████████████             ███
+                 ██████████████████████       █████████████████████          ████
+                █████████████    ███████     █ █████████████████████         ████
+                █████  ██████    ████████    ██ ██████████████████████       ████
+               ██████  ███████    ████████  ███ ███████████████████████      ████
+               ██████   ██████    ████████  ████ ██████████████████████      ████
+               ██████   ███████    ███████ █████ ██████████████████████      ████
+               ███████  ████████    ██████ █████ ██████████████████████      ████
+               ███████   ███████    █████ █████ ███████████████████████      ████
+               ████████   ███ ███    ████ █████ ███████████████████████      ████
+          ██████████████  ███ ████    ██ █████ ████████████████████████      ███
+         ███████████████   ████████   ██ █████████████████████████████      ████
+        █████   █████████   ████████    ████ ██████████████████████████     ████
+       ████       █████████  ████████   ███     ██████████           ███   ████
+       ████        █████████ █████████ ███       ███████                   ████
+        ████        ████████ ██████████████       ████                    ████
+         ████         █████████████████████        ███                   ████
+          █████       █████████████████████         ███                 █████
+           ██████      █████████████████████        ███               ██████
+             ██████     ████████████████████        ███             ██████
+              ████████  ████████████████████        ███          ████████
+                 ███████████████████████████       ███      ███████████
+                   ███████     █████████████      ██████████████  ████
+                                    █████████   ██████████████   ████
+                   ██████████            ████████████████████   ████
+                  █████████████           █████████  ███████  █████
+                 ████     ██████                   ███████   █████
+                 ████        █████              ████████   █████
+                 █████        ███████    ████████████    ██████
+                  █████         █████████████████     ███████
+                   ██████         ███████████      ████████
+                     ████████                  █████████
+                       ██████████         ████████████
+                          ████████████████████████
+                               ██████████████`;
+
+// Pre-compute the indices of every block character so reveal can
+// shuffle them once and step through. Newlines and spaces stay put.
+const WAPUU_BLOCK_INDICES = ( () => {
+	const out = [];
+	for ( let i = 0; i < WAPUU_ART.length; i++ ) {
+		if ( WAPUU_ART[ i ] === '█' ) out.push( i );
+	}
+	return out;
+} )();
+
+// Total reveal duration, in ms. Tuned to feel like the wapuu is
+// 'rendering in' rather than appearing instantly — but short enough
+// that fast networks still show most of him.
+const WAPUU_REVEAL_MS = 900;
+
+let wapuuTimer = null;
+
+function startWapuuReveal() {
+	stopWapuuReveal();
+	const el = document.querySelector( '.mh-pdp-modal__loading .mh-wapuu-ascii' );
+	if ( ! el ) return;
+
+	// Start with a blank canvas the same shape as the final art —
+	// every block becomes a space, every newline stays. This locks
+	// in the height of the loading area so it doesn't reflow as the
+	// wapuu fills in.
+	const blank = WAPUU_ART.replace( /█/g, ' ' );
+	const buf = blank.split( '' );
+	el.textContent = blank;
+
+	// Fisher-Yates shuffle of the block indices.
+	const order = WAPUU_BLOCK_INDICES.slice();
+	for ( let i = order.length - 1; i > 0; i-- ) {
+		const j = Math.floor( Math.random() * ( i + 1 ) );
+		[ order[ i ], order[ j ] ] = [ order[ j ], order[ i ] ];
+	}
+
+	const total = order.length;
+	const tickMs = 16;
+	const ticks = Math.max( 1, Math.round( WAPUU_REVEAL_MS / tickMs ) );
+	const perTick = Math.max( 1, Math.ceil( total / ticks ) );
+	let cursor = 0;
+
+	wapuuTimer = setInterval( () => {
+		const end = Math.min( cursor + perTick, total );
+		for ( let i = cursor; i < end; i++ ) {
+			buf[ order[ i ] ] = '█';
+		}
+		cursor = end;
+		el.textContent = buf.join( '' );
+		if ( cursor >= total ) {
+			stopWapuuReveal();
+		}
+	}, tickMs );
+}
+
+function stopWapuuReveal() {
+	if ( wapuuTimer ) {
+		clearInterval( wapuuTimer );
+		wapuuTimer = null;
+	}
+}
+
 const { state, actions } = store( NAMESPACE, {
 	state: {
 		isOpen: false,
@@ -67,6 +185,9 @@ const { state, actions } = store( NAMESPACE, {
 			state.loadingText = pickLoadingLabel();
 			state.currentUrl = url;
 			document.body.style.overflow = 'hidden';
+			// Kick off the wapuu reveal on the next tick so the
+			// loading element has rendered in the DOM.
+			setTimeout( startWapuuReveal, 0 );
 
 			try {
 				// Always fetch fresh — the browser otherwise serves a stale
@@ -101,17 +222,20 @@ const { state, actions } = store( NAMESPACE, {
 				// Bail to native navigation on any fetch / parse error.
 				state.isOpen = false;
 				state.isLoading = false;
+				stopWapuuReveal();
 				document.body.style.overflow = '';
 				window.location.href = url;
 				return;
 			}
 
 			state.isLoading = false;
+			stopWapuuReveal();
 		},
 		close() {
 			if ( ! state.isOpen ) return;
 			state.isOpen = false;
 			state.html = '';
+			stopWapuuReveal();
 			document.body.style.overflow = '';
 			// If we opened via pushState, restore the URL on close.
 			if ( window.history.state && window.history.state.mhPdpModal ) {
@@ -185,6 +309,7 @@ window.addEventListener( 'popstate', function ( event ) {
 		// step (the back button itself already advanced history).
 		state.isOpen = false;
 		state.html = '';
+		stopWapuuReveal();
 		document.body.style.overflow = '';
 	}
 } );

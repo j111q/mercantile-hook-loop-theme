@@ -2629,8 +2629,9 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	display: flex;
+	flex-direction: column;
 	align-items: center;
-	gap: 14px;
+	gap: 18px;
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 13px;
 	color: var(--mh-slate);
@@ -2650,27 +2651,24 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	color: var(--mh-wp);
 	animation: mh-caret 1.1s steps(2, start) infinite;
 }
-/* ASCII Wapuu dancing while we wait. ✿ topknot leaf matches the wapuu
-   ticker items in parts/ticker.html. Wiggles side-to-side with a tiny
-   bounce. */
-.mh-wapuu {
+/* ASCII Wapuu — ~100×51 of U+2588 blocks, populated character-by-character
+   by pdp-modal.js while the product fetch is in flight. font-size kept
+   small so the whole figure fits inside the modal card without scrolling
+   on common viewports. */
+.mh-wapuu-ascii {
 	margin: 0;
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
+	font-size: 6px;
 	line-height: 1.05;
 	color: var(--mh-ok);
 	white-space: pre;
-	transform-origin: 50% 100%;
-	animation: mh-wapuu-dance 1.1s ease-in-out infinite;
+	letter-spacing: 0;
 }
-@keyframes mh-wapuu-dance {
-	0%, 100% { transform: translateY(0)    rotate(0deg); }
-	25%      { transform: translateY(-2px) rotate(-6deg); }
-	50%      { transform: translateY(0)    rotate(0deg); }
-	75%      { transform: translateY(-2px) rotate(6deg); }
-}
+/* Make sure the modal card has room for the wapuu while loading. Once
+   content arrives this rule no longer matches, so the card snaps back to
+   sizing itself to the product. */
+.mh-pdp-modal.is-loading .mh-pdp-modal__card { min-height: 460px; }
 @media (prefers-reduced-motion: reduce) {
 	.mh-pdp-modal__loading-line::after { animation: none; opacity: 0.9; }
-	.mh-wapuu { animation: none; }
 }
 
