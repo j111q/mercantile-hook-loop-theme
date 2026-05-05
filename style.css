@@ -498,14 +498,15 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	text-transform: lowercase;
 }
 
-/* Phone: stack section-head, hide the decorative label + pill filters,
-   surface the native <select> dropdown instead. Mirrors the prototype's
-   @700 breakpoint — better one-handed UX, native OS picker. */
+/* Phone: hide the decorative label + pill filters and surface a native
+   <select> dropdown instead. The dropdown + cart sit on a single row —
+   the proto kept a search field here too, but staging removed it (PR #7),
+   so we use the freed-up width to stretch the dropdown next to the cart. */
 @media (max-width: 700px) {
 	.mh-section-head {
-		flex-direction: column;
-		align-items: stretch;
-		gap: 8px;
+		flex-wrap: nowrap;
+		align-items: center;
+		gap: 10px;
 		padding-top: 10px;
 		padding-bottom: 10px;
 	}
@@ -513,7 +514,8 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	.mh-filters { display: none; }
 	.mh-filters-m {
 		display: block;
-		width: 100%;
+		flex: 1;
+		min-width: 0;
 		box-sizing: border-box;
 		padding: 10px 36px 10px 14px;
 		line-height: 1.4;
@@ -532,7 +534,7 @@ body.post-type-archive-product .mh-filters .mh-filter {
 		cursor: pointer;
 	}
 	.mh-filters-m:focus { outline: none; border-color: var(--mh-wp); }
-	.mh-section-head .mh-right { width: 100%; flex-wrap: wrap; }
+	.mh-section-head .mh-right { flex: 0 0 auto; }
 }
 
 /* ===== Product grid =====
