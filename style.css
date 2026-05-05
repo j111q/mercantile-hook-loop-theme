@@ -2624,14 +2624,11 @@ body.post-type-archive-product .mh-filters .mh-filter {
 }
 
 .mh-pdp-modal__loading {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 18px;
+	gap: 32px;
+	padding: 64px 20px;
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 13px;
 	color: var(--mh-slate);
@@ -2660,14 +2657,10 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 6px;
 	line-height: 1.05;
-	color: var(--mh-ok);
+	color: var(--mh-slate);
 	white-space: pre;
 	letter-spacing: 0;
 }
-/* Make sure the modal card has room for the wapuu while loading. Once
-   content arrives this rule no longer matches, so the card snaps back to
-   sizing itself to the product. */
-.mh-pdp-modal.is-loading .mh-pdp-modal__card { min-height: 460px; }
 @media (prefers-reduced-motion: reduce) {
 	.mh-pdp-modal__loading-line::after { animation: none; opacity: 0.9; }
 }
