@@ -195,19 +195,25 @@ body {
 }
 
 /* ===== Wordmark =====
-   Floor scales with viewport so "Mercantile." (~5.7em wide in
-   UnifrakturCook) fits inside the hero gutter on phones. At 390px
-   the old 96px floor rendered the word ~550px wide, clipping the
-   final letters. */
+   Desktop keeps the original grand clamp. Phone-size breakpoints
+   override with tighter ranges so "Mercantile." (~5.7em wide in
+   UnifrakturCook) doesn't burst past the hero gutter — values
+   mirror the prototype's mobile pass. */
 .mh-mark {
 	font-family: 'UnifrakturCook', 'Newsreader', Georgia, serif;
 	font-weight: 700;
-	font-size: clamp(48px, 13vw, 195px);
+	font-size: clamp(96px, 14vw, 195px);
 	line-height: 1;
 	letter-spacing: -0.005em;
 	color: var(--mh-ink);
 	margin: 12px 0 0;
 	text-wrap: balance;
+}
+@media (max-width: 700px) {
+	.mh-mark { font-size: clamp(70px, 14vw, 110px); margin: 14px 0 -4px; }
+}
+@media (max-width: 500px) {
+	.mh-mark { font-size: clamp(53px, 14vw, 72px); }
 }
 
 .mh-mark .mh-mark__dot {
@@ -256,11 +262,54 @@ body {
 	border-bottom: 0;
 }
 
-@media (max-width: 800px) {
-	.mh-rail-row {
-		grid-template-columns: 1fr;
-		gap: 18px;
+/* Tablet: blurb spans full width, stats collapse to two side-by-side
+   columns. Mirrors the prototype's @960 breakpoint. */
+@media (max-width: 960px) {
+	.mh-hero {
+		padding-top: 40px !important;
+		padding-left: 28px !important;
+		padding-right: 28px !important;
 	}
+	.mh-meta-strip {
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 2px 12px;
+		font-size: 9px;
+		padding-bottom: 4px;
+	}
+	/* display: contents flattens each column so its child spans join the
+	   parent flex row — gives one continuous meta line instead of three
+	   stacked col blocks. */
+	.mh-meta-strip .mh-col { display: contents; }
+	.mh-meta-strip .mh-col.is-right { text-align: left; }
+	.mh-rail-row {
+		grid-template-columns: 1fr 1fr;
+		gap: 18px 24px;
+		padding: 18px 0 22px;
+		font-size: 10.5px;
+	}
+	.mh-rail-row .mh-blurb { grid-column: 1 / -1; max-width: none; }
+	.mh-rail-row .mh-kv { padding: 1px 0; flex-wrap: wrap; }
+	.mh-rail-row .mh-kv b { margin-left: auto; text-align: right; }
+}
+/* Phone: tighter hero padding, smaller rail row. */
+@media (max-width: 700px) {
+	.mh-hero {
+		padding-top: 28px !important;
+		padding-left: 20px !important;
+		padding-right: 20px !important;
+	}
+	.mh-meta-strip { font-size: 8.5px; gap: 2px 10px; }
+	.mh-rail-row { font-size: 9px; gap: 14px 20px; }
+}
+@media (max-width: 500px) {
+	.mh-hero {
+		padding-top: 24px !important;
+		padding-left: 16px !important;
+		padding-right: 16px !important;
+	}
+	.mh-rail-row { font-size: 8.5px; }
 }
 
 /* ===== Section head ===== */
@@ -317,21 +366,13 @@ body {
 	font-size: 12px;
 	border: 1px solid var(--mh-rule);
 	background: var(--mh-paper-2);
-	/* On narrow viewports the filter row would otherwise burst past the
-	   section-head padding (e.g. 'accessories 05' clipped at the right).
-	   Scroll horizontally instead. The mask-image fades the right edge so
-	   it reads as 'there's more here, swipe' rather than a hard clip. */
-	max-width: 100%;
-	overflow-x: auto;
-	-webkit-overflow-scrolling: touch;
-	scrollbar-width: none;
 }
-.mh-filters::-webkit-scrollbar { display: none; }
-@media (max-width: 600px) {
-	.mh-filters {
-		mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
-		-webkit-mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
-	}
+
+/* Native <select> shown in place of the pill row on phones — better
+   one-handed UX, and the OS picker is more accessible than a clipped
+   horizontal-scroll strip. Mirrors the prototype's .filters-m. */
+.mh-filters-m {
+	display: none;
 }
 
 .mh-filters .mh-filter {
@@ -344,8 +385,6 @@ body {
 	line-height: 1.4;
 	cursor: pointer;
 	text-decoration: none;
-	flex: 0 0 auto;
-	white-space: nowrap;
 }
 
 .mh-filters .mh-filter:hover { background: var(--mh-card); }
@@ -459,6 +498,43 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	text-transform: lowercase;
 }
 
+/* Phone: stack section-head, hide the decorative label + pill filters,
+   surface the native <select> dropdown instead. Mirrors the prototype's
+   @700 breakpoint — better one-handed UX, native OS picker. */
+@media (max-width: 700px) {
+	.mh-section-head {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 8px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+	.mh-section-head__label { display: none; }
+	.mh-filters { display: none; }
+	.mh-filters-m {
+		display: block;
+		width: 100%;
+		box-sizing: border-box;
+		padding: 10px 36px 10px 14px;
+		line-height: 1.4;
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 13px;
+		color: var(--mh-wp);
+		background-color: var(--mh-paper-2);
+		border: 1px solid var(--mh-rule);
+		border-radius: 0;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1.5L6 6.5L11 1.5' stroke='%233858e9' stroke-width='1.5' stroke-linecap='round'/></svg>");
+		background-repeat: no-repeat;
+		background-position: right 14px center;
+		cursor: pointer;
+	}
+	.mh-filters-m:focus { outline: none; border-color: var(--mh-wp); }
+	.mh-section-head .mh-right { width: 100%; flex-wrap: wrap; }
+}
+
 /* ===== Product grid =====
    Border-left is owned by the inner .wc-block-product-template (further down)
    to avoid stacking two 1px rules at the same gutter. */
@@ -537,6 +613,18 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	overflow: hidden;
 }
 
+/* Tighter horizontal padding on phones — the gutter preset already
+   collapses to 40px below ~1640vw, but that's still wasteful on a
+   390px viewport. Mirrors the prototype's @700 / @500 paddings. */
+@media (max-width: 700px) {
+	.mh-grid-wrap { padding-left: 20px !important; padding-right: 20px !important; }
+	.mh-band { padding: 40px 20px !important; }
+}
+@media (max-width: 500px) {
+	.mh-grid-wrap { padding-left: 16px !important; padding-right: 16px !important; }
+	.mh-band { padding: 32px 16px !important; }
+}
+
 .mh-band__line {
 	font-family: 'UnifrakturCook', 'Newsreader', Georgia, serif;
 	font-weight: 700;
@@ -595,8 +683,16 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	gap: 32px;
 }
 
-@media (max-width: 800px) {
-	.mh-footer .mh-footer__cols { grid-template-columns: 1fr; }
+/* Footer: 3-col → 2-col on tablet → 1-col on phones. */
+@media (max-width: 860px) {
+	.mh-footer .mh-footer__cols { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 700px) {
+	.mh-footer .mh-footer__cols { grid-template-columns: 1fr; gap: 24px; }
+	.mh-footer .mh-footer__inner { padding: 0 20px; }
+}
+@media (max-width: 500px) {
+	.mh-footer .mh-footer__inner { padding: 0 16px; }
 }
 
 .mh-footer .mh-footer__frak {
