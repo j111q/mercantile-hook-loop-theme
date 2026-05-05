@@ -535,6 +535,15 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	}
 	.mh-filters-m:focus { outline: none; border-color: var(--mh-wp); }
 	.mh-section-head .mh-right { flex: 0 0 auto; }
+	/* Match cart button height to the filter dropdown so the row aligns. */
+	.mh-section-head .wc-block-mini-cart__button,
+	.mh-section-head .wp-block-woocommerce-mini-cart .wc-block-mini-cart__button {
+		padding: 10px 14px !important;
+		font-size: 13px !important;
+	}
+	.mh-section-head .wc-block-mini-cart__button::before {
+		font-size: 13px;
+	}
 }
 
 /* ===== Product grid =====
