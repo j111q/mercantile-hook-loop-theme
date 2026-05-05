@@ -958,13 +958,23 @@ body.post-type-archive-product .mh-filters .mh-filter {
 /* ===== Single product (admin-editor framing) ===== */
 .mh-breadcrumbs.wc-block-components-breadcrumbs { display: none; } /* prefer custom crumb header */
 
-.mh-pdp-wrap { padding-top: 32px; }
+/* PDP wrapper acts as a backdrop "scrim" so the card sits on a different
+   plane than the rest of the page chrome — same modal-card feel as the
+   prototype. The card itself is capped narrower than alignwide. */
+.mh-pdp-wrap {
+	background: var(--mh-rule-soft);
+	padding-top: 40px;
+	padding-bottom: 64px;
+}
 
 .mh-pdp {
+	max-width: 1040px;
+	margin-left: auto;
+	margin-right: auto;
 	background: var(--mh-paper);
 	border: 1px solid var(--mh-rule);
 	border-radius: 6px;
-	box-shadow: 0 18px 50px -12px rgba(17, 18, 20, 0.08), 0 6px 18px -6px rgba(17, 18, 20, 0.05);
+	box-shadow: 0 18px 50px -12px rgba(17, 18, 20, 0.18), 0 6px 18px -6px rgba(17, 18, 20, 0.10);
 	overflow: hidden;
 }
 
@@ -973,12 +983,14 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 10px 16px;
+	padding: 14px 20px;
 	background: var(--mh-paper-2);
 	border-bottom: 1px solid var(--mh-rule);
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 11px;
 	color: var(--mh-slate);
+	min-height: 56px;
+	box-sizing: border-box;
 }
 
 .mh-pdp__crumb { letter-spacing: 0.02em; }
@@ -1012,6 +1024,13 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	grid-template-columns: 1fr 300px !important;
 	gap: 0 !important;
 	align-items: stretch;
+	/* WP injects per-block <style> rules for blockGap that come along on
+	   direct page render but NOT on modal injection (we only extract
+	   .mh-pdp.outerHTML, not the sibling <style> blocks). Without these,
+	   the body inherits the default 24px block-gap as margin-block-start
+	   from its preceding sibling (.mh-pdp__header). Zero it explicitly. */
+	margin-top: 0 !important;
+	margin-block-start: 0 !important;
 }
 
 @media (max-width: 860px) {
@@ -1021,11 +1040,15 @@ body.post-type-archive-product .mh-filters .mh-filter {
 .mh-pdp__editor {
 	border-right: 1px solid var(--mh-rule);
 	min-width: 0;
+	margin-top: 0 !important;
+	margin-block-start: 0 !important;
 }
 
 .mh-pdp__side {
 	background: var(--mh-paper-2);
 	min-width: 0;
+	margin-top: 0 !important;
+	margin-block-start: 0 !important;
 }
 
 /* Permalink line */
@@ -1036,7 +1059,7 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	padding-bottom: 10px;
 	border-bottom: 1px dashed var(--mh-rule);
 	word-break: break-all;
-	margin: 0;
+	margin: 0 0 14px;
 }
 
 .mh-pdp__permalink .k { color: var(--mh-wp); }
@@ -2504,3 +2527,110 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	height: auto !important;
 	object-fit: contain;
 }
+
+
+/* ============================================================
+   PDP MODAL — Interactivity API client-side overlay.
+   The scaffold lives in parts/pdp-modal.html; the JS store is
+   in assets/js/pdp-modal.js. When closed, the entire root is
+   display:none via the [hidden] attribute (set by the template
+   server-render, removed when state.isOpen flips true).
+   ============================================================ */
+.mh-pdp-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 200;
+}
+.mh-pdp-modal[hidden] { display: none; }
+/* When the IxAPI flips state.isOpen, the [hidden] attr stays on the
+   element initially (server-rendered). The is-open class wins via
+   stronger specificity, but we also explicitly clear hidden when
+   the wrapper has the .is-open class for older bindings. */
+.mh-pdp-modal.is-open { display: block; }
+.mh-pdp-modal.is-open[hidden] { display: block; }
+
+.mh-pdp-modal__scrim {
+	position: absolute;
+	inset: 0;
+	background: rgba(240, 240, 241, 0.4);
+	-webkit-backdrop-filter: blur(10px) saturate(120%);
+	backdrop-filter: blur(10px) saturate(120%);
+	animation: mh-pdp-modal-fade-in 0.28s cubic-bezier(.2,.7,.3,1) both;
+}
+
+.mh-pdp-modal__card {
+	position: relative;
+	width: calc(100% - 40px);
+	max-width: 1040px;
+	min-height: 120px;                 /* visible even during loading */
+	max-height: calc(100vh - 80px);
+	margin: 40px auto;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	background: var(--mh-paper);
+	border: 1px solid var(--mh-rule);
+	border-radius: 6px;
+	box-shadow: 0 18px 50px -12px rgba(17, 18, 20, 0.18), 0 6px 18px -6px rgba(17, 18, 20, 0.10);
+	animation: mh-pdp-modal-rise 0.42s cubic-bezier(.22,.9,.28,1.06) both;
+}
+
+@keyframes mh-pdp-modal-fade-in {
+	from { opacity: 0; -webkit-backdrop-filter: blur(0); backdrop-filter: blur(0); }
+	to   { opacity: 1; }
+}
+@keyframes mh-pdp-modal-rise {
+	0%   { opacity: 0; transform: translateY(18px) scale(0.985); }
+	60%  { opacity: 1; }
+	100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+	.mh-pdp-modal__scrim,
+	.mh-pdp-modal__card { animation: none; }
+}
+
+.mh-pdp-modal__close {
+	position: absolute;
+	top: 14px;
+	right: 14px;
+	z-index: 2;
+	width: 32px;
+	height: 32px;
+	background: var(--mh-paper);
+	border: 1px solid var(--mh-rule);
+	border-radius: 4px;
+	font-size: 20px;
+	line-height: 1;
+	color: var(--mh-ink);
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+}
+.mh-pdp-modal__close:hover {
+	background: var(--mh-accent);
+	color: #fff;
+	border-color: var(--mh-accent);
+}
+
+/* The injected .mh-pdp inside the modal sits at full card width
+   (no double max-width cap, no extra margin). */
+.mh-pdp-modal__card .mh-pdp {
+	max-width: none;
+	margin: 0;
+	border: 0;
+	border-radius: 0;
+	box-shadow: none;
+}
+
+.mh-pdp-modal__loading {
+	position: absolute;
+	bottom: 16px;
+	left: 16px;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-slate);
+	letter-spacing: 0.06em;
+}
+.mh-pdp-modal__loading[hidden] { display: none; }
+

@@ -1,0 +1,31 @@
+<!-- wp:html -->
+<div
+	class="mh-pdp-modal"
+	data-wp-interactive="mercantile/pdp-modal"
+	data-wp-class--is-open="state.isOpen"
+	data-wp-class--is-loading="state.isLoading"
+	data-wp-bind--aria-hidden="!state.isOpen"
+	data-wp-on-window--keydown="callbacks.onKeydown"
+	role="dialog"
+	aria-modal="true"
+	aria-label="Product details"
+	hidden
+>
+	<div class="mh-pdp-modal__scrim" data-wp-on--click="actions.close"></div>
+	<div class="mh-pdp-modal__card" data-wp-on--click="actions.stopPropagation">
+		<button
+			class="mh-pdp-modal__close"
+			type="button"
+			aria-label="Close product"
+			data-wp-on--click="actions.close"
+		>×</button>
+		<div
+			class="mh-pdp-modal__content"
+			data-wp-watch="callbacks.onContentChange"
+		></div>
+		<div class="mh-pdp-modal__loading" data-wp-bind--hidden="!state.isLoading">
+			<span class="mh-pdp-modal__loading-line">loading…</span>
+		</div>
+	</div>
+</div>
+<!-- /wp:html -->

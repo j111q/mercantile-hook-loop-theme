@@ -41,6 +41,30 @@ add_action(
 );
 
 /**
+ * Register and enqueue the PDP modal script as an Interactivity API
+ * client-side module. Triggered globally so a click on any product link
+ * (catalog cell, related-products row, mini-cart line) opens the
+ * product in a modal instead of full-page navigation.
+ *
+ * Direct loads of /product/<slug> still render the page normally; the
+ * modal scaffold sits dormant (via the `hidden` attribute on the root)
+ * unless the IxAPI store flips `state.isOpen` to true.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		if ( function_exists( 'wp_enqueue_script_module' ) ) {
+			wp_enqueue_script_module(
+				'mercantile-hook-loop/pdp-modal',
+				get_template_directory_uri() . '/assets/js/pdp-modal.js',
+				array( '@wordpress/interactivity' ),
+				wp_get_theme()->get( 'Version' )
+			);
+		}
+	}
+);
+
+/**
  * Re-label a few WooCommerce Checkout step headings to match the
  * Mercantile prototype (Contact / Shipping address / Payment).
  */
