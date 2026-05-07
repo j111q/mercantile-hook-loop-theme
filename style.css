@@ -1460,6 +1460,97 @@ body.post-type-archive-product .mh-filters .mh-filter {
 .mh-sizes button:hover { background: var(--mh-blue-tint); }
 .mh-sizes button.on { background: var(--mh-wp); color: #fff; }
 
+/* Variable products — restyle WC's <table class="variations"> so the
+   per-attribute label sits above its picker, matching the
+   .mh-side-label / .mh-sizes rhythm used elsewhere in the sidebar. */
+.mh-pdp__side .variations_form .variations,
+.mh-pdp__side .variations_form .variations tbody {
+	display: block;
+	border: 0;
+}
+
+.mh-pdp__side .variations_form .variations tr {
+	display: block;
+	margin-top: 8px;
+}
+
+.mh-pdp__side .variations_form .variations th.label {
+	display: block;
+	padding: 0;
+	background: transparent;
+	border: 0;
+	text-align: left;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	color: var(--mh-slate);
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	font-weight: 400;
+	width: auto;
+}
+
+.mh-pdp__side .variations_form .variations th.label label {
+	font-weight: inherit;
+	margin: 0;
+}
+
+.mh-pdp__side .variations_form .variations td.value {
+	display: block;
+	padding: 0;
+	background: transparent;
+	border: 0;
+}
+
+.mh-pdp__side .variations_form .reset_variations {
+	display: none !important; /* WC's "Clear" link — clutters the design */
+}
+
+/* Mono-button picker injected by assets/js/variation-buttons.js. Mirrors
+   the .mh-sizes treatment used elsewhere in the prototype, with extra
+   states for unavailable / aria-checked. */
+.mh-variation-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 8px;
+}
+
+.mh-variation-buttons button {
+	min-width: 40px;
+	padding: 8px 12px;
+	border: 1.5px solid var(--mh-wp);
+	border-radius: 4px;
+	background: #fff;
+	color: var(--mh-wp);
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	cursor: pointer;
+	transition: background 0.15s, color 0.15s, opacity 0.15s;
+}
+
+.mh-variation-buttons button:hover:not(.is-unavailable) {
+	background: var(--mh-blue-tint);
+}
+
+.mh-variation-buttons button.on {
+	background: var(--mh-wp);
+	color: #fff;
+}
+
+.mh-variation-buttons button.is-unavailable {
+	opacity: 0.35;
+	cursor: not-allowed;
+	text-decoration: line-through;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mh-variation-buttons button {
+		transition: none;
+	}
+}
+
 /* CTA — make WC add-to-cart form full-width and on-brand */
 .mh-pdp__cta.wp-block-woocommerce-add-to-cart-form,
 .mh-pdp__side .wp-block-woocommerce-add-to-cart-form {

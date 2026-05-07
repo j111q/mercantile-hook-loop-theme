@@ -126,3 +126,31 @@ add_shortcode(
 		return ob_get_clean();
 	}
 );
+
+/**
+ * Enhance WooCommerce variation <select> dropdowns with mono-font button
+ * rows so the prototype's "pick a size" UI matches the design instead of
+ * a native select. The script keeps the underlying <select> in the DOM
+ * and forwards clicks via native `change` events, so WC's own variation
+ * logic (price / image / availability / cart submission) is unchanged.
+ *
+ * Loaded site-wide because the PDP modal can open variable products from
+ * any page (catalog cells, related rows, mini-cart line items). Script
+ * is gated by DOM presence — does nothing if no `.variations_form` is on
+ * the page.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		wp_enqueue_script(
+			'mercantile-hook-loop-variation-buttons',
+			get_template_directory_uri() . '/assets/js/variation-buttons.js',
+			array(),
+			wp_get_theme()->get( 'Version' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
+	}
+);
