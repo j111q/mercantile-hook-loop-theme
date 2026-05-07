@@ -40,6 +40,22 @@
 		return t;
 	}
 
+	// Canonical size order for the picker. WC outputs options
+	// alphabetically by term slug, which ranks `2XL` before `LG` and
+	// looks chaotic. We re-sort the buttons after they're built so a
+	// known size set renders left-to-right small → large. Non-size
+	// attributes (Color, etc.) all return Infinity rank, which is a
+	// stable no-op under V8's stable sort — original order preserved.
+	const SIZE_ORDER = [
+		'XXS', 'XS', 'S', 'SM', 'M', 'MD', 'L', 'LG',
+		'XL', 'XXL', '2XL', '3XL', '4XL', '5XL', '6XL',
+	];
+
+	function sizeRank( label ) {
+		const idx = SIZE_ORDER.indexOf( label.trim().toUpperCase() );
+		return idx >= 0 ? idx : Infinity;
+	}
+
 	function enhanceSelect( select ) {
 		if ( PROCESSED.has( select ) ) return;
 		PROCESSED.add( select );
@@ -76,6 +92,12 @@
 			row.appendChild( btn );
 			buttons.set( opt.value, btn );
 		} );
+
+		// Sort buttons by canonical size order before mounting. Non-size
+		// attributes are no-ops (all Infinity rank, stable sort).
+		[ ...row.children ]
+			.sort( ( a, b ) => sizeRank( a.textContent ) - sizeRank( b.textContent ) )
+			.forEach( ( b ) => row.appendChild( b ) );
 
 		// Keep the <select> in the DOM (WC's logic reads from it) but hide it.
 		select.style.display = 'none';

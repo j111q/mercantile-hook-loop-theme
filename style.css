@@ -1554,7 +1554,7 @@ body.post-type-archive-product .mh-filters .mh-filter {
 /* CTA — make WC add-to-cart form full-width and on-brand */
 .mh-pdp__cta.wp-block-woocommerce-add-to-cart-form,
 .mh-pdp__side .wp-block-woocommerce-add-to-cart-form {
-	margin: 12px 0 0 !important;
+	margin: 12px 0 18px !important;
 }
 
 .mh-pdp__side .wp-block-woocommerce-add-to-cart-form form.cart {
