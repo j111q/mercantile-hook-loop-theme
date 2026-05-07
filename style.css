@@ -1245,7 +1245,7 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 8px;
-	margin: 0 0 14px;
+	margin: 14px 0;
 }
 
 .mh-pdp .mh-marginalia .mh-pill {
