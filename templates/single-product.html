@@ -128,27 +128,13 @@
 					</div>
 					<!-- /wp:group -->
 
-					<!-- wp:group {"className":"mh-pdp__spec-row","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"},"style":{"spacing":{"blockGap":"10px"}}} -->
-					<div class="wp-block-group mh-pdp__spec-row">
-						<!-- wp:paragraph {"style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"10px","letterSpacing":"0.08em","textTransform":"uppercase"}},"textColor":"slate","className":"mh-pdp__spec-key"} -->
-						<p class="has-slate-color has-text-color mh-pdp__spec-key" style="font-family:'JetBrains Mono', ui-monospace, monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase">material</p>
-						<!-- /wp:paragraph -->
-						<!-- wp:paragraph {"style":{"typography":{"fontFamily":"'Newsreader', Georgia, serif","fontSize":"13px"}},"textColor":"ink","className":"mh-pdp__spec-val"} -->
-						<p class="has-ink-color has-text-color mh-pdp__spec-val" style="font-family:'Newsreader', Georgia, serif;font-size:13px">100% ring-spun cotton, 220gsm</p>
-						<!-- /wp:paragraph -->
-					</div>
-					<!-- /wp:group -->
-
-					<!-- wp:group {"className":"mh-pdp__spec-row","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"},"style":{"spacing":{"blockGap":"10px"}}} -->
-					<div class="wp-block-group mh-pdp__spec-row">
-						<!-- wp:paragraph {"style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"10px","letterSpacing":"0.08em","textTransform":"uppercase"}},"textColor":"slate","className":"mh-pdp__spec-key"} -->
-						<p class="has-slate-color has-text-color mh-pdp__spec-key" style="font-family:'JetBrains Mono', ui-monospace, monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase">care</p>
-						<!-- /wp:paragraph -->
-						<!-- wp:paragraph {"style":{"typography":{"fontFamily":"'Newsreader', Georgia, serif","fontSize":"13px"}},"textColor":"ink","className":"mh-pdp__spec-val"} -->
-						<p class="has-ink-color has-text-color mh-pdp__spec-val" style="font-family:'Newsreader', Georgia, serif;font-size:13px">cold wash · line dry · review PRs</p>
-						<!-- /wp:paragraph -->
-					</div>
-					<!-- /wp:group -->
+					<!-- Per-product specs (material, care, capacity, fit, weight, dimensions…)
+					     come from WooCommerce attributes via [product_attributes].
+					     Outputs nothing if a product has no attributes set, so it
+					     gracefully degrades for products that haven't been populated yet. -->
+					<!-- wp:shortcode -->
+					[product_attributes]
+					<!-- /wp:shortcode -->
 				</div>
 				<!-- /wp:group -->
 

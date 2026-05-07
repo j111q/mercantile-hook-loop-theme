@@ -1560,6 +1560,53 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	border-bottom: 0;
 }
 
+/* WooCommerce [product_attributes] shortcode — restyle the default
+   .shop_attributes table to match our .mh-pdp__spec-row rhythm so per-
+   product attributes (material, care, capacity, fit, etc.) render as
+   labeled rows below price/category/tags. */
+.mh-pdp__panel--details .shop_attributes {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0;
+}
+
+.mh-pdp__panel--details .shop_attributes tr {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	padding: 4px 0;
+	border-bottom: 1px dashed var(--mh-rule);
+	gap: 10px;
+}
+
+.mh-pdp__panel--details .shop_attributes tr:last-child {
+	border-bottom: 0;
+}
+
+.mh-pdp__panel--details .shop_attributes th {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--mh-slate);
+	white-space: nowrap;
+	text-align: left;
+	font-weight: 400;
+	padding: 0;
+	background: transparent;
+}
+
+.mh-pdp__panel--details .shop_attributes td,
+.mh-pdp__panel--details .shop_attributes td p {
+	font-family: 'Newsreader', Georgia, serif;
+	font-size: 13px;
+	color: var(--mh-ink);
+	text-align: right;
+	margin: 0;
+	padding: 0;
+	background: transparent;
+}
+
 /* Related list — single column rows */
 .mh-pdp__panel--related .mh-pdp__related-list {
 	margin: 0 !important;
