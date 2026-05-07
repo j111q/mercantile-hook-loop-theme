@@ -1512,7 +1512,8 @@ body.post-type-archive-product .mh-filters .mh-filter {
 }
 
 .mh-pdp__panel--details .mh-pdp__spec-row .wp-block-woocommerce-product-price,
-.mh-pdp__panel--details .mh-pdp__spec-row .wp-block-post-terms {
+.mh-pdp__panel--details .mh-pdp__spec-row .wp-block-post-terms,
+.mh-pdp__panel--details .mh-pdp__spec-row .mh-pdp__spec-val {
 	margin: 0 !important;
 	text-align: right;
 }
@@ -1553,43 +1554,10 @@ body.post-type-archive-product .mh-filters .mh-filter {
 
 .mh-pdp__panel--details .mh-pdp__spec-tags a::before { content: '#'; }
 
-/* Manual specs (material, care, etc) */
-.mh-pdp__specs {
-	margin: 0;
-	display: grid;
-	grid-template-columns: auto 1fr;
-	gap: 4px 12px;
-	font-size: 12px;
-}
-
-.mh-pdp__specs dt {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 9px;
-	color: var(--mh-slate);
-	text-transform: uppercase;
-	letter-spacing: 0.08em;
-	padding-top: 6px;
-	margin: 0;
-	white-space: nowrap;
-}
-
-.mh-pdp__specs dd {
-	margin: 0;
-	padding: 4px 0 6px;
-	border-bottom: 1px dashed var(--mh-rule);
-	font-family: 'Newsreader', Georgia, serif;
-	font-size: 13px;
-	color: var(--mh-ink);
-	line-height: 1.35;
-	text-align: right;
-}
-
-.mh-pdp__specs dd:last-of-type,
-.mh-pdp__specs dt:last-of-type + dd { border-bottom: 0; }
-
-.mh-pdp__specs dd.mono {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
+/* Hide the trailing dashed border on the last spec row — the next
+   panel's top border already provides the seam. */
+.mh-pdp__panel--details .mh-pdp__spec-row:last-child {
+	border-bottom: 0;
 }
 
 /* Related list — single column rows */
