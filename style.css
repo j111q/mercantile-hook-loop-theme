@@ -2794,7 +2794,9 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	   inside the modal card on phones. Caps at 6px on desktop. */
 	font-size: clamp(3.2px, 1.4vw, 6px);
 	line-height: 1.05;
-	color: var(--mh-slate);
+	/* Same soft periwinkle the ticker uses for ✿ wapuu items — keeps
+	   the mascot one consistent colour across the theme. */
+	color: #9fb1ff;
 	white-space: pre;
 	letter-spacing: 0;
 }
