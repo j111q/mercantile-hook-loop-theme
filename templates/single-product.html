@@ -129,11 +129,13 @@
 					<!-- /wp:group -->
 
 					<!-- Per-product specs (material, care, capacity, fit, weight, dimensions…)
-					     come from WooCommerce attributes via [product_attributes].
-					     Outputs nothing if a product has no attributes set, so it
-					     gracefully degrades for products that haven't been populated yet. -->
+					     come from WooCommerce attributes via [mh_product_attributes],
+					     a small shortcode in functions.php that wraps
+					     wc_display_product_attributes(). Outputs nothing if a product
+					     has no attributes set, so it gracefully degrades for products
+					     that haven't been populated yet. -->
 					<!-- wp:shortcode -->
-					[product_attributes]
+					[mh_product_attributes]
 					<!-- /wp:shortcode -->
 				</div>
 				<!-- /wp:group -->
