@@ -31,15 +31,33 @@
 	function buildBody( form ) {
 		const fd = new FormData( form );
 		const params = new URLSearchParams();
+
+		// WC's `wc-ajax=add_to_cart` endpoint (class-wc-ajax.php::add_to_cart)
+		// expects `product_id` to be the *variation* ID for variable products
+		// — it then derives the parent_id + variation attributes from the
+		// variation object. Our form sends `product_id=<parent>` and
+		// `variation_id=<child>`, which makes WC's handler try to add the
+		// parent directly (impossible for variable products) and respond with
+		// `{error: true, product_url: '/product/<slug>/'}` — we then
+		// helpfully navigated there. Swap so the variation id wins.
+		const variationId = fd.get( 'variation_id' );
+		const useVariationAsProduct = variationId && variationId !== '0' && variationId !== '';
+
 		for ( const [ key, value ] of fd.entries() ) {
+			if ( key === 'product_id' && useVariationAsProduct ) {
+				continue; // overridden below
+			}
 			params.append( key, value );
 		}
-		// WC's ajax endpoint expects `product_id` — variations forms put it
-		// on the form via data-product_id; pull it across if not in FormData.
-		if ( ! params.has( 'product_id' ) ) {
+
+		if ( useVariationAsProduct ) {
+			params.set( 'product_id', variationId );
+		} else if ( ! params.has( 'product_id' ) ) {
+			// Simple products — fall back to the form's data-product_id.
 			const pid = form.dataset.product_id || form.getAttribute( 'data-product_id' );
 			if ( pid ) params.set( 'product_id', pid );
 		}
+
 		return params.toString();
 	}
 
