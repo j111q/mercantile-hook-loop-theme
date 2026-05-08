@@ -106,12 +106,18 @@
 	document.addEventListener(
 		'submit',
 		function ( event ) {
+			console.log( '[mh-cart-ajax] submit event caught, target:', event.target );
 			const form = findFormInModal( event.target );
+			console.log( '[mh-cart-ajax] form-in-modal match:', form );
 			if ( ! form ) return;
 			event.preventDefault();
 			event.stopPropagation();
+			console.log( '[mh-cart-ajax] intercepted, posting to', ENDPOINT );
 			submitAjax( form );
 		},
 		true // capture phase — beat WC's own jQuery submit handler
 	);
+
+	// Also log when the script loads, so Jill can verify it's enqueued.
+	console.log( '[mh-cart-ajax] loaded' );
 } )();
