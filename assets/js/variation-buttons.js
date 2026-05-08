@@ -13,6 +13,14 @@
  * later — e.g. when the PDP modal hydrates its content via the IxAPI
  * store — also get enhanced.
  *
+ * Buttons are marked `.is-unavailable` when the corresponding option
+ * has no in-stock + purchasable variation given the user's current
+ * other-attribute selections. WC ships the full variation matrix as a
+ * JSON blob on `form.variations_form[data-product_variations]`; we
+ * parse it once per form and re-evaluate availability whenever any
+ * attribute select changes (including cross-attribute fan-out — e.g.
+ * picking a Color disables Sizes that are out of stock for that color).
+ *
  * Vanilla JS, no jQuery dependency. Native `change` events bubble and
  * jQuery's event system honours them, so WC's own jQuery handlers fire.
  */
@@ -56,9 +64,52 @@
 		return idx >= 0 ? idx : Infinity;
 	}
 
+	/**
+	 * Read & parse WC's variation matrix from the form. Each variation:
+	 *   { variation_id, attributes: { attribute_pa_size: "small", ... },
+	 *     is_in_stock, is_purchasable, ... }
+	 * An empty-string attribute value means "any" (variation matches any
+	 * value for that attribute). Returns null if no usable data.
+	 */
+	function parseVariations( form ) {
+		if ( ! form ) return null;
+		const raw = form.getAttribute( 'data-product_variations' );
+		if ( ! raw || raw === 'false' ) return null;
+		try {
+			const parsed = JSON.parse( raw );
+			return Array.isArray( parsed ) ? parsed : null;
+		} catch ( _ ) {
+			return null;
+		}
+	}
+
+	/**
+	 * Is there any in-stock + purchasable variation that matches:
+	 *   - this attribute (`attrName`) = `attrValue`
+	 *   - all other attributes already selected by the user
+	 * Variation attribute value of `""` accepts any value for that attr.
+	 */
+	function hasInStockMatch( variations, attrName, attrValue, otherSelections ) {
+		return variations.some( ( v ) => {
+			if ( ! v.is_in_stock ) return false;
+			if ( v.is_purchasable === false ) return false;
+			const attrs = v.attributes || {};
+			const myAttr = attrs[ attrName ];
+			if ( myAttr && myAttr !== attrValue ) return false;
+			for ( const name in otherSelections ) {
+				const variAttr = attrs[ name ];
+				if ( variAttr && variAttr !== otherSelections[ name ] ) return false;
+			}
+			return true;
+		} );
+	}
+
 	function enhanceSelect( select ) {
 		if ( PROCESSED.has( select ) ) return;
 		PROCESSED.add( select );
+
+		const form = select.closest( 'form.variations_form' );
+		const variations = parseVariations( form );
 
 		const labelEl = select.closest( 'tr' )?.querySelector( 'th.label label' );
 		const row = document.createElement( 'div' );
@@ -108,18 +159,43 @@
 		// WC sets `disabled` on incompatible options after firing its own event,
 		// so we re-sync on a microtask delay to catch that pass.
 		const sync = () => {
+			// Snapshot OTHER selects' current selections on the same form, so
+			// stock checks can fan out across attributes (e.g. picking Color=Red
+			// disables Sizes that are out of stock for Red).
+			const otherSelections = {};
+			if ( form ) {
+				for ( const s of form.querySelectorAll( 'select[name^="attribute_"]' ) ) {
+					if ( s !== select && s.value ) {
+						otherSelections[ s.name ] = s.value;
+					}
+				}
+			}
+
 			[ ...select.options ].forEach( ( opt ) => {
 				const btn = buttons.get( opt.value );
 				if ( ! btn ) return;
 				const selected = opt.value !== '' && opt.value === select.value;
 				btn.classList.toggle( 'on', selected );
 				btn.setAttribute( 'aria-checked', selected ? 'true' : 'false' );
-				const unavailable = opt.disabled || opt.style.display === 'none';
+
+				// Availability sources:
+				//   1. WC marked the option disabled or hidden (cross-attribute
+				//      incompatibility — there's NO variation at all for this
+				//      combination)
+				//   2. There IS a matching variation but none in stock /
+				//      purchasable given the current other-attribute picks
+				let unavailable = opt.disabled || opt.style.display === 'none';
+				if ( ! unavailable && variations && opt.value ) {
+					unavailable = ! hasInStockMatch( variations, select.name, opt.value, otherSelections );
+				}
 				btn.classList.toggle( 'is-unavailable', unavailable );
-				btn.disabled = opt.disabled;
+				btn.disabled = unavailable;
 			} );
 		};
-		select.addEventListener( 'change', () => {
+		// Listen on the form so a change on ANY select on this form re-syncs
+		// THIS select's buttons. Without this, picking Color wouldn't refresh
+		// the Size buttons' stock state for the new color.
+		( form || select ).addEventListener( 'change', () => {
 			sync();
 			setTimeout( sync, 50 );
 		} );
