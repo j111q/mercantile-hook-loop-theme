@@ -154,3 +154,44 @@ add_action(
 		);
 	}
 );
+
+/**
+ * Force-enqueue WooCommerce's variation script (and its localized params)
+ * site-wide.
+ *
+ * WC normally only enqueues `wc-add-to-cart-variation` on `is_product()`
+ * pages. The PDP modal can open a variable product from anywhere in the
+ * site (catalog cell, related-products row, mini-cart line item), and
+ * the modal-injected variations form needs jQuery + WC's VariationForm
+ * class to function. Without this, picking a size on a modal-opened
+ * product fails silently — variation_id stays at the markup default and
+ * Add to Cart's first click does nothing.
+ *
+ * Nothing extra to do for the inline `<script type="text/template">`
+ * tags that WC outputs adjacent to the variations form: those travel
+ * with the form HTML when the modal extracts and re-injects `.mh-pdp`.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		if ( ! function_exists( 'WC' ) ) {
+			return;
+		}
+		if ( is_product() ) {
+			return; // WC already handles its own enqueue here.
+		}
+		wp_enqueue_script( 'wc-add-to-cart-variation' );
+		wp_localize_script(
+			'wc-add-to-cart-variation',
+			'wc_add_to_cart_variation_params',
+			array(
+				'wc_ajax_url'                      => WC_AJAX::get_endpoint( '%%endpoint%%' ),
+				'i18n_no_matching_variations_text' => esc_attr__( 'Sorry, no products matched your selection. Please choose a different combination.', 'woocommerce' ),
+				'i18n_make_a_selection_text'       => esc_attr__( 'Please select some product options before adding this product to your cart.', 'woocommerce' ),
+				'i18n_unavailable_text'            => esc_attr__( 'Sorry, this product is unavailable. Please choose a different combination.', 'woocommerce' ),
+				'i18n_reset_alert_text'            => esc_attr__( 'Product selection reset.', 'woocommerce' ),
+			)
+		);
+	},
+	20
+);

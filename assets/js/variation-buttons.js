@@ -135,9 +135,23 @@
 				const newVal = select.value === opt.value ? '' : opt.value;
 				select.value = newVal;
 				select.dispatchEvent( new Event( 'change', { bubbles: true } ) );
-				// Belt-and-suspenders for any plugin still listening via jQuery.
-				if ( window.jQuery ) {
-					window.jQuery( select ).trigger( 'change' );
+				// WC's add-to-cart-variation.js binds its handlers via jQuery's
+				// event system (delegated on the form, namespaced
+				// `change.wc-variation-form`). Native dispatch alone has been
+				// observed not to flow through reliably — the variation_id
+				// input stays unset and the Add to Cart button keeps its
+				// .disabled / wc-variation-selection-needed classes, so the
+				// first ATC click runs the "no selection" fallback (which
+				// belatedly fires check_variations and shows stock) and the
+				// second click is the one that actually submits.
+				//
+				// Trigger via jQuery AND fire `check_variations` directly on
+				// the form so WC's onFindVariation runs immediately, sets the
+				// variation_id, and onShow enables the button.
+				if ( window.jQuery && form ) {
+					const $ = window.jQuery;
+					$( select ).trigger( 'change' );
+					$( form ).trigger( 'check_variations' );
 				}
 			} );
 			row.appendChild( btn );
@@ -205,6 +219,26 @@
 
 	function enhanceForm( form ) {
 		form.querySelectorAll( 'select[name^="attribute_"]' ).forEach( enhanceSelect );
+		// Ensure WC's VariationForm class is initialized on this form.
+		// WC's own init runs once at jQuery DOM-ready against existing
+		// `.variations_form` nodes; forms hydrated *after* that (e.g. by
+		// the IxAPI PDP modal) never get a VariationForm instance, so
+		// none of WC's `change.wc-variation-form` / `check_variations`
+		// handlers are bound. Calling wc_variation_form() ourselves
+		// constructs a new VariationForm for this form, attaching all
+		// the change/found_variation/show_variation listeners that turn
+		// our select changes into UI updates.
+		if (
+			window.jQuery &&
+			typeof window.jQuery.fn.wc_variation_form === 'function' &&
+			typeof window.wc_add_to_cart_variation_params !== 'undefined'
+		) {
+			const $form = window.jQuery( form );
+			if ( ! $form.data( 'wc-variation-form-initialised' ) ) {
+				$form.wc_variation_form();
+				$form.data( 'wc-variation-form-initialised', true );
+			}
+		}
 	}
 
 	function init() {
