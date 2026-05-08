@@ -1530,7 +1530,7 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	transition: background 0.15s, color 0.15s, opacity 0.15s;
 }
 
-.mh-variation-buttons button:hover:not(.is-unavailable) {
+.mh-variation-buttons button:hover:not(.is-unavailable):not(.on) {
 	background: var(--mh-blue-tint);
 }
 
