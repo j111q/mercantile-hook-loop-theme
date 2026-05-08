@@ -1564,8 +1564,24 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	margin: 0;
 }
 
+/* Quantity stepper — visible now that variable products are real. The
+   placeholder simple-products era hid this entirely; the prototype's
+   sidebar layout has room for it on its own row above Add to Cart.
+   Constrain width so it doesn't stretch to the full sidebar — a 70px
+   numeric box is plenty for a qty stepper. */
 .mh-pdp__side .wp-block-woocommerce-add-to-cart-form .quantity {
-	display: none; /* keep the side compact — qty unused in prototype */
+	display: inline-flex;
+	align-items: stretch;
+	width: auto;
+	max-width: 80px;
+	margin: 0;
+}
+
+.mh-pdp__side .wp-block-woocommerce-add-to-cart-form .quantity input.qty {
+	width: 70px;
+	text-align: center;
+	padding: 8px 6px;
+	font-size: 14px;
 }
 
 .mh-pdp__side .wp-block-woocommerce-add-to-cart-form .single_add_to_cart_button {
