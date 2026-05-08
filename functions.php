@@ -152,6 +152,20 @@ add_action(
 				'strategy'  => 'defer',
 			)
 		);
+		// AJAX-submit add-to-cart from inside the PDP modal so the form
+		// doesn't reload to /product/<slug>/?add-to-cart=… and leave the
+		// modal floating over a duplicate PDP. Loaded site-wide so the
+		// modal's submit-handler is registered before any modal opens.
+		wp_enqueue_script(
+			'mercantile-hook-loop-cart-ajax-submit',
+			get_template_directory_uri() . '/assets/js/cart-ajax-submit.js',
+			array(),
+			wp_get_theme()->get( 'Version' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
 	}
 );
 
