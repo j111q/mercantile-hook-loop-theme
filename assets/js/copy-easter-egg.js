@@ -18,7 +18,7 @@
  */
 
 ( function () {
-	const DEFAULT_TEXT = 'copy →';
+	const DEFAULT_TEXT = 'copy shortcode ⟶';
 	const REVERT_MS    = 3200;
 
 	const SNARKS = [

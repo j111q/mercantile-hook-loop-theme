@@ -373,7 +373,7 @@ add_shortcode(
 			? ' <span class="k">size</span>=<span class="v">"M"</span>'
 			: '';
 		return sprintf(
-			'<div class="mh-shortcode"><span>[<span class="k">mercantile</span> <span class="k">id</span>=<span class="v">"%s"</span>%s]</span><span class="copy" role="button" tabindex="0">copy &rarr;</span></div>',
+			'<div class="mh-shortcode"><span class="mh-shortcode__code">[<span class="k">mercantile</span> <span class="k">id</span>=<span class="v">"%s"</span>%s]</span><span class="copy" role="button" tabindex="0">copy shortcode &#x27F6;</span></div>',
 			esc_html( $slug ),
 			$size_attr
 		);
