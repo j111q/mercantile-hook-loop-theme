@@ -1,0 +1,59 @@
+/* mercantile/ticker-track — marquee track of one-line announcements.
+   Items are <p>s; render.php duplicates the list for a seamless loop
+   driven by the mh-marquee animation. */
+
+.mh-ticker__rail {
+	flex: 1;
+	overflow: hidden;
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.mh-ticker__track {
+	display: flex;
+	gap: 40px;
+	white-space: nowrap;
+	padding-left: 16px;
+	animation: mh-marquee 90s linear infinite;
+}
+
+.mh-ticker__rail:hover .mh-ticker__track {
+	animation-play-state: paused;
+}
+
+@keyframes mh-marquee {
+	from { transform: translateX(0); }
+	to { transform: translateX(-50%); }
+}
+
+/* Track items are <p>s; neutralize UA paragraph margin and inherit the
+   ticker group's mono typography from the parent. */
+.mh-ticker__item {
+	margin: 0;
+	font: inherit;
+	color: inherit;
+	letter-spacing: inherit;
+}
+
+.mh-ticker__item b {
+	color: #ecebe4;
+	font-weight: 600;
+}
+
+.mh-ticker__item .mh-mono-blue {
+	color: #9ab1ff;
+}
+
+.mh-ticker__item.is-wapuu {
+	color: #9fb1ff;
+	font-weight: 600;
+}
+
+.mh-ticker__item.is-wapuu::before {
+	content: '✿ ';
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mh-ticker__track { animation: none; }
+}

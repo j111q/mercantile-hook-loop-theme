@@ -24,13 +24,49 @@
 		"size": {
 			"type": "number",
 			"default": 14
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": "ink"
+		},
+		"textColor": {
+			"type": "string",
+			"default": "text-on-ink"
+		},
+		"style": {
+			"type": "object",
+			"default": {
+				"spacing": { "padding": { "top": "0", "right": "12px", "bottom": "0", "left": "12px" } },
+				"typography": { "fontWeight": "600" },
+				"border": { "right": { "color": "var:preset|color|divider-on-ink", "width": "1px", "style": "solid" } }
+			}
 		}
 	},
 	"supports": {
 		"html": false,
 		"className": true,
-		"customClassName": true
+		"customClassName": true,
+		"color": {
+			"background": true,
+			"text": true,
+			"link": false
+		},
+		"spacing": {
+			"padding": true,
+			"__experimentalDefaultControls": { "padding": true }
+		},
+		"typography": {
+			"__experimentalFontWeight": true,
+			"__experimentalDefaultControls": { "fontWeight": true }
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"style": true,
+			"width": true,
+			"__experimentalDefaultControls": { "color": true, "width": true }
+		}
 	},
 	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css",
 	"render": "file:./render.php"
 }

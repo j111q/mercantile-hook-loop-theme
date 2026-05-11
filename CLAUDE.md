@@ -22,11 +22,19 @@ or editing blocks here.
    `currentColor`, (b) Interactivity API directives, or (c) live data
    needs an attribute schema you can't get from core. Don't reach for
    them just to skip writing block markup.
-4. **CSS last, scoped to a className.** A `.mh-ticker`-style hook still
-   earns its keep for things blocks can't express: fixed `height`,
-   `overflow:hidden`, `::before` pseudos, descendant resets (paragraph
-   margin, link color/underline) that need to be neutralized only
-   inside one surface.
+4. **CSS last, scoped to the block that owns it.** A surface-level
+   className hook (e.g. `.mh-ticker` on the outer group) earns its
+   keep only for chrome blocks can't express: fixed `height`,
+   `overflow:hidden`, `z-index`, `::before` pseudos. Everything else
+   — wrapper chrome (padding/background/border), UA-default resets
+   (paragraph margin, link color/underline), keyframes, content
+   variant styles — belongs in the owning block's own
+   `blocks/src/<slug>/style.css`, declared via `"style":
+   "file:./style-index.css"` in `block.json`. WordPress then enqueues
+   each block's CSS only on pages that render it. Do NOT blanket
+   resets across the surface (`.mh-ticker p`, `.mh-ticker > *`) — that
+   reaches across block boundaries and fights theme.json from the
+   wrong layer.
 
 ## Custom blocks — the editing model is the design decision
 
@@ -77,6 +85,33 @@ or editing blocks here.
     inside a `/** */` comment closes it early — caused a fatal error
     here from the literal string `blocks/build/*/block.json` inside a
     docblock. Avoid `*/` in docblock prose.
+14. **`block.json`'s `"style"` is a runtime hint, not a build trigger.**
+    wp-scripts only bundles CSS that is `import`ed from the JS entry.
+    A bare `style.css` next to `index.js` is silently ignored. Pattern:
+    `import './style.css';` from `index.js`, then point `block.json`
+    at the emitted file with `"style": "file:./style-index.css"` (the
+    name wp-scripts uses for CSS extracted from the index entry).
+15. **Block-supports gotchas when expressing chrome as defaults.**
+    Setting wrapper chrome (padding, color, border, fontWeight) via
+    `supports` + default `attributes.style` lets the editor tweak
+    everything from the Site Editor and removes the corresponding CSS.
+    Three sharp edges that cost time:
+    - **Some support keys are still `__experimental*` even on modern
+      WP.** `border` works only as `__experimentalBorder`; the
+      typography subkey for `fontWeight` is `__experimentalFontWeight`
+      (and `fontStyle`, `letterSpacing`, `textDecoration`,
+      `textTransform`, `writingMode`, `fontFamily` are also still
+      `__experimental*`). The matching style attribute path drops the
+      prefix (`style.typography.fontWeight` etc.).
+    - **`safecss_filter_attr` blocks `rgba()` in inline styles.** Its
+      function-stripping regex only allows `var/calc/min/max/clamp/
+      repeat`; `rgb`/`rgba` fall through, then the `(` fails the
+      safety check and the property is dropped silently. Use a hex
+      color or a CSS custom property (`var(--…)`) instead.
+    - **Self-closing block markup (`<!-- wp:foo /-->`) does honor
+      block.json default attributes.** Render-time supports apply to
+      defaults the same way they apply to user-set values, so you do
+      not have to repeat the chrome inline in the template part.
 
 ## Refactoring instincts
 
@@ -96,10 +131,13 @@ blocks/
 ├── src/
 │   └── <slug>/
 │       ├── block.json     # apiVersion 3, editorScript: file:./index.js,
-│       │                  # render: file:./render.php, optional
-│       │                  # viewScriptModule: file:./view.js
-│       ├── index.js       # JSX edit/save (no JSX, no build needed only
-│       │                  # if you really want; default here is JSX)
+│       │                  # style: file:./style-index.css (when shipping
+│       │                  # block-owned CSS), render: file:./render.php,
+│       │                  # optional viewScriptModule: file:./view.js
+│       ├── index.js       # JSX edit/save; must `import './style.css'`
+│       │                  # for wp-scripts to bundle the stylesheet
+│       ├── style.css      # block-owned styles; wp-scripts emits this as
+│       │                  # build/<slug>/style-index.css
 │       ├── render.php     # echoes HTML (don't return)
 │       └── view.js        # ESM, IxAPI store; only when you need
 │                          # client-side reactivity beyond SSR

@@ -1,0 +1,56 @@
+/* mercantile/ticker-lead — anchor block of the ticker.
+   Linked WP mark + LIVE label. The pulsing status dot is delivered as
+   a ::before pseudo on .mh-ticker__live so the rendered DOM stays
+   minimal (no empty span shell).
+
+   Wrapper chrome (padding, background, color, fontWeight, border-right)
+   lives on block.json as default attributes via the color, spacing,
+   typography, and border supports — see register_block_type() output. */
+
+.mh-ticker__lead {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-shrink: 0;
+}
+
+/* WP logomark doubles as the home link.
+   Inside joke: click WordPress, go home. */
+.mh-site-mark {
+	display: inline-flex;
+	align-items: center;
+	color: inherit;
+	text-decoration: none;
+	line-height: 0;
+	transition: color 0.15s ease;
+}
+.mh-site-mark:hover,
+.mh-site-mark:focus-visible {
+	color: var(--mh-wp);
+	outline: none;
+}
+
+.mh-ticker__live {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.mh-ticker__live::before {
+	content: '';
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--mh-ok);
+	animation: mh-pulse 2s infinite;
+}
+
+@keyframes mh-pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mh-ticker__live::before { animation: none; }
+}

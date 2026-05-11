@@ -40,168 +40,19 @@ body {
 }
 
 /* ===== Ticker =====
-   Composed from native blocks in parts/ticker.html:
-     - Outer alignfull core/group → .mh-ticker
-     - mercantile/ticker-lead     → .mh-ticker__lead
-       - linked WP mark           → .mh-site-mark (inline SVG, currentColor)
-       - LIVE label               → .mh-ticker__live (status dot is the
-                                    ::before pseudo on this element)
-     - mercantile/ticker-track    → .mh-ticker__rail > .mh-ticker__track > .mh-ticker__item
-     - mercantile/cart-tab        → .mh-ticker__tab (live cart count via
-                                    the woocommerce IxAPI cart store; click
-                                    opens the mini-cart drawer)
-   Block default margins for paragraphs / groups are reset below so the
-   flex bar stays a single 34px row regardless of which core block lands. */
-/* The bar's chrome (sticky position, ink background, slate text, mono
-   font, letter-spacing, border) is set on the block in parts/ticker.html
-   via core supports — only the bits WP block supports can't express stay
-   here: a fixed 34px row, a stacking context above the page, and the
-   overflow clip the marquee track relies on. */
+   Surface hook for the outer alignfull core/group in parts/ticker.html.
+   The bar's chrome (sticky position, ink background, slate text, mono
+   font, letter-spacing, border) is set on that group via core block
+   supports. Each child block (mercantile/ticker-lead, ticker-track,
+   cart-tab) ships its own style.css from blocks/src/<slug>/style.css
+   and is enqueued conditionally by register_block_type(). Only the
+   bits WP block supports can't express stay here: a fixed 34px row,
+   a stacking context above the page, and the overflow clip the
+   marquee track relies on. */
 .mh-ticker {
 	height: 34px;
 	z-index: 50;
 	overflow: hidden;
-}
-
-/* Reset WP block default margins/typography inside the ticker so paragraph
-   and group children behave like the original flex spans. */
-.mh-ticker > *,
-.mh-ticker .mh-ticker__lead > * {
-	margin-block-start: 0 !important;
-	margin-block-end: 0 !important;
-	margin-top: 0 !important;
-	margin-bottom: 0 !important;
-}
-.mh-ticker p {
-	margin: 0;
-	font-size: inherit;
-	color: inherit;
-	line-height: inherit;
-	font-family: inherit;
-	letter-spacing: inherit;
-}
-.mh-ticker a {
-	color: inherit;
-	text-decoration: none;
-}
-
-.mh-ticker .mh-ticker__lead {
-	padding: 0 12px;
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	background: var(--mh-ink);
-	color: #ecebe4;
-	font-weight: 600;
-	flex-shrink: 0;
-	border-right: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-/* WP logomark in the ticker doubles as the home link.
-   Inside joke: click WordPress, go home. */
-.mh-ticker .mh-site-mark {
-	display: inline-flex;
-	align-items: center;
-	color: inherit;
-	line-height: 0;
-	transition: color 0.15s ease;
-}
-.mh-ticker .mh-site-mark:hover,
-.mh-ticker .mh-site-mark:focus-visible {
-	color: var(--mh-wp);
-	outline: none;
-}
-
-.mh-ticker .mh-ticker__live {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-}
-
-/* Pulsing status dot. Lives as a ::before pseudo on .mh-ticker__live so
-   the rendered DOM stays minimal — no empty span shell needed. */
-.mh-ticker .mh-ticker__live::before {
-	content: '';
-	display: inline-block;
-	width: 6px;
-	height: 6px;
-	border-radius: 50%;
-	background: var(--mh-ok);
-	animation: mh-pulse 2s infinite;
-}
-
-@keyframes mh-pulse {
-	0%, 100% { opacity: 1; }
-	50% { opacity: 0.4; }
-}
-
-.mh-ticker .mh-ticker__rail {
-	flex: 1;
-	overflow: hidden;
-	position: relative;
-	display: flex;
-	align-items: center;
-}
-
-.mh-ticker .mh-ticker__track {
-	display: flex;
-	gap: 40px;
-	white-space: nowrap;
-	padding-left: 16px;
-	animation: mh-marquee 90s linear infinite;
-}
-
-.mh-ticker .mh-ticker__rail:hover .mh-ticker__track {
-	animation-play-state: paused;
-}
-
-@keyframes mh-marquee {
-	from { transform: translateX(0); }
-	to { transform: translateX(-50%); }
-}
-
-.mh-ticker .mh-ticker__item b {
-	color: #ecebe4;
-	font-weight: 600;
-}
-
-.mh-ticker .mh-ticker__item .mh-mono-blue {
-	color: #9ab1ff;
-}
-
-.mh-ticker .mh-ticker__item.is-wapuu {
-	color: #9fb1ff;
-	font-weight: 600;
-}
-
-.mh-ticker .mh-ticker__item.is-wapuu::before {
-	content: '✿ ';
-}
-
-.mh-ticker .mh-ticker__tab {
-	padding: 0 12px;
-	border-left: 1px solid rgba(255, 255, 255, 0.12);
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	flex-shrink: 0;
-	color: #ecebe4;
-}
-
-.mh-ticker .mh-ticker__tab a {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-}
-
-.mh-ticker .mh-ticker__tab strong {
-	color: #ecebe4;
-	font-weight: 600;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.mh-ticker .mh-ticker__track { animation: none; }
-	.mh-ticker .mh-ticker__live::before { animation: none; }
 }
 
 /* ===== Hero meta ===== */

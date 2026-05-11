@@ -3,6 +3,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, TextControl } from '@wordpress/components';
 import metadata from './block.json';
+import './style.css';
 
 registerBlockType( metadata.name, {
 	edit( { attributes, setAttributes } ) {

@@ -9,6 +9,7 @@ import {
 	ButtonGroup,
 } from '@wordpress/components';
 import metadata from './block.json';
+import './style.css';
 
 const VARIANT_OPTIONS = [
 	{ label: __( 'Default', 'mercantile-hook-loop' ), value: 'default' },

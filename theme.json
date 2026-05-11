@@ -65,7 +65,9 @@
 				{ "slug": "accent", "color": "#d63638", "name": "Accent Red" },
 				{ "slug": "ok", "color": "#1f8f3a", "name": "OK Green" },
 				{ "slug": "blue-tint", "color": "#e2e8ff", "name": "Blue Tint" },
-				{ "slug": "pink-tint", "color": "#ffd4e1", "name": "Pink Tint" }
+				{ "slug": "pink-tint", "color": "#ffd4e1", "name": "Pink Tint" },
+				{ "slug": "text-on-ink", "color": "#ecebe4", "name": "Text on Ink" },
+				{ "slug": "divider-on-ink", "color": "rgba(255, 255, 255, 0.12)", "name": "Divider on Ink" }
 			]
 		},
 		"spacing": {

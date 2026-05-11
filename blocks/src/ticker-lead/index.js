@@ -11,6 +11,7 @@ import {
 	RangeControl,
 } from '@wordpress/components';
 import metadata from './block.json';
+import './style.css';
 
 const SiteMarkSvg = ( { size } ) => (
 	<svg
