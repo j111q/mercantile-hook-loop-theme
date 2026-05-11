@@ -1,0 +1,61 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/ticker-track",
+	"version": "3.0.0",
+	"title": "Ticker Track",
+	"category": "theme",
+	"description": "Marquee track of one-line announcements. Items live as block attributes (text + variant), edited from the inspector. Render duplicates the list for a seamless loop.",
+	"icon": "controls-repeat",
+	"textdomain": "mercantile-hook-loop",
+	"attributes": {
+		"items": {
+			"type": "array",
+			"default": [
+				{
+					"text": "<strong>Hooked.</strong> 12,847 actions fired today",
+					"variant": "default"
+				},
+				{
+					"text": "the tie-dye hoodie is my favorite (don’t tell the others).",
+					"variant": "wapuu"
+				},
+				{
+					"text": "<strong>ORDER #10820</strong> · tie-dye-hoodie × 1 → Portland, OR",
+					"variant": "default"
+				},
+				{
+					"text": "Code is poetry. Merch is proof.",
+					"variant": "default"
+				},
+				{
+					"text": "don’t worry, press happy.",
+					"variant": "wapuu"
+				},
+				{
+					"text": "<span class=\"mh-mono-blue\">[mercantile id=\"i-love-wp-tee\"]</span> → renders in 38ms",
+					"variant": "default"
+				},
+				{
+					"text": "Howdy.",
+					"variant": "wapuu"
+				},
+				{
+					"text": "Howdy is the original wp-admin greeting · since 2008",
+					"variant": "default"
+				},
+				{
+					"text": "<span class=\"mh-mono-blue\">$ ssh shop@mercantile.wordpress.org</span>",
+					"variant": "default"
+				}
+			]
+		}
+	},
+	"supports": {
+		"html": false,
+		"className": true,
+		"customClassName": true
+	},
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}

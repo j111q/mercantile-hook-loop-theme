@@ -21,6 +21,29 @@ add_action(
 	}
 );
 
+/**
+ * Register theme-local blocks. Source lives in blocks/src/<slug>/ (JSX
+ * + block.json + render.php) and is compiled by `pnpm build` into
+ * blocks/build/<slug>/, which is what we register from. Discovery is
+ * filesystem-driven: every block.json under blocks/build is registered,
+ * so adding a block is just `mkdir blocks/src/<slug> && pnpm build` —
+ * no second edit here. The build directory is .gitignored — run
+ * `pnpm install && pnpm build` after a fresh checkout before
+ * activating the theme.
+ */
+add_action(
+	'init',
+	function () {
+		$blocks_dir = get_theme_file_path( 'blocks/build' );
+		if ( ! is_dir( $blocks_dir ) ) {
+			return;
+		}
+		foreach ( glob( $blocks_dir . '/*/block.json' ) as $block_json ) {
+			register_block_type( dirname( $block_json ) );
+		}
+	}
+);
+
 add_action(
 	'wp_enqueue_scripts',
 	function () {

@@ -1,0 +1,15 @@
+{
+	"name": "mercantile-hook-loop",
+	"private": true,
+	"version": "0.1.0",
+	"description": "Mercantile Hook Loop — block theme for the WordPress Studio shop demo.",
+	"scripts": {
+		"build": "WP_EXPERIMENTAL_MODULES=true wp-scripts build --webpack-src-dir=blocks/src --output-path=blocks/build",
+		"start": "WP_EXPERIMENTAL_MODULES=true wp-scripts start --webpack-src-dir=blocks/src --output-path=blocks/build",
+		"lint:js": "wp-scripts lint-js blocks/src",
+		"format": "wp-scripts format blocks/src"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^30.0.0"
+	}
+}

@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/cart-tab",
+	"version": "1.0.0",
+	"title": "Cart Tab",
+	"category": "theme",
+	"description": "Live cart link for the ticker bar. The item count is derived from WooCommerce's Interactivity API cart store and updates whenever a product is added or removed anywhere on the page.",
+	"icon": "cart",
+	"textdomain": "mercantile-hook-loop",
+	"attributes": {
+		"cartUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"label": {
+			"type": "string",
+			"default": "cart"
+		}
+	},
+	"supports": {
+		"html": false,
+		"interactivity": true,
+		"className": true,
+		"customClassName": true
+	},
+	"editorScript": "file:./index.js",
+	"viewScriptModule": "file:./view.js",
+	"render": "file:./render.php"
+}

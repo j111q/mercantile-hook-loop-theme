@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/ticker-lead",
+	"version": "1.0.0",
+	"title": "Ticker Lead",
+	"category": "theme",
+	"description": "Site mark + LIVE indicator that anchors the ticker bar. The pulsing status dot is rendered as a CSS ::before on the LIVE label.",
+	"icon": "podio",
+	"textdomain": "mercantile-hook-loop",
+	"attributes": {
+		"href": {
+			"type": "string",
+			"default": ""
+		},
+		"ariaLabel": {
+			"type": "string",
+			"default": "Mercantile home"
+		},
+		"liveText": {
+			"type": "string",
+			"default": "LIVE"
+		},
+		"size": {
+			"type": "number",
+			"default": 14
+		}
+	},
+	"supports": {
+		"html": false,
+		"className": true,
+		"customClassName": true
+	},
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}
