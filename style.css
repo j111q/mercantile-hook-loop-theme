@@ -1375,6 +1375,25 @@ body.post-type-archive-product .mh-filters .mh-filter {
 
 .mh-shortcode .copy:hover { color: #fff; }
 
+/* When the copy easter-egg snark is showing: drop caps, lighten, bump
+   size, italicise. assets/js/copy-easter-egg.js toggles `.snarked`. */
+.mh-shortcode .copy.snarked {
+	text-transform: none;
+	letter-spacing: 0;
+	font-size: 12px;
+	color: #fff;
+	font-style: italic;
+}
+
+.mh-shortcode .copy:focus-visible {
+	outline: 1px dotted #fff;
+	outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mh-shortcode .copy { transition: none; }
+}
+
 /* ===== PDP Side panel ===== */
 .mh-pdp__side > * { margin-block-start: 0 !important; margin-block-end: 0 !important; }
 

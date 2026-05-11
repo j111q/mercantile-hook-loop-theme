@@ -166,6 +166,20 @@ add_action(
 				'strategy'  => 'defer',
 			)
 		);
+		// "copy →" link on the dark [mercantile id="…"] PDP codeblock —
+		// never actually copies; cycles snark messages for 3.2s.
+		// Loaded site-wide so it also fires when the codeblock is
+		// injected by the IxAPI modal.
+		wp_enqueue_script(
+			'mercantile-hook-loop-copy-easter-egg',
+			get_template_directory_uri() . '/assets/js/copy-easter-egg.js',
+			array(),
+			wp_get_theme()->get( 'Version' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
 	}
 );
 
@@ -331,6 +345,37 @@ add_shortcode(
 			$status_text,
 			$visibility_text,
 			$stock_text
+		);
+	}
+);
+
+/**
+ * `[mh_pdp_codeblock]` — the dark `[mercantile id="…"]` shortcode strip.
+ *
+ * Editorial-zine bit that sits below the gallery on every PDP. Replaces
+ * the old hard-coded `[mercantile id="slug" size="M"] copy →` row with
+ * the *real* product slug. The "copy →" link is the easter egg target —
+ * see `assets/js/copy-easter-egg.js` for the snark cycle.
+ *
+ * Variable products get a `size="M"` placeholder so the codeblock has
+ * the same visual rhythm whether the product is simple or variable;
+ * the snark fires regardless of what's in the brackets.
+ */
+add_shortcode(
+	'mh_pdp_codeblock',
+	function () {
+		global $product;
+		if ( ! is_a( $product, 'WC_Product' ) ) {
+			return '';
+		}
+		$slug = $product->get_slug();
+		$size_attr = $product->is_type( 'variable' )
+			? ' <span class="k">size</span>=<span class="v">"M"</span>'
+			: '';
+		return sprintf(
+			'<div class="mh-shortcode"><span>[<span class="k">mercantile</span> <span class="k">id</span>=<span class="v">"%s"</span>%s]</span><span class="copy" role="button" tabindex="0">copy &rarr;</span></div>',
+			esc_html( $slug ),
+			$size_attr
 		);
 	}
 );
