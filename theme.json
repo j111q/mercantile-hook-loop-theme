@@ -142,6 +142,7 @@
 		{ "name": "hero", "title": "Hero", "area": "uncategorized" },
 		{ "name": "section-head", "title": "Section Head", "area": "uncategorized" },
 		{ "name": "pdp-modal", "title": "PDP Modal", "area": "uncategorized" },
+		{ "name": "pdp-details", "title": "PDP Details Panel", "area": "uncategorized" },
 		{ "name": "footer", "title": "Footer", "area": "footer" }
 	],
 	"customTemplates": [

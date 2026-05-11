@@ -73,42 +73,7 @@
 
 				<!-- wp:woocommerce/add-to-cart-form {"className":"mh-pdp__cta"} /-->
 
-				<!-- wp:group {"className":"mh-pdp__panel mh-pdp__panel--details","style":{"spacing":{"blockGap":"0","padding":{"top":"16px"}},"border":{"top":{"color":"var:preset|color|rule","width":"1px"}}},"layout":{"type":"default"}} -->
-				<div class="wp-block-group mh-pdp__panel mh-pdp__panel--details" style="border-top-color:var(--wp--preset--color--rule);border-top-width:1px;padding-top:16px">
-					<!-- wp:html -->
-					<h3 class="mh-pdp__panel-h3">Details</h3>
-					<!-- /wp:html -->
-
-					<!-- wp:group {"className":"mh-pdp__spec-row","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"},"style":{"spacing":{"blockGap":"10px"}}} -->
-					<div class="wp-block-group mh-pdp__spec-row">
-						<!-- wp:paragraph {"style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"10px","letterSpacing":"0.08em","textTransform":"uppercase"}},"textColor":"slate","className":"mh-pdp__spec-key"} -->
-						<p class="has-slate-color has-text-color mh-pdp__spec-key" style="font-family:'JetBrains Mono', ui-monospace, monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase">price</p>
-						<!-- /wp:paragraph -->
-						<!-- wp:woocommerce/product-price {"className":"mh-pdp__spec-price"} /-->
-					</div>
-					<!-- /wp:group -->
-
-					<!-- wp:group {"className":"mh-pdp__spec-row","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"},"style":{"spacing":{"blockGap":"10px"}}} -->
-					<div class="wp-block-group mh-pdp__spec-row">
-						<!-- wp:paragraph {"style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"10px","letterSpacing":"0.08em","textTransform":"uppercase"}},"textColor":"slate","className":"mh-pdp__spec-key"} -->
-						<p class="has-slate-color has-text-color mh-pdp__spec-key" style="font-family:'JetBrains Mono', ui-monospace, monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase">category</p>
-						<!-- /wp:paragraph -->
-						<!-- wp:post-terms {"term":"product_cat","style":{"typography":{"fontFamily":"'Newsreader', Georgia, serif","fontSize":"13px"}},"textColor":"ink","className":"mh-pdp__spec-val"} /-->
-					</div>
-					<!-- /wp:group -->
-
-					<!-- wp:group {"className":"mh-pdp__spec-row","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"},"style":{"spacing":{"blockGap":"10px"}}} -->
-					<div class="wp-block-group mh-pdp__spec-row">
-						<!-- wp:paragraph {"style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"10px","letterSpacing":"0.08em","textTransform":"uppercase"}},"textColor":"slate","className":"mh-pdp__spec-key"} -->
-						<p class="has-slate-color has-text-color mh-pdp__spec-key" style="font-family:'JetBrains Mono', ui-monospace, monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase">tags</p>
-						<!-- /wp:paragraph -->
-						<!-- wp:post-terms {"term":"product_tag","prefix":"","suffix":"","style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"11px"}},"className":"mh-pdp__spec-tags"} /-->
-					</div>
-					<!-- /wp:group -->
-
-					<!-- wp:mercantile/product-attributes /-->
-				</div>
-				<!-- /wp:group -->
+				<!-- wp:template-part {"slug":"pdp-details","theme":"mercantile-hook-loop"} /-->
 
 				<!-- wp:group {"className":"mh-pdp__panel mh-pdp__panel--related","style":{"spacing":{"blockGap":"10px","padding":{"top":"16px","bottom":"4px"}},"border":{"top":{"color":"var:preset|color|rule","width":"1px"}}},"layout":{"type":"default"}} -->
 				<div class="wp-block-group mh-pdp__panel mh-pdp__panel--related" style="border-top-color:var(--wp--preset--color--rule);border-top-width:1px;padding-top:16px;padding-bottom:4px">
