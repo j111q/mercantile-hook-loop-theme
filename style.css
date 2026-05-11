@@ -1373,8 +1373,8 @@ body.post-type-archive-product .mh-filters .mh-filter {
 .mh-shortcode .k { color: #9ab1ff; }
 .mh-shortcode .v { color: #fff; }
 .mh-shortcode .copy {
-	align-self: flex-end;
-	text-align: right;
+	align-self: flex-start;
+	text-align: left;
 	color: var(--mh-slate-2);
 	font-size: 10px;
 	letter-spacing: 0.05em;
