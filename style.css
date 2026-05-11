@@ -1735,6 +1735,14 @@ body.post-type-archive-product .mh-filters .mh-filter {
    vs our 2). We use !important here to override them — the alternative
    would be chaining `.woocommerce` into every selector, which is fragile
    if WC changes its body classes in future. */
+/* The product-attributes block wraps its table in a <div> (so editor
+   className + block-supports flow through). Zero its margin so it
+   doesn't pick up theme.json's default block-flow margin and push
+   the next panel away. */
+.mh-pdp__panel--details .wp-block-mercantile-product-attributes {
+	margin: 0;
+}
+
 .mh-pdp__panel--details .shop_attributes,
 .mh-pdp__panel--details .shop_attributes tbody {
 	width: 100%;
