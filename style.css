@@ -1296,23 +1296,6 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	z-index: 1;
 }
 
-/* fig label and see-more button */
-.mh-pdp__gallery::after {
-	content: 'fig. 78 · shop';
-	position: absolute;
-	top: 10px;
-	left: 12px;
-	z-index: 2;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: var(--mh-ink);
-	background: var(--mh-blue-tint);
-	padding: 3px 8px;
-	border-radius: 2px;
-}
-
 .mh-pdp__gallery .wp-block-woocommerce-product-gallery {
 	background: transparent !important;
 	border: 0 !important;
@@ -1364,7 +1347,12 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	font-size: 80px;
 }
 
-/* Dark shortcode strip below the gallery */
+/* Dark shortcode strip below the gallery. Two-line layout: the
+   [mercantile id="…"] codeblock sits on top, the "copy shortcode ⟶"
+   link drops to its own line below. This keeps the block's height
+   stable when the easter-egg replaces "copy shortcode ⟶" with a
+   longer snark — the snark wraps within the reserved second-line
+   area instead of pushing the codeblock up. */
 .mh-shortcode {
 	background: var(--mh-ink);
 	color: var(--mh-paper);
@@ -1372,25 +1360,53 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 12px;
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 14px;
-	flex-wrap: wrap;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 6px;
 	margin: 0;
+}
+
+.mh-shortcode__code {
+	word-break: break-all; /* long slugs shouldn't overflow on narrow widths */
 }
 
 .mh-shortcode .k { color: #9ab1ff; }
 .mh-shortcode .v { color: #fff; }
 .mh-shortcode .copy {
+	align-self: flex-start;
+	text-align: left;
 	color: var(--mh-slate-2);
 	font-size: 10px;
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
 	cursor: pointer;
 	transition: color 0.2s;
+	/* Reserve room for ~2 lines of snark text so the block doesn't
+	   resize when the snark replaces "copy shortcode ⟶". 2.4em ≈
+	   two lines at the .copy font size; tweak if any snark grows. */
+	min-height: 2.4em;
 }
 
 .mh-shortcode .copy:hover { color: #fff; }
+
+/* When the copy easter-egg snark is showing: drop caps, lighten, bump
+   size, italicise. assets/js/copy-easter-egg.js toggles `.snarked`. */
+.mh-shortcode .copy.snarked {
+	text-transform: none;
+	letter-spacing: 0;
+	font-size: 12px;
+	color: #fff;
+	font-style: italic;
+}
+
+.mh-shortcode .copy:focus-visible {
+	outline: 1px dotted #fff;
+	outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mh-shortcode .copy { transition: none; }
+}
 
 /* ===== PDP Side panel ===== */
 .mh-pdp__side > * { margin-block-start: 0 !important; margin-block-end: 0 !important; }

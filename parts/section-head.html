@@ -1,20 +1,12 @@
 <!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"10px","bottom":"10px","left":"var:preset|spacing|gutter","right":"var:preset|spacing|gutter"},"blockGap":"0"}},"layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"center"},"className":"mh-section-head"} -->
 <div class="wp-block-group alignfull mh-section-head" style="padding-top:10px;padding-right:var(--wp--preset--spacing--gutter);padding-bottom:10px;padding-left:var(--wp--preset--spacing--gutter)">
-	<!-- wp:html -->
-	<span class="mh-section-head__label">/* shop · 17 items */</span>
-	<div class="mh-filters">
-		<a href="/shop/" class="mh-filter is-on">all <span class="mh-n">17</span></a>
-		<a href="/product-category/apparel/" class="mh-filter">apparel <span class="mh-n">08</span></a>
-		<a href="/product-category/drinkware/" class="mh-filter">drinkware <span class="mh-n">04</span></a>
-		<a href="/product-category/accessories/" class="mh-filter">accessories <span class="mh-n">05</span></a>
-	</div>
-	<select class="mh-filters-m" aria-label="Filter products" onchange="if(this.value)location.href=this.value">
-		<option value="/shop/">all · 17</option>
-		<option value="/product-category/apparel/">apparel · 08</option>
-		<option value="/product-category/drinkware/">drinkware · 04</option>
-		<option value="/product-category/accessories/">accessories · 05</option>
-	</select>
-	<!-- /wp:html -->
+	<!-- Section label + filter chips (desktop) + select (mobile) rendered
+	     server-side from real WC product / category counts. The active
+	     filter is detected from the queried object and flagged .is-on.
+	     See [mh_section_filters] in functions.php. -->
+	<!-- wp:shortcode -->
+	[mh_section_filters]
+	<!-- /wp:shortcode -->
 
 	<!-- wp:group {"className":"mh-right","style":{"spacing":{"blockGap":"10px"}},"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center","justifyContent":"right"}} -->
 	<div class="wp-block-group mh-right">
