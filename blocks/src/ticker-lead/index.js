@@ -1,15 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
-import {
-	useBlockProps,
-	InspectorControls,
-	RichText,
-} from '@wordpress/block-editor';
-import {
-	PanelBody,
-	TextControl,
-	RangeControl,
-} from '@wordpress/components';
+import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
+import { PanelBody, TextControl, RangeControl } from '@wordpress/components';
 import metadata from './block.json';
 import './style.css';
 
@@ -35,7 +27,7 @@ const SiteMarkSvg = ( { size } ) => (
 
 registerBlockType( metadata.name, {
 	edit( { attributes, setAttributes } ) {
-		const { href, ariaLabel, liveText, size = 14 } = attributes;
+		const { href, ariaLabel, pauseMs = 5000, size = 14 } = attributes;
 		const blockProps = useBlockProps( {
 			className: 'mh-ticker__lead',
 		} );
@@ -44,10 +36,7 @@ registerBlockType( metadata.name, {
 			<>
 				<InspectorControls>
 					<PanelBody
-						title={ __(
-							'Ticker Lead',
-							'mercantile-hook-loop'
-						) }
+						title={ __( 'Ticker Lead', 'mercantile-hook-loop' ) }
 					>
 						<TextControl
 							label={ __(
@@ -55,9 +44,7 @@ registerBlockType( metadata.name, {
 								'mercantile-hook-loop'
 							) }
 							value={ href || '' }
-							onChange={ ( v ) =>
-								setAttributes( { href: v } )
-							}
+							onChange={ ( v ) => setAttributes( { href: v } ) }
 						/>
 						<TextControl
 							label={ __(
@@ -77,8 +64,19 @@ registerBlockType( metadata.name, {
 							value={ size }
 							min={ 10 }
 							max={ 64 }
+							onChange={ ( v ) => setAttributes( { size: v } ) }
+						/>
+						<RangeControl
+							label={ __(
+								'Pause duration (ms)',
+								'mercantile-hook-loop'
+							) }
+							value={ pauseMs }
+							min={ 1000 }
+							max={ 15000 }
+							step={ 500 }
 							onChange={ ( v ) =>
-								setAttributes( { size: v } )
+								setAttributes( { pauseMs: v } )
 							}
 						/>
 					</PanelBody>
@@ -95,16 +93,9 @@ registerBlockType( metadata.name, {
 					>
 						<SiteMarkSvg size={ size } />
 					</span>
-					<RichText
-						tagName="span"
-						className="mh-ticker__live"
-						value={ liveText }
-						onChange={ ( v ) =>
-							setAttributes( { liveText: v } )
-						}
-						allowedFormats={ [] }
-						placeholder={ __( 'LIVE', 'mercantile-hook-loop' ) }
-					/>
+					<span className="mh-ticker__live">
+						{ __( 'LIVE', 'mercantile-hook-loop' ) }
+					</span>
 				</div>
 			</>
 		);

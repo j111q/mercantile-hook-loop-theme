@@ -30,10 +30,25 @@
 	outline: none;
 }
 
+/* .mh-ticker__live is a <button> so clicking it can toggle the paused
+   state via iAPI. Reset native button chrome so it reads as the same
+   inline mono label as before. */
 .mh-ticker__live {
 	display: inline-flex;
 	align-items: center;
 	gap: 8px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	letter-spacing: inherit;
+	cursor: pointer;
+}
+.mh-ticker__live:focus-visible {
+	outline: 1px dashed currentColor;
+	outline-offset: 2px;
 }
 
 .mh-ticker__live::before {
@@ -44,6 +59,20 @@
 	border-radius: 50%;
 	background: var(--mh-ok);
 	animation: mh-pulse 2s infinite;
+}
+
+/* Paused state — set by the ticker-lead iAPI store on click. Dot turns
+   amber and stops pulsing; the sibling ticker-track marquee freezes via
+   the :has() rule below, scoped to the parent .mh-ticker group so it
+   only fires when this exact ticker is paused. Crossing the block
+   boundary is intentional: ticker-lead owns the paused state, the
+   visual consequence on the track follows from that. */
+.mh-ticker__lead.is-paused .mh-ticker__live::before {
+	background: #f5b800;
+	animation: none;
+}
+.mh-ticker:has(.mh-ticker__lead.is-paused) .mh-ticker__track {
+	animation-play-state: paused;
 }
 
 @keyframes mh-pulse {

@@ -5,7 +5,7 @@
  * Emits the ticker's cart link with an Interactivity API binding
  * (`data-wp-text="state.itemCount"`) so the count stays current as the
  * shopper adds or removes items elsewhere on the page. The state is
- * derived in view.js from WooCommerce's locked `woocommerce` IxAPI
+ * derived in view.js from WooCommerce's locked `woocommerce` iAPI
  * cart store; we seed that store server-side via load_cart_state() so
  * the count is correct on first paint, before any client-side fetch.
  *
@@ -25,7 +25,7 @@ if ( ! function_exists( 'WC' ) ) {
 $cart_url = ! empty( $attributes['cartUrl'] ) ? esc_url( $attributes['cartUrl'] ) : esc_url( wc_get_cart_url() );
 $label    = isset( $attributes['label'] ) ? (string) $attributes['label'] : 'cart';
 
-// Pre-populate the WC cart state in the IxAPI store so the initial
+// Pre-populate the WC cart state in the iAPI store so the initial
 // hydrated value of state.itemCount matches the server-rendered count.
 // load_cart_state() requires the consent acknowledgment string so WC
 // knows we're aware we're touching a private/locked store.

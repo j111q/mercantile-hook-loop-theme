@@ -1,33 +1,25 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "mercantile/ticker-lead",
+	"name": "mercantile/wappu-drop",
 	"version": "1.0.0",
-	"title": "Ticker Lead",
+	"title": "Wapuu Drop",
 	"category": "theme",
-	"description": "Site mark + LIVE indicator that anchors the ticker bar. The pulsing status dot is rendered as a CSS ::before on the LIVE label.",
-	"icon": "podio",
+	"description": "Tiny `+ New` tab for the ticker bar. Click drops one Wapuu sticker that drifts down and fades. Pure Interactivity API + CSS keyframes — no extra dependencies.",
+	"icon": "smiley",
 	"textdomain": "mercantile-hook-loop",
 	"attributes": {
-		"href": {
+		"label": {
 			"type": "string",
-			"default": ""
+			"default": "New"
 		},
-		"ariaLabel": {
+		"prefix": {
 			"type": "string",
-			"default": "Mercantile home"
+			"default": "+"
 		},
-		"pauseMs": {
+		"count": {
 			"type": "number",
-			"default": 5000
-		},
-		"size": {
-			"type": "number",
-			"default": 14
-		},
-		"backgroundColor": {
-			"type": "string",
-			"default": "ink"
+			"default": 1
 		},
 		"textColor": {
 			"type": "string",
@@ -37,8 +29,7 @@
 			"type": "object",
 			"default": {
 				"spacing": { "padding": { "top": "0", "right": "12px", "bottom": "0", "left": "12px" } },
-				"typography": { "fontWeight": "600" },
-				"border": { "right": { "color": "var:preset|color|divider-on-ink", "width": "1px", "style": "solid" } }
+				"border": { "left": { "color": "var:preset|color|divider-on-ink", "width": "1px", "style": "solid" } }
 			}
 		}
 	},
@@ -56,10 +47,6 @@
 			"padding": true,
 			"__experimentalDefaultControls": { "padding": true }
 		},
-		"typography": {
-			"__experimentalFontWeight": true,
-			"__experimentalDefaultControls": { "fontWeight": true }
-		},
 		"__experimentalBorder": {
 			"color": true,
 			"style": true,
@@ -68,7 +55,7 @@
 		}
 	},
 	"editorScript": "file:./index.js",
-	"style": "file:./style-index.css",
 	"viewScriptModule": "file:./view.js",
+	"style": "file:./style-index.css",
 	"render": "file:./render.php"
 }

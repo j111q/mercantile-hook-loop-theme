@@ -70,28 +70,56 @@ or editing blocks here.
     `Automattic\WooCommerce\Blocks\Utils\BlocksSharedState::load_cart_state( $consent )`
     from the block's `render.php`.
 
+## i18n — every user-facing string is translation-ready
+
+11. **All user-facing strings flow through a translation function.**
+    PHP: `__()` / `esc_html__()` / `esc_attr__()` with textdomain
+    `'mercantile-hook-loop'`. JS (editor): `__( 'foo',
+    'mercantile-hook-loop' )` from `@wordpress/i18n`. Applies even to
+    "hardcoded" labels like `LIVE` / `STOP` — hardcoded means
+    not author-editable, not English-only.
+12. **block.json attribute `default` values are NOT auto-translated.**
+    `register_block_type` translates `title` / `description` /
+    `keywords` when `textdomain` is set, but attribute defaults pass
+    through verbatim. If a default is user-facing, run it through
+    `__()` at render-time when the attribute is empty.
+13. **iAPI view.js: seed translated strings via PHP, don't `__()` in
+    JS.** render.php runs strings through `__()` server-side; view.js
+    reads them via `getConfig()` (or `state` if reactive) and never
+    touches the textdomain. Keeps the Interactivity module free of
+    translation-loading concerns. See rule 14 for the state-vs-config
+    split.
+
+14. **`wp_interactivity_config()` for static values, state for
+    reactive.** Config is read-only and never re-renders consumers —
+    asset URLs, translated labels, timing constants, feature flags.
+    State is for things that mutate at runtime (`isPaused`, derived
+    getters that depend on mutating values). Putting static data in
+    state still works but is wasteful: every consumer subscribes for
+    changes that never come.
+
 ## Build pipeline (`@wordpress/scripts`)
 
-11. **`WP_EXPERIMENTAL_MODULES=true` is required for
+15. **`WP_EXPERIMENTAL_MODULES=true` is required for
     `viewScriptModule`.** Without it, wp-scripts silently skips module
-    entries — you get no `view.js`, your IxAPI store never registers,
+    entries — you get no `view.js`, your iAPI store never registers,
     no error. The flag is already set in `package.json` scripts; keep
     it there.
-12. **Auto-discover blocks via `glob`, don't hardcode slugs.**
+16. **Auto-discover blocks via `glob`, don't hardcode slugs.**
     `functions.php` already does this — `glob( get_theme_file_path(
     'blocks/build' ) . '/*/block.json' )` registers everything under
     `blocks/build/`. One less file to edit per new block.
-13. **Beware the `*/` doc-block trap in PHP comments.** Putting `*/`
+17. **Beware the `*/` doc-block trap in PHP comments.** Putting `*/`
     inside a `/** */` comment closes it early — caused a fatal error
     here from the literal string `blocks/build/*/block.json` inside a
     docblock. Avoid `*/` in docblock prose.
-14. **`block.json`'s `"style"` is a runtime hint, not a build trigger.**
+18. **`block.json`'s `"style"` is a runtime hint, not a build trigger.**
     wp-scripts only bundles CSS that is `import`ed from the JS entry.
     A bare `style.css` next to `index.js` is silently ignored. Pattern:
     `import './style.css';` from `index.js`, then point `block.json`
     at the emitted file with `"style": "file:./style-index.css"` (the
     name wp-scripts uses for CSS extracted from the index entry).
-15. **Block-supports gotchas when expressing chrome as defaults.**
+19. **Block-supports gotchas when expressing chrome as defaults.**
     Setting wrapper chrome (padding, color, border, fontWeight) via
     `supports` + default `attributes.style` lets the editor tweak
     everything from the Site Editor and removes the corresponding CSS.
@@ -115,11 +143,11 @@ or editing blocks here.
 
 ## Refactoring instincts
 
-14. **Empty-block-as-styled-div is a smell.** The pulsing dot started
+20. **Empty-block-as-styled-div is a smell.** The pulsing dot started
     as an empty `core/group` — uneditable, looked like a placeholder
     in the Site Editor. Folded it into the LIVE paragraph as a
     `::before` instead — cleaner DOM, one fewer block.
-15. **Merging tightly-related blocks beats keeping them "atomic."**
+21. **Merging tightly-related blocks beats keeping them "atomic."**
     `site-mark` + dot + LIVE were three siblings; users only ever
     edited them together. One `mercantile/ticker-lead` block is more
     honest about the unit.
@@ -139,7 +167,7 @@ blocks/
 │       ├── style.css      # block-owned styles; wp-scripts emits this as
 │       │                  # build/<slug>/style-index.css
 │       ├── render.php     # echoes HTML (don't return)
-│       └── view.js        # ESM, IxAPI store; only when you need
+│       └── view.js        # ESM, iAPI store; only when you need
 │                          # client-side reactivity beyond SSR
 └── build/                 # gitignored; produced by `pnpm build`
 ```
