@@ -1296,23 +1296,6 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	z-index: 1;
 }
 
-/* fig label and see-more button */
-.mh-pdp__gallery::after {
-	content: 'fig. 78 · shop';
-	position: absolute;
-	top: 10px;
-	left: 12px;
-	z-index: 2;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: var(--mh-ink);
-	background: var(--mh-blue-tint);
-	padding: 3px 8px;
-	border-radius: 2px;
-}
-
 .mh-pdp__gallery .wp-block-woocommerce-product-gallery {
 	background: transparent !important;
 	border: 0 !important;

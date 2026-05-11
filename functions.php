@@ -209,3 +209,196 @@ add_action(
 	},
 	20
 );
+
+/* -----------------------------------------------------------------------
+ * Prototype-chrome shortcodes.
+ *
+ * The PDP and shop-head designs mimic the WordPress editor's Publish
+ * meta-box, breadcrumb, permalink row, and category-filter chips. The
+ * original templates rendered those bits as static `wp:html` blocks with
+ * hard-coded copy ("post.php?action=edit", "all 17", "permalink:
+ * http://localhost:8883/product/slug · modified just now") so they
+ * looked design-correct on screenshots but lied about real product
+ * state. These shortcodes generate the same markup from real WC data,
+ * so the design is preserved and the content tells the truth.
+ * -------------------------------------------------------------------- */
+
+/**
+ * `[mh_pdp_breadcrumb]` — mercantile / shop / <category> / <title>
+ *
+ * Matches the design of the static breadcrumb that used to live in the
+ * PDP header. "mercantile" links to home, "shop" links to the shop
+ * page, the category links to the category archive, and the product
+ * title is rendered as bold non-link text (we're already on its page).
+ * The close × button (back to shop) is rendered as a sibling so the
+ * existing `.mh-pdp__header` flex layout still works.
+ */
+add_shortcode(
+	'mh_pdp_breadcrumb',
+	function () {
+		global $product;
+		if ( ! is_a( $product, 'WC_Product' ) ) {
+			return '';
+		}
+		$shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+		$cat_html = '';
+		$terms    = get_the_terms( $product->get_id(), 'product_cat' );
+		if ( $terms && ! is_wp_error( $terms ) ) {
+			$primary = reset( $terms );
+			$cat_html = sprintf(
+				'<a href="%s">%s</a><span class="sl">/</span>',
+				esc_url( get_term_link( $primary ) ),
+				esc_html( strtolower( $primary->name ) )
+			);
+		}
+		return sprintf(
+			'<header class="mh-pdp__header"><div class="mh-pdp__crumb"><a href="%s">mercantile</a><span class="sl">/</span><a href="%s">shop</a><span class="sl">/</span>%s<b>%s</b></div><a class="mh-pdp__close" href="%s" aria-label="Back to shop">&times;</a></header>',
+			esc_url( home_url( '/' ) ),
+			esc_url( $shop_url ),
+			$cat_html,
+			esc_html( strtolower( $product->get_name() ) ),
+			esc_url( $shop_url )
+		);
+	}
+);
+
+/**
+ * `[mh_pdp_permalink]` — permalink: <site>/product/<slug> · modified <date>
+ *
+ * Replaces the static "permalink: http://localhost:8883/product/slug ·
+ * modified just now" line. Splits the URL at the slug so the slug can
+ * be highlighted blue (matching the prototype's editor-style URL row),
+ * and renders the real last-modified time as a human-readable diff
+ * ("3 days ago"). On the index page (no product context) returns empty.
+ */
+add_shortcode(
+	'mh_pdp_permalink',
+	function () {
+		global $product;
+		if ( ! is_a( $product, 'WC_Product' ) ) {
+			return '';
+		}
+		$permalink = get_permalink( $product->get_id() );
+		$slug      = basename( untrailingslashit( $permalink ) );
+		// Everything up to (and including) /product/ — strip the slug off the end.
+		$prefix    = substr( $permalink, 0, strrpos( untrailingslashit( $permalink ), '/' ) + 1 );
+
+		$modified  = get_post_modified_time( 'U', true, $product->get_id() );
+		$diff      = human_time_diff( $modified, current_time( 'timestamp', true ) );
+
+		return sprintf(
+			'<div class="mh-pdp__permalink">permalink: <span class="k">%s</span><b class="hl-blue">%s</b><span class="mh-pdp__permalink-meta">&middot; modified %s ago</span></div>',
+			esc_html( $prefix ),
+			esc_html( $slug ),
+			esc_html( $diff )
+		);
+	}
+);
+
+/**
+ * `[mh_pdp_publish_meta]` — the Publish meta-box mimic in the sidebar.
+ *
+ * Renders three status rows (status / visibility / stock) with REAL
+ * values: post_status, catalog_visibility, and stock_status. The
+ * design treats this as a wp-admin Publish meta-box reference, so the
+ * presence of the panel is intentional — only the values were stale.
+ */
+add_shortcode(
+	'mh_pdp_publish_meta',
+	function () {
+		global $product;
+		if ( ! is_a( $product, 'WC_Product' ) ) {
+			return '';
+		}
+
+		$status      = get_post_status( $product->get_id() );
+		$status_dot  = 'publish' === $status ? 'g' : ''; // green dot when published
+		$status_text = 'publish' === $status ? 'published' : esc_html( $status );
+
+		$visibility = $product->get_catalog_visibility(); // visible / catalog / search / hidden
+		$visibility_text = 'visible' === $visibility ? 'public' : esc_html( $visibility );
+
+		$in_stock = $product->is_in_stock();
+		$stock_text = $in_stock ? '<b>in stock</b>' : '<b class="oos">out of stock</b>';
+
+		return sprintf(
+			'<section class="mh-pdp__panel"><h3>Publish</h3>' .
+			'<div class="mh-status-row"><span>status</span><span class="v %s">&bull; %s</span></div>' .
+			'<div class="mh-status-row"><span>visibility</span><span class="v">%s</span></div>' .
+			'<div class="mh-status-row"><span>stock</span><span class="v">%s</span></div>' .
+			'</section>',
+			esc_attr( $status_dot ),
+			$status_text,
+			$visibility_text,
+			$stock_text
+		);
+	}
+);
+
+/**
+ * `[mh_section_filters]` — shop section-head with real category counts.
+ *
+ * The original markup hard-coded "all 17 / apparel 08 / drinkware 04 /
+ * accessories 05" — when products are added or removed those numbers
+ * lie. This shortcode counts products per category in real time, marks
+ * the matching tab `.is-on` based on the current archive (shop / cat),
+ * and emits both the desktop chip-row markup and the mobile <select>
+ * fallback the original template had.
+ *
+ * Pads counts to 2 digits ("08") to keep the prototype's typographic
+ * rhythm consistent with the rest of the editorial-zine design.
+ */
+add_shortcode(
+	'mh_section_filters',
+	function () {
+		if ( ! function_exists( 'wc_get_page_permalink' ) ) {
+			return '';
+		}
+
+		// Total published products.
+		$total = (int) wp_count_posts( 'product' )->publish;
+
+		// Categories to render as filter chips, in display order.
+		$cat_slugs = array( 'apparel', 'drinkware', 'accessories' );
+		$cats      = array();
+		foreach ( $cat_slugs as $slug ) {
+			$term = get_term_by( 'slug', $slug, 'product_cat' );
+			if ( $term && ! is_wp_error( $term ) ) {
+				$cats[] = $term;
+			}
+		}
+
+		// Detect the active filter so we can flag it .is-on.
+		$active_slug = 'all';
+		if ( is_product_taxonomy() ) {
+			$current = get_queried_object();
+			if ( $current && isset( $current->slug ) ) {
+				$active_slug = $current->slug;
+			}
+		}
+
+		$shop_url = wc_get_page_permalink( 'shop' );
+		$pad      = static function ( $n ) {
+			return str_pad( (string) $n, 2, '0', STR_PAD_LEFT );
+		};
+
+		// Desktop chip row.
+		ob_start();
+		?>
+		<span class="mh-section-head__label">/* shop &middot; <?php echo esc_html( $total ); ?> items */</span>
+		<div class="mh-filters">
+			<a href="<?php echo esc_url( $shop_url ); ?>" class="mh-filter<?php echo 'all' === $active_slug ? ' is-on' : ''; ?>">all <span class="mh-n"><?php echo esc_html( $pad( $total ) ); ?></span></a>
+			<?php foreach ( $cats as $cat ) : ?>
+				<a href="<?php echo esc_url( get_term_link( $cat ) ); ?>" class="mh-filter<?php echo $cat->slug === $active_slug ? ' is-on' : ''; ?>"><?php echo esc_html( strtolower( $cat->name ) ); ?> <span class="mh-n"><?php echo esc_html( $pad( $cat->count ) ); ?></span></a>
+			<?php endforeach; ?>
+		</div>
+		<select class="mh-filters-m" aria-label="Filter products" onchange="if(this.value)location.href=this.value">
+			<option value="<?php echo esc_url( $shop_url ); ?>"<?php echo 'all' === $active_slug ? ' selected' : ''; ?>>all &middot; <?php echo esc_html( $pad( $total ) ); ?></option>
+			<?php foreach ( $cats as $cat ) : ?>
+				<option value="<?php echo esc_url( get_term_link( $cat ) ); ?>"<?php echo $cat->slug === $active_slug ? ' selected' : ''; ?>><?php echo esc_html( strtolower( $cat->name ) ); ?> &middot; <?php echo esc_html( $pad( $cat->count ) ); ?></option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+		return ob_get_clean();
+	}
+);
