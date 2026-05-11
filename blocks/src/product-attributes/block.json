@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/product-attributes",
+	"version": "1.0.0",
+	"title": "Product Attributes",
+	"category": "theme",
+	"description": "Renders the WooCommerce product attributes table (material, care, capacity, fit, weight, dimensions, etc.) inline. Wraps wc_display_product_attributes() so the same table WC normally puts inside its 'Additional information' tab can live elsewhere on the single-product template — typically the Details sidebar panel. Outputs nothing if no attributes are set, so it degrades gracefully on products that haven't been populated.",
+	"icon": "info-outline",
+	"textdomain": "mercantile-hook-loop",
+	"supports": {
+		"html": false,
+		"className": true,
+		"customClassName": true
+	},
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}

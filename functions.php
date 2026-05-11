@@ -122,35 +122,6 @@ add_action(
 );
 
 /**
- * `[mh_product_attributes]` — render the WooCommerce product attributes
- * table inline.
- *
- * WooCommerce ships `wc_display_product_attributes()` which outputs
- * `<table class="shop_attributes">` with one row per visible attribute
- * (plus weight/dimensions if set). It's normally only called inside the
- * "Additional information" tab on the single-product page.
- *
- * Expose it as a shortcode so the PDP template can render attributes as
- * labeled spec rows in the sidebar Details panel, without the tabs UI.
- * Restyled in style.css to match the .mh-pdp__spec-row rhythm.
- *
- * Returns empty string off-product, so accidental placement on other
- * pages renders nothing instead of erroring.
- */
-add_shortcode(
-	'mh_product_attributes',
-	function () {
-		global $product;
-		if ( ! is_a( $product, 'WC_Product' ) ) {
-			return '';
-		}
-		ob_start();
-		wc_display_product_attributes( $product );
-		return ob_get_clean();
-	}
-);
-
-/**
  * Enhance WooCommerce variation <select> dropdowns with mono-font button
  * rows so the prototype's "pick a size" UI matches the design instead of
  * a native select. The script keeps the underlying <select> in the DOM
