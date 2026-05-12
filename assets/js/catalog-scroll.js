@@ -72,18 +72,32 @@
 		let exhausted = false;
 		let loading = false;
 
-		// Sentinel — invisible div after the grid that triggers the
-		// next fetch when it scrolls into view. Placed inside
-		// .mh-grid-wrap so its layout is bound to the grid's column.
-		const sentinel = document.createElement( 'div' );
-		sentinel.className = 'mh-load-more-sentinel';
-		sentinel.setAttribute( 'aria-hidden', 'true' );
-		sentinel.style.cssText =
-			'min-height:1px;width:100%;contain:strict;pointer-events:none';
-		wrap.appendChild( sentinel );
+		// Load-more button — visible, clickable AND the
+		// IntersectionObserver target. Styled like the dark
+		// `.mh-shortcode` code-interstitial on the PDP, but with a
+		// WP-blue clickable label on the right that signals the
+		// load action. Auto-triggers when scrolled into view; also
+		// responds to keyboard / mouse click as the no-IO fallback.
+		const button = document.createElement( 'button' );
+		button.type = 'button';
+		button.className = 'mh-load-more';
+		// Live region so screen readers hear "loading / no more
+		// products" announcements as pages append.
+		button.setAttribute( 'aria-live', 'polite' );
+		const renderButton = ( nextPage ) => {
+			button.innerHTML =
+				'<span class="mh-load-more__code">' +
+				'[<span class="k">mercantile</span> <span class="k">next_page</span>=<span class="v">"' +
+				String( nextPage ) +
+				'"</span>]' +
+				'</span>' +
+				'<span class="mh-load-more__cta">load more &#x27F6;</span>';
+		};
+		renderButton( currentPage + 1 );
+		wrap.appendChild( button );
 
-		// Optional status line for assistive tech (and visible state
-		// once the run completes).
+		// Status line — sits below the button and updates only on
+		// exhaustion ("no more products"). aria-live for SR feedback.
 		const status = document.createElement( 'p' );
 		status.className = 'mh-load-more-status';
 		status.setAttribute( 'role', 'status' );
@@ -91,9 +105,17 @@
 		status.textContent = '';
 		wrap.appendChild( status );
 
+		const setExhausted = () => {
+			exhausted = true;
+			button.hidden = true;
+			button.disabled = true;
+			status.textContent = '— end of catalog —';
+		};
+
 		async function loadNext() {
 			if ( exhausted || loading ) return;
 			loading = true;
+			button.classList.add( 'is-loading' );
 
 			const nextPage = currentPage + 1;
 			const url = new URL( window.location.href );
@@ -107,8 +129,7 @@
 				if ( ! response.ok ) {
 					// 404 on the next page means no more — bail out
 					// silently rather than retrying.
-					exhausted = true;
-					sentinel.remove();
+					setExhausted();
 					return;
 				}
 				const html = await response.text();
@@ -122,8 +143,7 @@
 				);
 				const items = nextList ? nextList.children : null;
 				if ( ! items || items.length === 0 ) {
-					exhausted = true;
-					sentinel.remove();
+					setExhausted();
 					return;
 				}
 
@@ -134,21 +154,34 @@
 				list.appendChild( frag );
 
 				currentPage = nextPage;
+				renderButton( currentPage + 1 );
 
-				// If the next page has fewer items than expected (last
-				// page short-load) the next fetch will 404 or be empty;
-				// no need to track total pages manually.
+				// If the page came back with fewer items than the
+				// per-page count, that was the final page — flag
+				// exhausted to skip the next fetch.
+				if ( items.length < 16 ) {
+					setExhausted();
+				}
 			} catch ( e ) {
 				// Network blip — don't lock the user out, but back off
 				// so we don't hammer the server.
 				setTimeout( () => {
+					button.classList.remove( 'is-loading' );
 					loading = false;
 				}, 1500 );
 				return;
 			}
+			button.classList.remove( 'is-loading' );
 			loading = false;
 		}
 
+		// Click / Enter / Space all trigger load (button's native
+		// keyboard behaviour handles Enter + Space).
+		button.addEventListener( 'click', loadNext );
+
+		// IntersectionObserver auto-trigger as the button scrolls into
+		// view — feels like "infinite scroll" while still leaving the
+		// button as a visible click-to-load fallback.
 		const observer = new IntersectionObserver(
 			( entries ) => {
 				for ( const entry of entries ) {
@@ -158,14 +191,14 @@
 				}
 			},
 			{
-				// Start fetching when the sentinel is within 400px of
-				// the viewport bottom — feels like "auto-load" rather
+				// Start fetching when the button is within 400px of
+				// the viewport bottom — feels like auto-load rather
 				// than a stall at the bottom.
 				rootMargin: '0px 0px 400px 0px',
 				threshold: 0,
 			}
 		);
-		observer.observe( sentinel );
+		observer.observe( button );
 	}
 
 	/* --------- Boot ------------------------------------------------ */
