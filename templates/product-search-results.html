@@ -4,9 +4,10 @@
 
 <!-- wp:template-part {"slug":"section-head","theme":"mercantile-hook-loop"} /-->
 
-<!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"0","bottom":"0","left":"var:preset|spacing|gutter","right":"var:preset|spacing|gutter"}}},"layout":{"type":"default"},"className":"mh-grid-wrap"} -->
+<!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"0","bottom":"0","left":"var:preset|spacing|gutter","right":"var:preset|spacing|gutter"},"blockGap":"0"}},"layout":{"type":"default"},"className":"mh-grid-wrap"} -->
 <div class="wp-block-group alignfull mh-grid-wrap" style="padding-top:0;padding-right:var(--wp--preset--spacing--gutter);padding-bottom:0;padding-left:var(--wp--preset--spacing--gutter)">
-	<!-- wp:woocommerce/product-collection {"queryId":2,"query":{"perPage":16,"pages":0,"offset":0,"postType":"product","order":"desc","orderBy":"date","search":"","exclude":[],"inherit":true,"taxQuery":{},"isProductCollectionBlock":true},"displayLayout":{"type":"flex","columns":4,"shrinkColumns":true},"queryContextIncludes":["collection"],"className":"mh-grid"} -->
+
+	<!-- wp:woocommerce/product-collection {"queryId":1,"query":{"perPage":16,"pages":0,"offset":0,"postType":"product","order":"desc","orderBy":"date","search":"","exclude":[],"inherit":true,"taxQuery":{},"isProductCollectionBlock":true},"displayLayout":{"type":"flex","columns":4,"shrinkColumns":true},"queryContextIncludes":["collection"],"className":"mh-grid"} -->
 	<div class="wp-block-woocommerce-product-collection mh-grid">
 		<!-- wp:woocommerce/product-template -->
 			<!-- wp:group {"className":"mh-cell","style":{"spacing":{"blockGap":"8px"}},"layout":{"type":"flex","orientation":"vertical","justifyContent":"stretch"}} -->
@@ -31,13 +32,21 @@
 			<!-- /wp:group -->
 		<!-- /wp:woocommerce/product-template -->
 		<!-- wp:woocommerce/product-collection-no-results -->
-			<!-- wp:paragraph -->
-			<p>No products in this category yet.</p>
+			<!-- wp:paragraph {"className":"mh-no-results"} -->
+			<p class="mh-no-results">The catalog is empty — but the loop is alive.</p>
 			<!-- /wp:paragraph -->
 		<!-- /wp:woocommerce/product-collection-no-results -->
+		<!-- wp:query-pagination {"layout":{"type":"flex","justifyContent":"center"}} -->
+			<!-- wp:query-pagination-previous /-->
+			<!-- wp:query-pagination-numbers /-->
+			<!-- wp:query-pagination-next /-->
+		<!-- /wp:query-pagination -->
 	</div>
 	<!-- /wp:woocommerce/product-collection -->
+
 </div>
 <!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"band","theme":"mercantile-hook-loop"} /-->
 
 <!-- wp:template-part {"slug":"footer","theme":"mercantile-hook-loop","tagName":"footer"} /-->

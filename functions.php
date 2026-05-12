@@ -88,6 +88,91 @@ add_action(
 );
 
 /**
+ * Tag the catalog grid wrapper as an Interactivity API router region so
+ * chip clicks (mercantile/section-filters) and search submits
+ * (woocommerce/product-search) can swap the grid in place instead of
+ * full-page reloading.
+ *
+ * `core/group`'s save() only emits class/style/id, so adding `data-wp-*`
+ * inline in the template HTML triggers a block-validation error. The
+ * render-time filter is the supported escape hatch for surface-only
+ * attributes that don't belong in an attribute schema.
+ *
+ * Matches the `.mh-grid-wrap` group emitted by index.html (and the
+ * archive/taxonomy/search templates that mirror it).
+ */
+add_filter(
+	'render_block_core/group',
+	function ( $block_content, $block ) {
+		if ( ! is_string( $block_content ) ) {
+			return $block_content;
+		}
+		$class = $block['attrs']['className'] ?? '';
+		if ( false === strpos( $class, 'mh-grid-wrap' ) ) {
+			return $block_content;
+		}
+		$p = new WP_HTML_Tag_Processor( $block_content );
+		if ( $p->next_tag( 'div' ) ) {
+			$p->set_attribute( 'data-wp-interactive', 'mercantile/catalog' );
+			$p->set_attribute( 'data-wp-router-region', 'mercantile/catalog-grid' );
+		}
+		return $p->get_updated_html();
+	},
+	10,
+	2
+);
+
+/**
+ * Wire the section-head's `core/search` block (a WC-registered variation
+ * with namespace `woocommerce/product-search`, identified by the
+ * `mh-section-search` className) into the shared `mercantile/catalog`
+ * iAPI store. The block already renders a real <form action=…
+ * method="get"> with the right post_type=product hidden input, so the
+ * no-JS fallback works on its own; with JS, the submit handler routes
+ * via the iAPI router and swaps the catalog grid region in place.
+ *
+ * Also adds `enterkeyhint="search"` on the input so mobile keyboards
+ * surface a "Search" return key, and pre-fills the input from `?s=…`.
+ *
+ * (Replaces the older `woocommerce/product-search` block, which WC
+ * deprecated in favor of this variation; the legacy block now shows an
+ * "Upgrade to continue using" notice in the Site Editor.)
+ */
+add_filter(
+	'render_block_core/search',
+	function ( $block_content, $block ) {
+		if ( ! is_string( $block_content ) ) {
+			return $block_content;
+		}
+		$class = $block['attrs']['className'] ?? '';
+		if ( false === strpos( $class, 'mh-section-search' ) ) {
+			return $block_content;
+		}
+		$p = new WP_HTML_Tag_Processor( $block_content );
+		// core/search renders the <form> as the outer element (no
+		// wrapping div), so both iAPI directives go on the form itself.
+		if ( $p->next_tag( 'form' ) ) {
+			$p->set_attribute( 'data-wp-interactive', 'mercantile/catalog' );
+			$p->set_attribute( 'data-wp-on--submit', 'actions.search' );
+		}
+		if ( $p->next_tag( array( 'tag_name' => 'input', 'class_name' => 'wp-block-search__input' ) ) ) {
+			$p->set_attribute( 'enterkeyhint', 'search' );
+			$p->set_attribute( 'aria-keyshortcuts', 'Enter' );
+			// Pre-fill from the current ?s=… so the input reflects the
+			// active query when the user lands on a search results page.
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$current = isset( $_GET['s'] ) ? wp_unslash( $_GET['s'] ) : '';
+			if ( '' !== $current ) {
+				$p->set_attribute( 'value', (string) $current );
+			}
+		}
+		return $p->get_updated_html();
+	},
+	10,
+	2
+);
+
+/**
  * Re-label a few WooCommerce Checkout step headings to match the
  * Mercantile prototype (Contact / Shipping address / Payment).
  */
@@ -411,70 +496,3 @@ add_shortcode(
 	}
 );
 
-/**
- * `[mh_section_filters]` — shop section-head with real category counts.
- *
- * The original markup hard-coded "all 17 / apparel 08 / drinkware 04 /
- * accessories 05" — when products are added or removed those numbers
- * lie. This shortcode counts products per category in real time, marks
- * the matching tab `.is-on` based on the current archive (shop / cat),
- * and emits both the desktop chip-row markup and the mobile <select>
- * fallback the original template had.
- *
- * Pads counts to 2 digits ("08") to keep the prototype's typographic
- * rhythm consistent with the rest of the editorial-zine design.
- */
-add_shortcode(
-	'mh_section_filters',
-	function () {
-		if ( ! function_exists( 'wc_get_page_permalink' ) ) {
-			return '';
-		}
-
-		// Total published products.
-		$total = (int) wp_count_posts( 'product' )->publish;
-
-		// Categories to render as filter chips, in display order.
-		$cat_slugs = array( 'apparel', 'drinkware', 'accessories' );
-		$cats      = array();
-		foreach ( $cat_slugs as $slug ) {
-			$term = get_term_by( 'slug', $slug, 'product_cat' );
-			if ( $term && ! is_wp_error( $term ) ) {
-				$cats[] = $term;
-			}
-		}
-
-		// Detect the active filter so we can flag it .is-on.
-		$active_slug = 'all';
-		if ( is_product_taxonomy() ) {
-			$current = get_queried_object();
-			if ( $current && isset( $current->slug ) ) {
-				$active_slug = $current->slug;
-			}
-		}
-
-		$shop_url = wc_get_page_permalink( 'shop' );
-		$pad      = static function ( $n ) {
-			return str_pad( (string) $n, 2, '0', STR_PAD_LEFT );
-		};
-
-		// Desktop chip row.
-		ob_start();
-		?>
-		<span class="mh-section-head__label">/* shop &middot; <?php echo esc_html( $total ); ?> items */</span>
-		<div class="mh-filters">
-			<a href="<?php echo esc_url( $shop_url ); ?>" class="mh-filter<?php echo 'all' === $active_slug ? ' is-on' : ''; ?>">all <span class="mh-n"><?php echo esc_html( $pad( $total ) ); ?></span></a>
-			<?php foreach ( $cats as $cat ) : ?>
-				<a href="<?php echo esc_url( get_term_link( $cat ) ); ?>" class="mh-filter<?php echo $cat->slug === $active_slug ? ' is-on' : ''; ?>"><?php echo esc_html( strtolower( $cat->name ) ); ?> <span class="mh-n"><?php echo esc_html( $pad( $cat->count ) ); ?></span></a>
-			<?php endforeach; ?>
-		</div>
-		<select class="mh-filters-m" aria-label="Filter products" onchange="if(this.value)location.href=this.value">
-			<option value="<?php echo esc_url( $shop_url ); ?>"<?php echo 'all' === $active_slug ? ' selected' : ''; ?>>all &middot; <?php echo esc_html( $pad( $total ) ); ?></option>
-			<?php foreach ( $cats as $cat ) : ?>
-				<option value="<?php echo esc_url( get_term_link( $cat ) ); ?>"<?php echo $cat->slug === $active_slug ? ' selected' : ''; ?>><?php echo esc_html( strtolower( $cat->name ) ); ?> &middot; <?php echo esc_html( $pad( $cat->count ) ); ?></option>
-			<?php endforeach; ?>
-		</select>
-		<?php
-		return ob_get_clean();
-	}
-);

@@ -1,0 +1,122 @@
+/* mercantile/section-filters — desktop pill row + native <select> mobile
+   fallback. The block ships its own responsive behavior (label/chips
+   hide below 700px and the select takes over); surface-level layout of
+   the section-head bar (sticky chrome, mini-cart skin) stays in the
+   theme stylesheet. */
+
+.mh-section-filters {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	flex: 1 1 auto;
+	min-width: 0;
+	flex-wrap: wrap;
+}
+
+.mh-section-filters__label {
+	font-size: 11px;
+	color: var(--mh-slate);
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.mh-section-filters__chips {
+	display: flex;
+	gap: 0;
+	font-size: 12px;
+	border: 1px solid var(--mh-rule);
+	background: var(--mh-paper-2);
+}
+
+.mh-section-filters__chip {
+	padding: 6px 12px;
+	color: var(--mh-wp);
+	border-right: 1px solid var(--mh-rule);
+	display: inline-flex;
+	align-items: baseline;
+	gap: 5px;
+	line-height: 1.4;
+	cursor: pointer;
+	text-decoration: none;
+	transition: background 0.1s, color 0.1s;
+}
+
+.mh-section-filters__chip:last-child { border-right: 0; }
+
+.mh-section-filters__chip:hover { background: var(--mh-card); }
+
+.mh-section-filters__chip.is-on {
+	background: var(--mh-ink);
+	color: var(--mh-paper);
+}
+
+.mh-section-filters__count {
+	font-size: 10px;
+	color: var(--mh-slate-2);
+}
+
+.mh-section-filters__chip.is-on .mh-section-filters__count,
+.mh-section-filters__chip:hover .mh-section-filters__count {
+	color: var(--mh-slate-2);
+}
+
+/* Belt-and-suspenders for category archives — if the server-side
+   active-slug detection ever misses (e.g. permalink rewrites or a
+   non-standard query var), the body's term-<slug> class still flips
+   the matching href to the active chrome. WP body classes are
+   tax-product_cat + term-<slug> as separate classes. */
+body.tax-product_cat .mh-section-filters__chip.is-on {
+	background: transparent;
+	color: var(--mh-wp);
+}
+body.tax-product_cat.term-apparel .mh-section-filters__chips [href$="/apparel/"],
+body.tax-product_cat.term-drinkware .mh-section-filters__chips [href$="/drinkware/"],
+body.tax-product_cat.term-accessories .mh-section-filters__chips [href$="/accessories/"] {
+	background: var(--mh-ink);
+	color: var(--mh-paper);
+}
+body.tax-product_cat.term-apparel .mh-section-filters__chips [href$="/apparel/"] .mh-section-filters__count,
+body.tax-product_cat.term-drinkware .mh-section-filters__chips [href$="/drinkware/"] .mh-section-filters__count,
+body.tax-product_cat.term-accessories .mh-section-filters__chips [href$="/accessories/"] .mh-section-filters__count {
+	color: var(--mh-slate-2);
+}
+
+/* Native <select> shown in place of the pill row on phones — better
+   one-handed UX, and the OS picker is more accessible than a clipped
+   horizontal-scroll strip. */
+.mh-section-filters__mobile {
+	display: none;
+}
+
+@media (max-width: 700px) {
+	.mh-section-filters {
+		flex: 1;
+		gap: 0;
+	}
+	.mh-section-filters__label,
+	.mh-section-filters__chips { display: none; }
+	.mh-section-filters__mobile {
+		display: block;
+		width: 100%;
+		box-sizing: border-box;
+		padding: 10px 36px 10px 14px;
+		line-height: 1.4;
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 13px;
+		color: var(--mh-wp);
+		background-color: var(--mh-paper-2);
+		border: 1px solid var(--mh-rule);
+		border-radius: 0;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1.5L6 6.5L11 1.5' stroke='%233858e9' stroke-width='1.5' stroke-linecap='round'/></svg>");
+		background-repeat: no-repeat;
+		background-position: right 14px center;
+		cursor: pointer;
+	}
+	.mh-section-filters__mobile:focus {
+		outline: none;
+		border-color: var(--mh-wp);
+	}
+}

@@ -1,0 +1,31 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/section-filters",
+	"version": "1.0.0",
+	"title": "Section Filters",
+	"category": "theme",
+	"description": "Shop filter chips (all / category) with real-time WooCommerce product counts. Chip clicks use Interactivity API client-side navigation to swap the product grid without a full reload.",
+	"icon": "filter",
+	"textdomain": "mercantile-hook-loop",
+	"attributes": {
+		"categories": {
+			"type": "string",
+			"default": "apparel,drinkware,accessories"
+		},
+		"label": {
+			"type": "string",
+			"default": "§ CATALOG"
+		}
+	},
+	"supports": {
+		"html": false,
+		"interactivity": true,
+		"className": true,
+		"customClassName": true
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css",
+	"viewScriptModule": "file:./view.js",
+	"render": "file:./render.php"
+}

@@ -83,20 +83,17 @@ body {
 }
 
 
-/* ===== Section head ===== */
+/* ===== Section head =====
+   Outer surface chrome (sticky position, background, border-bottom,
+   padding, flex layout, font-family) lives on the wp:group attributes
+   in parts/section-head.html via block supports. The filter chips +
+   label + mobile select are the mercantile/section-filters block and
+   own their own CSS. What stays here is what neither layer can express
+   from block-level attributes: the surface z-index, child margin
+   reset, surface block-gap collapse, and the WC mini-cart skin
+   (cross-block selectors into woocommerce/mini-cart internals). */
 .mh-section-head {
-	position: sticky;
-	top: 34px;
 	z-index: 40;
-	background: var(--mh-paper);
-	border-top: 1px solid var(--mh-rule);
-	border-bottom: 1px solid var(--mh-rule);
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 20px;
-	flex-wrap: wrap;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
 }
 
 /* Reset WP flow-layout child margins so flex children sit on the cross-axis center. */
@@ -106,10 +103,6 @@ body {
 	margin-top: 0 !important;
 	margin-bottom: 0 !important;
 }
-
-/* The section-head only needs a bottom rule — the hero's own bottom border
-   sits flush above it once we collapse the block-gap. */
-.mh-section-head { border-top: 0; }
 
 /* Kill the 24px WP block-gap between every top-level section in the home/shop
    chain. Each landing-page band already supplies its own border, so we want
@@ -122,79 +115,6 @@ body {
 .wp-site-blocks > .mh-pdp-wrap {
 	margin-top: 0 !important;
 	margin-block-start: 0 !important;
-}
-
-.mh-section-head__label {
-	font-size: 11px;
-	color: var(--mh-slate);
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
-}
-
-.mh-filters {
-	display: flex;
-	gap: 0;
-	font-size: 12px;
-	border: 1px solid var(--mh-rule);
-	background: var(--mh-paper-2);
-}
-
-/* Native <select> shown in place of the pill row on phones — better
-   one-handed UX, and the OS picker is more accessible than a clipped
-   horizontal-scroll strip. Mirrors the prototype's .filters-m. */
-.mh-filters-m {
-	display: none;
-}
-
-.mh-filters .mh-filter {
-	padding: 6px 12px;
-	color: var(--mh-wp);
-	border-right: 1px solid var(--mh-rule);
-	display: inline-flex;
-	align-items: baseline;
-	gap: 5px;
-	line-height: 1.4;
-	cursor: pointer;
-	text-decoration: none;
-}
-
-.mh-filters .mh-filter:hover { background: var(--mh-card); }
-
-.mh-filters .mh-filter:last-child { border-right: 0; }
-
-.mh-filters .mh-filter.is-on,
-body.tax-product_cat .mh-filters .mh-filter.is-on { /* category page can flip is-on via JS later */
-	background: var(--mh-ink);
-	color: var(--mh-paper);
-}
-
-/* On a category archive, mark the matching filter active and unmark "all".
-   WP body classes are: tax-product_cat + term-<slug> (separate classes). */
-body.tax-product_cat .mh-filters .mh-filter.is-on { background: transparent; color: var(--mh-wp); }
-body.tax-product_cat.term-apparel .mh-filters [href$="/apparel/"],
-body.tax-product_cat.term-drinkware .mh-filters [href$="/drinkware/"],
-body.tax-product_cat.term-accessories .mh-filters [href$="/accessories/"] {
-	background: var(--mh-ink);
-	color: var(--mh-paper);
-}
-body.tax-product_cat.term-apparel .mh-filters [href$="/apparel/"] .mh-n,
-body.tax-product_cat.term-drinkware .mh-filters [href$="/drinkware/"] .mh-n,
-body.tax-product_cat.term-accessories .mh-filters [href$="/accessories/"] .mh-n {
-	color: var(--mh-slate-2);
-}
-
-.mh-filters .mh-filter .mh-n {
-	font-size: 10px;
-	color: var(--mh-slate-2);
-}
-
-.mh-filters .mh-filter.is-on .mh-n,
-.mh-filters .mh-filter:hover .mh-n { color: var(--mh-slate-2); }
-
-/* Active state via current URL — works on shop archive + category archives. */
-body.tax-product_cat .mh-filters .mh-filter,
-body.post-type-archive-product .mh-filters .mh-filter {
-	transition: background 0.1s, color 0.1s;
 }
 
 
@@ -229,8 +149,22 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	color: #fff !important;
 }
 
+/* Cart total — the prototype reads `cart · 0 · $0`, so the price stays
+   visible with a `·` separator inline before it. Mono-styled to match
+   the count. */
 .mh-section-head .wc-block-mini-cart__button .wc-block-mini-cart__amount {
-	display: none; /* keep it tight — count is enough */
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 12px;
+	font-weight: 400;
+	color: var(--mh-paper);
+	display: inline-flex;
+	align-items: baseline;
+	gap: 6px;
+}
+.mh-section-head .wc-block-mini-cart__button .wc-block-mini-cart__amount::before {
+	content: '·';
+	color: var(--mh-slate-2);
+	font-weight: 400;
 }
 
 /* Hide the WC cart icon — the prototype uses a plain `cart 0` mono pill. */
@@ -239,22 +173,59 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	display: none !important;
 }
 
-/* Quantity badge — render inline as a count pill `0` next to the word. */
-.mh-section-head .wc-block-mini-cart__quantity-badge,
-.mh-section-head .wc-block-mini-cart__badge {
+/* Quantity badge — render inline as a count pill `0` next to the word.
+   The leading `cart` and the trailing `· $0` come from the wrapper
+   button's ::before + the .wc-block-mini-cart__amount rule above; the
+   badge itself sits between them with its own padding-left separator. */
+/* Outer quantity-badge wraps icon + inner badge bubble. Treat it as the
+   inline `· N` segment between `cart` and the price. Its ::before
+   supplies the `·` separator. */
+.mh-section-head .wc-block-mini-cart__quantity-badge {
 	background: transparent !important;
-	color: #fff !important;
+	color: var(--mh-paper) !important;
 	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
 	font-size: 12px !important;
-	font-weight: 700 !important;
+	font-weight: 400 !important;
 	position: static !important;
 	padding: 0 !important;
 	width: auto !important;
 	height: auto !important;
 	min-width: 0 !important;
 	border: 0 !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 6px !important;
+	letter-spacing: 0 !important;
+	transform: none !important;
+}
+.mh-section-head .wc-block-mini-cart__quantity-badge::before {
+	content: '·';
+	color: var(--mh-slate-2);
+	font-weight: 400;
+	margin-right: 6px;
+}
+
+/* Inner badge bubble normally floats absolutely as a notification dot
+   over the cart icon. With the icon hidden, flatten the bubble back
+   into an inline number so the row reads `cart · 7 · $89.00` cleanly. */
+.mh-section-head .wc-block-mini-cart__badge {
+	background: transparent !important;
+	color: var(--mh-paper) !important;
+	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+	font-size: 12px !important;
+	font-weight: 400 !important;
+	position: static !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	left: auto !important;
+	width: auto !important;
+	height: auto !important;
+	min-width: 0 !important;
+	border: 0 !important;
 	display: inline !important;
 	letter-spacing: 0 !important;
+	transform: none !important;
+	line-height: inherit !important;
 }
 
 /* Pseudo-element prefix `cart ` so the layout reads `cart 0` even when WC
@@ -269,10 +240,11 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	text-transform: lowercase;
 }
 
-/* Phone: hide the decorative label + pill filters and surface a native
-   <select> dropdown instead. The dropdown + cart sit on a single row —
-   the proto kept a search field here too, but staging removed it (PR #7),
-   so we use the freed-up width to stretch the dropdown next to the cart. */
+/* Phone: compress the section-head row so the in-block filter dropdown
+   (mercantile/section-filters) sits flush with the cart on a single
+   row. The block owns its own internal mobile behavior (label/chips
+   hide, select takes over) — what stays here is surface-level layout
+   + the WC mini-cart mobile sizing. */
 @media (max-width: 700px) {
 	.mh-section-head {
 		flex-wrap: nowrap;
@@ -281,30 +253,6 @@ body.post-type-archive-product .mh-filters .mh-filter {
 		padding-top: 10px;
 		padding-bottom: 10px;
 	}
-	.mh-section-head__label { display: none; }
-	.mh-filters { display: none; }
-	.mh-filters-m {
-		display: block;
-		flex: 1;
-		min-width: 0;
-		box-sizing: border-box;
-		padding: 10px 36px 10px 14px;
-		line-height: 1.4;
-		font-family: 'JetBrains Mono', ui-monospace, monospace;
-		font-size: 13px;
-		color: var(--mh-wp);
-		background-color: var(--mh-paper-2);
-		border: 1px solid var(--mh-rule);
-		border-radius: 0;
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		appearance: none;
-		background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1.5L6 6.5L11 1.5' stroke='%233858e9' stroke-width='1.5' stroke-linecap='round'/></svg>");
-		background-repeat: no-repeat;
-		background-position: right 14px center;
-		cursor: pointer;
-	}
-	.mh-filters-m:focus { outline: none; border-color: var(--mh-wp); }
 	.mh-section-head .mh-right { flex: 0 0 auto; }
 	/* Match cart button height to the filter dropdown so the row aligns. */
 	.mh-section-head .wc-block-mini-cart__button,
@@ -314,6 +262,97 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	}
 	.mh-section-head .wc-block-mini-cart__button::before {
 		font-size: 13px;
+	}
+}
+
+/* ===== Section search =====
+   Skins the `core/search` block (WC product-search variation, namespace
+   `woocommerce/product-search`) when it sits in the section-head via
+   `className: mh-section-search`. With `buttonPosition: no-button` and
+   `showLabel: false` the block renders just the <form> wrapper, a
+   screen-reader-only <label>, the search <input>, and the hidden
+   post_type=product input. We add a `↵` overlay that appears on focus
+   or when the field has content.
+
+   iAPI directives are injected at render-time in functions.php
+   (data-wp-interactive + data-wp-on--submit on the form, enterkeyhint
+   + value pre-fill on the input). The block stays standard and
+   discoverable in the inserter; the chrome is theme-owned via this
+   class hook. */
+.mh-section-head form.mh-section-search.wp-block-search {
+	position: relative;
+	margin: 0;
+	display: flex;
+	align-items: center;
+	flex: 0 1 auto;
+	min-width: 0;
+}
+
+.mh-section-head .mh-section-search .wp-block-search__inside-wrapper {
+	display: flex;
+	align-items: center;
+	position: relative;
+	width: 100%;
+}
+
+.mh-section-head .mh-section-search .wp-block-search__input {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 12px;
+	line-height: 1.4;
+	padding: 6px 26px 6px 10px;
+	border: 1px solid var(--mh-rule);
+	background: var(--mh-paper-2);
+	border-radius: 0;
+	width: 220px;
+	min-width: 0;
+	color: var(--mh-ink);
+	box-sizing: border-box;
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.mh-section-head .mh-section-search .wp-block-search__input::placeholder {
+	color: var(--mh-slate-2);
+}
+
+.mh-section-head .mh-section-search .wp-block-search__input:focus {
+	outline: none;
+	border-color: var(--mh-wp);
+}
+
+/* Strip WebKit's search-field clear "X" — keeps the visual alignment
+   consistent with the prototype's plain mono input. */
+.mh-section-head .mh-section-search .wp-block-search__input::-webkit-search-cancel-button,
+.mh-section-head .mh-section-search .wp-block-search__input::-webkit-search-decoration {
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+/* `↵` hint inside the field, right-aligned. Visible on focus or when
+   the input has content. Pseudo-element on the wrapper avoids needing
+   our own markup — the core/search block's HTML is unchanged. */
+.mh-section-head .mh-section-search::after {
+	content: '↵';
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 12px;
+	color: var(--mh-slate-2);
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.1s ease;
+}
+
+.mh-section-head .mh-section-search:focus-within::after,
+.mh-section-head .mh-section-search:has(.wp-block-search__input:not(:placeholder-shown))::after {
+	opacity: 1;
+}
+
+@media (max-width: 700px) {
+	.mh-section-head .mh-section-search {
+		display: none;
 	}
 }
 
