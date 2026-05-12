@@ -19,11 +19,36 @@ import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps } from '@wordpress/block-editor';
 import metadata from './block.json';
 
+// Mock rows for the editor preview. Values match the kind of data
+// the real WC product-attributes table emits — fabric blends, care
+// instructions, capacity, fit — so the editor preview feels like a
+// real PDP row rather than an obviously-fake placeholder.
 const PLACEHOLDER_ROWS = [
-	{ label: 'Material', slug: 'attribute_pa_material' },
-	{ label: 'Care', slug: 'attribute_pa_care' },
-	{ label: 'Capacity', slug: 'attribute_pa_capacity' },
-	{ label: 'Fit', slug: 'attribute_pa_fit' },
+	{
+		label: 'Material',
+		slug: 'attribute_pa_material',
+		value: '60/40 ring-spun cotton/recycled poly',
+	},
+	{
+		label: 'Care',
+		slug: 'attribute_pa_care',
+		value: 'Machine wash cold · tumble dry low',
+	},
+	{
+		label: 'Capacity',
+		slug: 'attribute_pa_capacity',
+		value: '14 oz',
+	},
+	{
+		label: 'Fit',
+		slug: 'attribute_pa_fit',
+		value: 'Unisex',
+	},
+	{
+		label: 'Construction',
+		slug: 'attribute_pa_construction',
+		value: 'Embroidered logo, ribbed cuffs',
+	},
 ];
 
 registerBlockType( metadata.name, {
@@ -51,7 +76,7 @@ registerBlockType( metadata.name, {
 									{ row.label }
 								</th>
 								<td className="woocommerce-product-attributes-item__value">
-									&mdash;
+									{ row.value }
 								</td>
 							</tr>
 						) ) }
