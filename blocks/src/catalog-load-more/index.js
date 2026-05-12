@@ -8,6 +8,7 @@
  * apply here because the block ships its own style.css; the editor
  * inherits that automatically.
  */
+import './style.css';
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps } from '@wordpress/block-editor';
