@@ -904,22 +904,6 @@ body {
 	50% { opacity: 0.35; }
 }
 
-/* Final-state status line — short slate line below where the button
-   used to sit, signalling end of catalog. */
-.mh-load-more-status {
-	margin: 16px 0 32px;
-	text-align: center;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	letter-spacing: 0.08em;
-	color: var(--mh-slate);
-}
-
-.mh-load-more-status:empty {
-	display: none;
-	margin: 0;
-}
-
 @media (prefers-reduced-motion: reduce) {
 	.mh-load-more {
 		transition: none;

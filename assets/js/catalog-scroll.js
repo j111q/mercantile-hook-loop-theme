@@ -103,15 +103,6 @@
 		renderButton( currentPage + 1 );
 		wrap.appendChild( button );
 
-		// Status line — sits below the button and updates only on
-		// exhaustion ("no more products"). aria-live for SR feedback.
-		const status = document.createElement( 'p' );
-		status.className = 'mh-load-more-status';
-		status.setAttribute( 'role', 'status' );
-		status.setAttribute( 'aria-live', 'polite' );
-		status.textContent = '';
-		wrap.appendChild( status );
-
 		// Removing the button from the DOM is the cleanest hide here —
 		// `button.hidden = true` would be overridden by our
 		// `.mh-load-more { display: flex }` rule (same specificity
@@ -124,7 +115,6 @@
 			exhausted = true;
 			if ( observer ) observer.disconnect();
 			button.remove();
-			status.textContent = '— end of catalog —';
 		};
 
 		async function loadNext() {
