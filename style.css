@@ -797,6 +797,98 @@ body {
 
 .mh-cell:hover .mh-cell__view { opacity: 1; }
 
+/* ===== Catalog pagination =====
+   `wp:query-pagination` (core/query-pagination) with className
+   `mh-pagination` is centred under the product grid on the shop /
+   category / search-results templates. Each numbered tile + the
+   prev/next links pick up the same mono-button rhythm as
+   `.mh-variation-buttons` so the pagination feels like part of the
+   prototype's editorial-zine button language. Current page goes
+   solid WP-blue (same as a selected size).
+
+   Surrounded by a top rule + breathing room so it sits cleanly
+   between the grid and the footer band. */
+.mh-pagination {
+	padding: 40px var(--mh-gutter, 24px) 48px;
+	border-top: 1px solid var(--mh-rule);
+	margin-top: 16px;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+}
+
+.mh-pagination .page-numbers,
+.mh-pagination .wp-block-query-pagination-previous,
+.mh-pagination .wp-block-query-pagination-next {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 44px;
+	padding: 10px 14px;
+	border: 1.5px solid var(--mh-wp);
+	border-radius: 4px;
+	background: #fff;
+	color: var(--mh-wp);
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	text-decoration: none;
+	transition: background 0.15s, color 0.15s, opacity 0.15s;
+}
+
+.mh-pagination .page-numbers:hover:not(.current):not(.dots),
+.mh-pagination .wp-block-query-pagination-previous:hover:not([aria-disabled="true"]),
+.mh-pagination .wp-block-query-pagination-next:hover:not([aria-disabled="true"]) {
+	background: var(--mh-blue-tint);
+}
+
+/* Active page tile — solid WP-blue with white text. Mirrors
+   `.mh-variation-buttons button.on`. */
+.mh-pagination .page-numbers.current {
+	background: var(--mh-wp);
+	color: #fff;
+	cursor: default;
+}
+
+/* Ellipsis (`…`) tile — borderless, just slate dots so it reads as
+   a separator rather than a clickable number. */
+.mh-pagination .page-numbers.dots {
+	border: 0;
+	background: transparent;
+	color: var(--mh-slate);
+	cursor: default;
+	min-width: 24px;
+	padding: 10px 6px;
+}
+
+/* Prev / next get a touch more horizontal padding for the arrow +
+   word, and lowercase-tracked to match the prototype's mono labels. */
+.mh-pagination .wp-block-query-pagination-previous,
+.mh-pagination .wp-block-query-pagination-next {
+	padding: 10px 18px;
+	text-transform: lowercase;
+	letter-spacing: 0.04em;
+	margin: 0 8px;
+}
+
+/* Disabled prev/next (page 1 / final page). Core/query-pagination
+   emits aria-disabled="true" on the inert anchor. */
+.mh-pagination .wp-block-query-pagination-previous[aria-disabled="true"],
+.mh-pagination .wp-block-query-pagination-next[aria-disabled="true"] {
+	opacity: 0.3;
+	pointer-events: none;
+	cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mh-pagination .page-numbers,
+	.mh-pagination .wp-block-query-pagination-previous,
+	.mh-pagination .wp-block-query-pagination-next {
+		transition: none;
+	}
+}
+
 /* ===== Single product (admin-editor framing) ===== */
 .mh-breadcrumbs.wc-block-components-breadcrumbs { display: none; } /* prefer custom crumb header */
 
