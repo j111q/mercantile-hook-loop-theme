@@ -446,88 +446,21 @@ body.post-type-archive-product .mh-filters .mh-filter {
 .mh-band__caption b { color: var(--mh-ink); font-weight: 600; }
 .mh-band__caption em { color: var(--mh-wp); font-style: normal; }
 
-/* ===== Footer ===== */
-.mh-footer {
-	background: var(--mh-ink);
-	color: var(--mh-paper);
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	line-height: 1.7;
-}
+/* ===== Footer =====
+   Surface hooks for parts/footer.html. Brand wordmark, tagline, and
+   link rows are core/paragraph; column heads are core/heading; the
+   3-col grid is core/columns; bottom row is a pair of nested
+   core/group blocks. Wrapper chrome — background, text color,
+   font-family, font-size, line-height, link color/hover/decoration,
+   border-top, padding, margin — is set on each block via supports +
+   default attributes in the template part. The only piece that
+   stays here is what supports can't express on a paragraph. */
 
-.mh-footer .mh-footer__inner {
-	padding: 0 var(--mh-gutter);
+/* Tagline measure — caps at 50ch like the prototype. No block-
+   supports analog for max-width on a paragraph. */
+.mh-footer__tagline {
+	max-width: 50ch;
 }
-
-.mh-footer .mh-footer__cols {
-	display: grid;
-	grid-template-columns: 2fr 1fr 1fr;
-	gap: 32px;
-}
-
-/* Footer: 3-col → 2-col on tablet → 1-col on phones. */
-@media (max-width: 860px) {
-	.mh-footer .mh-footer__cols { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 700px) {
-	.mh-footer .mh-footer__cols { grid-template-columns: 1fr; gap: 24px; }
-	.mh-footer .mh-footer__inner { padding: 0 20px; }
-}
-@media (max-width: 500px) {
-	.mh-footer .mh-footer__inner { padding: 0 16px; }
-}
-
-.mh-footer .mh-footer__frak {
-	font-family: 'UnifrakturCook', serif;
-	font-size: 63px;
-	line-height: 0.9;
-	color: var(--mh-paper);
-}
-
-.mh-footer .mh-footer__frak .d {
-	color: var(--mh-wp);
-}
-
-.mh-footer h4 {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-	color: var(--mh-slate-2);
-	margin: 0 0 8px;
-	font-weight: 500;
-}
-
-.mh-footer a {
-	color: var(--mh-paper);
-	text-decoration: none;
-	display: block;
-}
-
-.mh-footer a:hover { color: var(--mh-wp); }
-
-.mh-footer .mh-footer__bottom {
-	border-top: 1px solid var(--mh-slate);
-	margin-top: 36px;
-	color: var(--mh-slate-2);
-	width: 100%;
-}
-
-.mh-footer .mh-footer__bottom-inner {
-	padding: 14px var(--mh-gutter) 24px;
-	display: flex;
-	justify-content: space-between;
-	gap: 16px;
-	flex-wrap: wrap;
-}
-
-.mh-footer .mh-footer__bottom b { color: var(--mh-paper); }
-
-/* SSH cross-link in the footer bottom row, replacing the version stamp.
-   Mono command in white; arrow + tagline inherit the copyright span style
-   on the other side (footer JetBrains Mono, slate-2). */
-.mh-footer .mh-footer__ssh-cmd { color: var(--mh-paper); font-weight: 600; }
-.mh-footer .mh-footer__ssh-sep { margin: 0 4px; }
 
 /* ===== Tag pill (decorative typography pop) ===== */
 .mh-pill {

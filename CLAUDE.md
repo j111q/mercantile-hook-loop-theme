@@ -53,7 +53,12 @@ or editing blocks here.
    `isStackedOnMobile: false`. The hero rail's blurb / spec-list-pair
    structure uses exactly this: outer columns stack at mobile (blurb
    above lists), inner columns hold the two spec lists side-by-side
-   always.
+   always. Per-column `width: "<n>%"` (emits `flex-basis`) sets
+   unequal desktop ratios — the footer's 50/25/25 brand-shop-elsewhere
+   row uses this. `blockGap` accepts `{top, left}` separately, letting
+   row gap (when stacked) differ from column gap (when side-by-side)
+   — useful when mobile rows want tighter vertical rhythm than
+   desktop columns want horizontal space.
 
 ## Custom blocks — the editing model is the design decision
 
@@ -223,6 +228,33 @@ or editing blocks here.
     `site-mark` + dot + LIVE were three siblings; users only ever
     edited them together. One `mercantile/ticker-lead` block is more
     honest about the unit.
+29. **`style.elements.{link,heading,h1..h6,button}` is element-scoped
+    chrome — reach for it before writing `.surface a { … }`.** When
+    a CSS rule would target descendant `<a>`/`<h*>`/`<button>` inside
+    a surface (not the wrapper itself), set those properties on the
+    surface's container block via `style.elements.<elt>` instead. The
+    payoff is largest for `style.elements.link`: combining
+    `color.text`, `":hover".color.text`, and
+    `typography.textDecoration` on the outer footer wp:group
+    replaces the entire `.mh-footer a { color, :hover, text-decoration }`
+    rule with zero surface CSS. WP emits a `.wp-elements-<hash>` class
+    scoped to that block; the generated selector uses `:where()` so
+    it beats theme.json globals without `!important`. Pattern is most
+    valuable on dark-surface link overrides where the global ink-on-
+    paper link color would be invisible.
+30. **`core/paragraph` beats `core/heading` for visually-heading-but-
+    not-semantic text.** When something looks like a heading
+    (decorative wordmark, footer brand, oversized eyebrow) but is
+    not part of the document outline, reach for `core/paragraph`
+    with explicit typography — not `core/heading`. The heading
+    element comes with a thick baseline from
+    `theme.json.styles.elements.{heading,h1..h6}.{fontFamily, color,
+    fontWeight, lineHeight}`; using it for decoration means writing
+    an override for every property, plus contributing junk to the
+    document outline. The footer's "Mercantile." fraktur is
+    `core/paragraph` with `fontFamily:"unifraktur"`, explicit
+    fontSize/lineHeight/fontWeight — clean. The hero wordmark is
+    `<h1>` because it actually IS the page's primary heading.
 
 ## Project layout for theme-local blocks
 
