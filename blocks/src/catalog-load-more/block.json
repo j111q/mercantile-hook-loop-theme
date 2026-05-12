@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/catalog-load-more",
+	"version": "1.0.0",
+	"title": "Catalog Load More",
+	"category": "theme",
+	"description": "Replaces catalog pagination with infinite-scroll. Renders a code-interstitial-styled button that auto-loads the next page as it scrolls into view, and also responds to click as the no-IO / no-JS fallback. Removes itself when the catalog runs out.",
+	"icon": "arrow-down-alt2",
+	"textdomain": "mercantile-hook-loop",
+	"supports": {
+		"html": false,
+		"interactivity": true,
+		"className": true,
+		"customClassName": true
+	},
+	"editorScript": "file:./index.js",
+	"viewScriptModule": "file:./view.js",
+	"style": "file:./style.css",
+	"render": "file:./render.php"
+}
