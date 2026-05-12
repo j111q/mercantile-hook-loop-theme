@@ -72,6 +72,13 @@
 		let exhausted = false;
 		let loading = false;
 
+		// Count of items the server rendered on this page — used as
+		// the expected "full page" size for the short-page detection
+		// below. Beats hardcoding the perPage value (which can change
+		// per template) and survives the catalog growing or shrinking
+		// without an update here.
+		const perPage = list.children.length;
+
 		// Load-more button — visible, clickable AND the
 		// IntersectionObserver target. Styled like the dark
 		// `.mh-shortcode` code-interstitial on the PDP, but with a
@@ -105,10 +112,18 @@
 		status.textContent = '';
 		wrap.appendChild( status );
 
+		// Removing the button from the DOM is the cleanest hide here —
+		// `button.hidden = true` would be overridden by our
+		// `.mh-load-more { display: flex }` rule (same specificity
+		// tie, our rule wins by source order), and toggling
+		// `display:none` inline would leave the IntersectionObserver
+		// stuck on a layout-zero element. Remove + observer.disconnect
+		// is the safe shape.
+		let observer = null;
 		const setExhausted = () => {
 			exhausted = true;
-			button.hidden = true;
-			button.disabled = true;
+			if ( observer ) observer.disconnect();
+			button.remove();
 			status.textContent = '— end of catalog —';
 		};
 
@@ -156,10 +171,10 @@
 				currentPage = nextPage;
 				renderButton( currentPage + 1 );
 
-				// If the page came back with fewer items than the
-				// per-page count, that was the final page — flag
-				// exhausted to skip the next fetch.
-				if ( items.length < 16 ) {
+				// If the page came back with fewer items than a full
+				// page, that was the final page — flag exhausted to
+				// skip the next fetch (which would just 404).
+				if ( items.length < perPage ) {
 					setExhausted();
 				}
 			} catch ( e ) {
@@ -181,8 +196,10 @@
 
 		// IntersectionObserver auto-trigger as the button scrolls into
 		// view — feels like "infinite scroll" while still leaving the
-		// button as a visible click-to-load fallback.
-		const observer = new IntersectionObserver(
+		// button as a visible click-to-load fallback. The `observer`
+		// variable was declared earlier so setExhausted() can
+		// disconnect it cleanly when we run out of pages.
+		observer = new IntersectionObserver(
 			( entries ) => {
 				for ( const entry of entries ) {
 					if ( entry.isIntersecting ) {
