@@ -388,63 +388,34 @@ body.post-type-archive-product .mh-filters .mh-filter {
 .mh-interstitial .k { color: var(--mh-wp); }
 .mh-interstitial .c { color: var(--mh-slate-2); }
 
-/* ===== Band ===== */
-.mh-band {
-	border-bottom: 1px solid var(--mh-rule);
-	background: var(--mh-paper);
-	overflow: hidden;
-}
+/* ===== Band =====
+   Surface is a wp:group; lines and caption are core/paragraph blocks
+   with chrome set inline via supports. What stays here is what blocks
+   can't express: the inline <code> style used for the mono-inline
+   ranges (core/code inline format) and the caption measure cap. */
 
-/* Tighter horizontal padding on phones — the gutter preset already
-   collapses to 40px below ~1640vw, but that's still wasteful on a
-   390px viewport. Mirrors the prototype's @700 / @500 paddings. */
+/* Tighter horizontal padding on phones for the product grid wrapper. */
 @media (max-width: 700px) {
 	.mh-grid-wrap { padding-left: 20px !important; padding-right: 20px !important; }
-	.mh-band { padding: 40px 20px !important; }
 }
 @media (max-width: 500px) {
 	.mh-grid-wrap { padding-left: 16px !important; padding-right: 16px !important; }
-	.mh-band { padding: 32px 16px !important; }
 }
 
-.mh-band__line {
-	font-family: 'UnifrakturCook', 'Newsreader', Georgia, serif;
-	font-weight: 700;
-	font-size: clamp(36px, 6vw, 84px);
-	line-height: 1.02;
-	color: var(--mh-ink);
-	letter-spacing: -0.01em;
-	margin: 0;
-	text-wrap: balance;
-}
-
-.mh-band__line .mh-q {
-	color: var(--mh-wp);
-	font-style: normal;
-}
-
-.mh-band__line .mh-mono-inline {
+/* Mono-inline ranges: core/code inline format (`<code>foo</code>`)
+   scoped to the band line. Strips the UA <code> background and tunes
+   size/weight to sit alongside the Fraktur display type. */
+.mh-band__line code {
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-weight: 600;
 	font-size: 0.72em;
 	letter-spacing: -0.01em;
 	vertical-align: 0.06em;
+	background: none;
+	padding: 0;
 }
 
-.mh-band__caption {
-	font-family: 'Newsreader', Georgia, serif;
-	font-style: italic;
-	font-weight: 400;
-	font-size: clamp(16px, 1.5vw, 20px);
-	color: var(--mh-ink-2);
-	line-height: 1.5;
-	max-width: 42em;
-	margin-top: 20px;
-	text-wrap: balance;
-}
-
-.mh-band__caption b { color: var(--mh-ink); font-weight: 600; }
-.mh-band__caption em { color: var(--mh-wp); font-style: normal; }
+.mh-band__caption { max-width: 42em; }
 
 /* ===== Footer =====
    Surface hooks for parts/footer.html. Brand wordmark, tagline, and
