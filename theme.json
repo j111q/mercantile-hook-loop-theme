@@ -41,7 +41,7 @@
 				{ "slug": "large", "size": "22px", "name": "Large" },
 				{ "slug": "x-large", "size": "32px", "name": "X-Large" },
 				{ "slug": "display", "size": "clamp(36px, 6vw, 84px)", "name": "Display" },
-				{ "slug": "wordmark", "size": "clamp(96px, 14vw, 195px)", "name": "Wordmark" }
+				{ "slug": "wordmark", "size": "clamp(53px, 14vw, 195px)", "name": "Wordmark" }
 			],
 			"fluid": false,
 			"textColumns": false

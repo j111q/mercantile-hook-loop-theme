@@ -109,9 +109,17 @@ add_filter(
 	2
 );
 
+// `enqueue_block_assets` (unlike `enqueue_block_editor_assets`) fires inside
+// the editor iframe — where the canvas actually renders — so the Google Fonts
+// stylesheet reaches the document that needs the @font-face rules. Guarded
+// with `is_admin()` because the same hook also fires on the front-end, where
+// `wp_enqueue_scripts` already loads the font.
 add_action(
-	'enqueue_block_editor_assets',
+	'enqueue_block_assets',
 	function () {
+		if ( ! is_admin() ) {
+			return;
+		}
 		wp_enqueue_style(
 			'mercantile-hook-loop-fonts-editor',
 			'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=UnifrakturCook:wght@700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap',

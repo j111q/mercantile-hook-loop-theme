@@ -55,154 +55,33 @@ body {
 	overflow: hidden;
 }
 
-/* ===== Hero meta ===== */
-.mh-meta-strip {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	color: var(--mh-slate);
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-	padding-bottom: 8px;
-	border-bottom: 1px solid var(--mh-rule);
-	flex-wrap: wrap;
-	gap: 12px;
-}
+/* ===== Hero =====
+   Surface hooks for parts/hero.html. Meta strip and rail row are
+   core/columns (rail row nests a non-stacking columns pair to keep
+   the two spec lists side-by-side at every viewport). Wordmark is
+   core/heading; separator is core/separator; spec rows are core/group
+   flex rows. Wrapper chrome — font-family, font-size, color,
+   letter-spacing, padding (fluid clamp()s set on the block), border
+   — is set on each block via supports + default attributes in the
+   template part. Only two bits supports can't express stay here:
+   the wordmark's letter-spacing/text-wrap and the blurb's
+   max-width. */
 
-.mh-meta-strip b {
-	color: var(--mh-ink);
-	font-weight: 600;
-}
-
-.mh-meta-strip .mh-col {
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
-}
-
-.mh-meta-strip .mh-col.is-right {
-	text-align: right;
-}
-
-/* ===== Wordmark =====
-   Desktop keeps the original grand clamp. Phone-size breakpoints
-   override with tighter ranges so "Mercantile." (~5.7em wide in
-   UnifrakturCook) doesn't burst past the hero gutter — values
-   mirror the prototype's mobile pass. */
+/* Wordmark — typography is mostly delivered by core: theme.json h1
+   sets UnifrakturCook 700/line-height 1, the "wordmark" font-size
+   preset supplies the clamp, and ink color is the heading default.
+   Only what supports can't reach stays here. */
 .mh-mark {
-	font-family: 'UnifrakturCook', 'Newsreader', Georgia, serif;
-	font-weight: 700;
-	font-size: clamp(96px, 14vw, 195px);
-	line-height: 1;
 	letter-spacing: -0.005em;
-	color: var(--mh-ink);
-	margin: 12px 0 0;
 	text-wrap: balance;
 }
-@media (max-width: 700px) {
-	.mh-mark { font-size: clamp(70px, 14vw, 110px); margin: 14px 0 -4px; }
-}
-@media (max-width: 500px) {
-	.mh-mark { font-size: clamp(53px, 14vw, 72px); }
-}
 
-.mh-mark .mh-mark__dot {
-	color: var(--mh-wp);
-}
-
-/* ===== Hero rail row ===== */
-.mh-rail-row {
-	display: grid;
-	grid-template-columns: 2fr 1fr 1fr;
-	gap: 48px;
-	padding: 20px 0 24px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	color: var(--mh-slate);
-	line-height: 1.7;
-}
-
-.mh-rail-row .mh-blurb {
-	font-family: 'Newsreader', Georgia, serif;
-	font-size: 17px;
-	color: var(--mh-ink);
-	line-height: 1.4;
-	font-style: italic;
+/* Blurb paragraph — caps measure at 38ch like the prototype. No
+   block-supports analog for max-width on a paragraph. */
+.mh-blurb {
 	max-width: 38ch;
 }
 
-.mh-rail-row .mh-blurb em {
-	color: var(--mh-wp);
-	font-style: italic;
-}
-
-.mh-rail-row b {
-	color: var(--mh-ink);
-	font-weight: 600;
-}
-
-.mh-rail-row .mh-kv {
-	display: flex;
-	justify-content: space-between;
-	border-bottom: 1px dashed var(--mh-rule);
-	padding: 2px 0;
-}
-
-.mh-rail-row .mh-kv:last-child {
-	border-bottom: 0;
-}
-
-/* Tablet: blurb spans full width, stats collapse to two side-by-side
-   columns. Mirrors the prototype's @960 breakpoint. */
-@media (max-width: 960px) {
-	.mh-hero {
-		padding-top: 40px !important;
-		padding-left: 28px !important;
-		padding-right: 28px !important;
-	}
-	.mh-meta-strip {
-		flex-direction: row;
-		flex-wrap: wrap;
-		align-items: baseline;
-		gap: 2px 12px;
-		font-size: 9px;
-		padding-bottom: 4px;
-	}
-	/* display: contents flattens each column so its child spans join the
-	   parent flex row — gives one continuous meta line instead of three
-	   stacked col blocks. */
-	.mh-meta-strip .mh-col { display: contents; }
-	.mh-meta-strip .mh-col.is-right { text-align: left; }
-	.mh-rail-row {
-		grid-template-columns: 1fr 1fr;
-		gap: 18px 24px;
-		padding: 18px 0 22px;
-		font-size: 10.5px;
-	}
-	.mh-rail-row .mh-blurb { grid-column: 1 / -1; max-width: none; }
-	.mh-rail-row .mh-kv { padding: 1px 0; flex-wrap: wrap; }
-	.mh-rail-row .mh-kv b { margin-left: auto; text-align: right; }
-}
-/* Phone: tighter hero padding, smaller rail row. */
-@media (max-width: 700px) {
-	.mh-hero {
-		padding-top: 28px !important;
-		padding-left: 20px !important;
-		padding-right: 20px !important;
-	}
-	.mh-meta-strip { font-size: 8.5px; gap: 2px 10px; }
-	.mh-rail-row { font-size: 9px; gap: 14px 20px; }
-}
-@media (max-width: 500px) {
-	.mh-hero {
-		padding-top: 24px !important;
-		padding-left: 16px !important;
-		padding-right: 16px !important;
-	}
-	.mh-rail-row { font-size: 8.5px; }
-}
 
 /* ===== Section head ===== */
 .mh-section-head {
