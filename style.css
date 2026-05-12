@@ -881,21 +881,27 @@ body {
 	text-transform: lowercase;
 }
 
-/* Loading state: dim + blinking ellipsis after the CTA. */
+/* Loading state — the whole button pulses opacity 1 ↔ 0.4 in a slow
+   rhythm so it's obvious something's happening, and a bigger blinking
+   `▼` appears after the CTA pointing at the products that are about
+   to slot in below. */
 .mh-load-more.is-loading {
-	opacity: 0.55;
 	cursor: progress;
+	animation: mh-load-more-pulse 1s ease-in-out infinite;
 }
 
 .mh-load-more.is-loading .mh-load-more__cta::after {
-	content: '…';
-	margin-left: 4px;
-	animation: mh-load-more-blink 0.9s steps(1, end) infinite;
+	content: ' ▼';
+	display: inline-block;
+	margin-left: 8px;
+	font-size: 16px;
+	line-height: 1;
+	vertical-align: -2px;
 }
 
-@keyframes mh-load-more-blink {
-	0%, 50% { opacity: 1; }
-	50.01%, 100% { opacity: 0.2; }
+@keyframes mh-load-more-pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.35; }
 }
 
 /* Final-state status line — short slate line below where the button
@@ -918,9 +924,9 @@ body {
 	.mh-load-more {
 		transition: none;
 	}
-	.mh-load-more.is-loading .mh-load-more__cta::after {
+	.mh-load-more.is-loading {
 		animation: none;
-		opacity: 1;
+		opacity: 0.55;
 	}
 }
 
