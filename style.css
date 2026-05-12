@@ -800,83 +800,98 @@ body {
 /* ===== Catalog pagination =====
    `wp:query-pagination` (core/query-pagination) with className
    `mh-pagination` is centred under the product grid on the shop /
-   category / search-results templates. Each numbered tile + the
-   prev/next links pick up the same mono-button rhythm as
-   `.mh-variation-buttons` so the pagination feels like part of the
-   prototype's editorial-zine button language. Current page goes
-   solid WP-blue (same as a selected size).
-
-   Surrounded by a top rule + breathing room so it sits cleanly
-   between the grid and the footer band. */
+   category / search-results templates. Visual register matches the
+   section-filters chips above the catalog — a single connected pill
+   row with paper-2 bg, rule borders, and an ink-on-paper "active"
+   state for the current page. The same editorial-zine register the
+   filter row sets, not the louder WP-blue button look. */
 .mh-pagination {
 	padding: 40px var(--mh-gutter, 24px) 48px;
 	border-top: 1px solid var(--mh-rule);
 	margin-top: 16px;
-	flex-wrap: wrap;
+	justify-content: center;
 	align-items: center;
-	gap: 6px;
+	flex-wrap: wrap;
+	gap: 0;
 }
 
-.mh-pagination .page-numbers,
+/* Flatten the inner `.wp-block-query-pagination-numbers` wrapper so
+   prev / numbers / dots / next are all direct flex children of the
+   nav — lets us border-chain them like the filter chips, without
+   per-group fudging. */
+.mh-pagination .wp-block-query-pagination-numbers {
+	display: contents;
+}
+
+/* The chip itself — same visual register as
+   `.mh-section-filters__chip`: paper-2 background, 1px rule border,
+   JetBrains Mono 12px, WP-blue text. Left border is left off so
+   chips share their right-border as the separator with the next
+   chip; the first chip below restores it to close the left edge. */
 .mh-pagination .wp-block-query-pagination-previous,
-.mh-pagination .wp-block-query-pagination-next {
+.mh-pagination .wp-block-query-pagination-next,
+.mh-pagination .page-numbers {
 	display: inline-flex;
 	align-items: center;
-	justify-content: center;
-	min-width: 44px;
-	padding: 10px 14px;
-	border: 1.5px solid var(--mh-wp);
-	border-radius: 4px;
-	background: #fff;
+	padding: 6px 12px;
+	background: var(--mh-paper-2);
+	border-top: 1px solid var(--mh-rule);
+	border-right: 1px solid var(--mh-rule);
+	border-bottom: 1px solid var(--mh-rule);
 	color: var(--mh-wp);
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 13px;
-	font-weight: 600;
-	letter-spacing: 0.02em;
+	font-size: 12px;
+	line-height: 1.4;
 	text-decoration: none;
-	transition: background 0.15s, color 0.15s, opacity 0.15s;
+	transition: background 0.1s, color 0.1s;
 }
 
-.mh-pagination .page-numbers:hover:not(.current):not(.dots),
+/* Close the left edge — the first chip in the row (prev, or page 1
+   if prev is hidden) is the only one with a left border. */
+.mh-pagination > :first-child {
+	border-left: 1px solid var(--mh-rule);
+}
+
+/* Hover — white card background, mirroring `.mh-section-filters__chip:hover`. */
 .mh-pagination .wp-block-query-pagination-previous:hover:not([aria-disabled="true"]),
-.mh-pagination .wp-block-query-pagination-next:hover:not([aria-disabled="true"]) {
-	background: var(--mh-blue-tint);
+.mh-pagination .wp-block-query-pagination-next:hover:not([aria-disabled="true"]),
+.mh-pagination .page-numbers:hover:not(.current):not(.dots) {
+	background: var(--mh-card);
 }
 
-/* Active page tile — solid WP-blue with white text. Mirrors
-   `.mh-variation-buttons button.on`. */
+/* Active page — same ink-on-paper treatment as
+   `.mh-section-filters__chip.is-on`. */
 .mh-pagination .page-numbers.current {
-	background: var(--mh-wp);
-	color: #fff;
+	background: var(--mh-ink);
+	color: var(--mh-paper);
 	cursor: default;
 }
 
-/* Ellipsis (`…`) tile — borderless, just slate dots so it reads as
-   a separator rather than a clickable number. */
+/* Ellipsis (`…`) — borderless, slate text, no hover. Acts as a
+   visual break in the connected chip row to signal skipped pages. */
 .mh-pagination .page-numbers.dots {
-	border: 0;
 	background: transparent;
+	border-color: transparent;
 	color: var(--mh-slate);
 	cursor: default;
-	min-width: 24px;
-	padding: 10px 6px;
+	padding: 6px 6px;
 }
 
-/* Prev / next get a touch more horizontal padding for the arrow +
-   word, and lowercase-tracked to match the prototype's mono labels. */
+/* Prev / next — lowercased and slightly tracked to match the rest
+   of the prototype's mono labels (matches the section-filters label
+   register). */
 .mh-pagination .wp-block-query-pagination-previous,
 .mh-pagination .wp-block-query-pagination-next {
-	padding: 10px 18px;
 	text-transform: lowercase;
 	letter-spacing: 0.04em;
-	margin: 0 8px;
+	gap: 4px;
 }
 
-/* Disabled prev/next (page 1 / final page). Core/query-pagination
-   emits aria-disabled="true" on the inert anchor. */
+/* Disabled prev/next at the edges of the range (core emits
+   aria-disabled="true" on page 1 / final page). */
 .mh-pagination .wp-block-query-pagination-previous[aria-disabled="true"],
 .mh-pagination .wp-block-query-pagination-next[aria-disabled="true"] {
-	opacity: 0.3;
+	opacity: 0.4;
 	pointer-events: none;
 	cursor: default;
 }
