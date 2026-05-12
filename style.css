@@ -1676,6 +1676,7 @@ body.post-type-archive-product .mh-filters .mh-filter {
 }
 
 .mh-pdp__panel--details .mh-pdp__spec-row .wp-block-woocommerce-product-price,
+.mh-pdp__panel--details .mh-pdp__spec-row .wp-block-mercantile-product-price,
 .mh-pdp__panel--details .mh-pdp__spec-row .wp-block-post-terms,
 .mh-pdp__panel--details .mh-pdp__spec-row .mh-pdp__spec-val {
 	margin: 0 !important;

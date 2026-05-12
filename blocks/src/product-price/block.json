@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/product-price",
+	"version": "1.0.0",
+	"title": "Product Price",
+	"category": "theme",
+	"description": "Renders the current product's price using WC's get_price_html(). A thin wrapper around the same data wp:woocommerce/product-price uses, but with an editor preview that doesn't 'go broken' inside template parts that have no product context (which the WC block does — there's no graceful editor fallback there).",
+	"icon": "money-alt",
+	"textdomain": "mercantile-hook-loop",
+	"supports": {
+		"html": false,
+		"className": true,
+		"customClassName": true
+	},
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}
