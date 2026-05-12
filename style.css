@@ -97,15 +97,22 @@ body {
 	transition: padding 0.18s ease, box-shadow 0.18s ease;
 }
 
-/* Flatten the `.wp-block-template-part` wrapper that surrounds the
-   ticker and section-head — without this, each sticky element's
-   containing block is its own short wrapper (= same height as the
-   element), so sticky un-sticks the moment you scroll past it.
-   `display: contents` removes the wrapper from layout entirely; the
-   sticky element's containing block becomes `.wp-site-blocks`, the
-   whole page, and the sticky behavior works as expected. */
-.wp-block-template-part:has(> .mh-ticker),
-.wp-block-template-part:has(> .mh-section-head) {
+/* Flatten EVERY `.wp-block-template-part` wrapper on the chain
+   between a sticky descendant and `.wp-site-blocks`. The ticker
+   sits two wrappers deep (header template-part > ticker template-
+   part > .mh-ticker) so a single-level `:has(> X)` only caught one
+   of them — the outer wrapper was still constraining sticky. The
+   descendant-`:has()` form below catches both and the section-head
+   wrapper too.
+
+   Without this, each sticky element's containing block is its own
+   short wrapper (= same height as the element), so sticky un-sticks
+   the moment you scroll past it. `display: contents` removes the
+   wrapper from layout entirely; the sticky element's containing
+   block becomes `.wp-site-blocks` (the whole page) and sticky
+   behaves as expected. */
+.wp-block-template-part:has(.mh-ticker),
+.wp-block-template-part:has(.mh-section-head) {
 	display: contents;
 }
 
@@ -832,11 +839,12 @@ body {
 .mh-cell:hover .mh-cell__view { opacity: 1; }
 
 /* ===== Catalog load-more button =====
-   Visible click-to-load fallback for the IntersectionObserver-driven
-   infinite scroll (see assets/js/catalog-scroll.js). Same dark code-
-   interstitial register as the `.mh-shortcode` block on the PDP, but
-   with a WP-blue clickable label on the right that signals the load
-   action. */
+   Full-width click-to-load fallback for the IntersectionObserver-
+   driven infinite scroll (see assets/js/catalog-scroll.js).
+   Visually matches the filter chips above the catalog (paper-2 bg,
+   single rule border, WP-blue text) — lighter than the dark code-
+   interstitial used on the PDP, so it sits flush with the grid
+   instead of stamping a dark bar across the bottom. */
 .mh-load-more {
 	display: flex;
 	align-items: center;
@@ -846,9 +854,9 @@ body {
 	width: 100%;
 	margin: 40px 0 0;
 	padding: 14px 18px;
-	background: var(--mh-ink);
-	color: var(--mh-paper);
-	border: 0;
+	background: var(--mh-paper-2);
+	border: 1px solid var(--mh-rule);
+	color: var(--mh-wp);
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 12px;
 	text-align: left;
@@ -857,36 +865,37 @@ body {
 }
 
 .mh-load-more:hover {
-	background: var(--mh-ink-2);
+	background: var(--mh-card);
 }
 
-.mh-load-more__code {
-	color: var(--mh-paper);
-}
-
-.mh-load-more__code .k { color: #9ab1ff; }
-.mh-load-more__code .v { color: #fff; }
+/* Code token highlight on the left half: keys in slate, values in
+   ink — same secondary/primary register as the chip-count colors
+   on .mh-section-filters. */
+.mh-load-more__code .k { color: var(--mh-slate); }
+.mh-load-more__code .v { color: var(--mh-ink); }
 
 .mh-load-more__cta {
 	color: var(--mh-wp);
 	font-size: 12px;
 	letter-spacing: 0.04em;
 	text-transform: lowercase;
-	transition: color 0.15s;
 }
 
-.mh-load-more:hover .mh-load-more__cta {
-	color: #9fb1ff;
-}
-
+/* Loading state: dim + blinking ellipsis after the CTA. */
 .mh-load-more.is-loading {
-	opacity: 0.7;
+	opacity: 0.55;
 	cursor: progress;
 }
 
 .mh-load-more.is-loading .mh-load-more__cta::after {
 	content: '…';
 	margin-left: 4px;
+	animation: mh-load-more-blink 0.9s steps(1, end) infinite;
+}
+
+@keyframes mh-load-more-blink {
+	0%, 50% { opacity: 1; }
+	50.01%, 100% { opacity: 0.2; }
 }
 
 /* Final-state status line — short slate line below where the button
@@ -906,9 +915,12 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.mh-load-more,
-	.mh-load-more__cta {
+	.mh-load-more {
 		transition: none;
+	}
+	.mh-load-more.is-loading .mh-load-more__cta::after {
+		animation: none;
+		opacity: 1;
 	}
 }
 
