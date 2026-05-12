@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/product-attribute-name",
+	"version": "1.0.0",
+	"title": "Attribute name",
+	"category": "theme",
+	"description": "Template cell for the attribute label inside mercantile/product-attributes. The parent renders this child once per visible attribute, passing the attribute's label via block context — styling applied here is shared across every rendered row.",
+	"icon": "tag",
+	"textdomain": "mercantile-hook-loop",
+	"parent": [ "mercantile/product-attributes" ],
+	"usesContext": [ "mercantile/currentAttribute" ],
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"color": {
+			"text": true,
+			"background": false,
+			"link": false
+		},
+		"typography": {
+			"fontSize": true,
+			"fontFamily": true,
+			"lineHeight": true,
+			"__experimentalFontWeight": true,
+			"__experimentalLetterSpacing": true,
+			"__experimentalTextTransform": true
+		},
+		"spacing": {
+			"padding": true,
+			"margin": true
+		}
+	},
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}
