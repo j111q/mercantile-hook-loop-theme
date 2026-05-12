@@ -296,6 +296,22 @@ add_action(
 				'strategy'  => 'defer',
 			)
 		);
+		// Catalog scroll behaviors: shrinking sticky section-head +
+		// IntersectionObserver-driven infinite scroll that replaces
+		// pagination on the shop / category / search-results
+		// templates. Vanilla JS, additive over SSR — pagination-less
+		// templates still work without JS, they just stop at the
+		// first page.
+		wp_enqueue_script(
+			'mercantile-hook-loop-catalog-scroll',
+			get_template_directory_uri() . '/assets/js/catalog-scroll.js',
+			array(),
+			wp_get_theme()->get( 'Version' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
 	}
 );
 

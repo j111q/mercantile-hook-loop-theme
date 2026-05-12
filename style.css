@@ -94,6 +94,7 @@ body {
    (cross-block selectors into woocommerce/mini-cart internals). */
 .mh-section-head {
 	z-index: 40;
+	transition: padding 0.18s ease, box-shadow 0.18s ease;
 }
 
 /* Reset WP flow-layout child margins so flex children sit on the cross-axis center. */
@@ -102,6 +103,27 @@ body {
 	margin-block-end: 0 !important;
 	margin-top: 0 !important;
 	margin-bottom: 0 !important;
+}
+
+/* Shrunk state — toggled by assets/js/catalog-scroll.js when the user
+   has scrolled past the hero. Pulls the section head into a tighter
+   sticky bar: vertical padding halved, small drop shadow to lift it
+   over the grid, the desktop label hides so the chips own the row.
+   Re-renders match the same sticky offset already set on the block
+   (top: 34px under the ticker). */
+.mh-section-head.is-shrunk {
+	padding-top: 4px !important;
+	padding-bottom: 4px !important;
+	box-shadow: 0 1px 0 var(--mh-rule), 0 4px 12px rgba(29, 35, 39, 0.05);
+}
+.mh-section-head.is-shrunk .mh-section-filters__label {
+	display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mh-section-head {
+		transition: none;
+	}
 }
 
 /* Kill the 24px WP block-gap between every top-level section in the home/shop
